@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Koru Elite Performance · Mapa de Procesos</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=DM+Mono:wght@300;400;500&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:    #07090d;
+  --s1:    #0c1018;
+  --s2:    #111720;
+  --s3:    #161e28;
+  --bd:    #1c2733;
+  --bd2:   #243140;
+  --text:  #dde4ec;
+  --muted: #4a5a6a;
+  --gold:  #c8a84b;
+  --gold-bg: rgba(200,168,75,0.07);
+  --gold-dim: rgba(200,168,75,0.12);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;font-size:14px;line-height:1.6;min-height:100vh;overflow-x:hidden;}
+body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:999;opacity:.02;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)'/%3E%3C/svg%3E");}
+
+.wrap{max-width:1200px;margin:0 auto;padding:0 32px 80px;}
+
+/* HEADER */
+header{padding:56px 0 40px;border-bottom:1px solid var(--bd);margin-bottom:48px;display:flex;justify-content:space-between;align-items:flex-end;gap:24px;flex-wrap:wrap;}
+.h-eyebrow{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);margin-bottom:10px;}
+h1{font-family:'Playfair Display',serif;font-size:clamp(32px,4vw,56px);font-weight:900;line-height:1.05;letter-spacing:-.02em;}
+h1 em{font-style:italic;color:var(--gold);}
+.h-meta{text-align:right;}
+.h-badge{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.15em;text-transform:uppercase;padding:6px 14px;border:1px solid var(--gold);color:var(--gold);display:inline-block;}
+.h-sub{font-size:12px;color:var(--muted);margin-top:6px;}
+
+/* LEGEND */
+.legend{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:40px;}
+.leg-item{display:flex;align-items:center;gap:7px;padding:6px 12px;background:var(--s1);border:1px solid var(--bd);font-size:12px;color:var(--muted);}
+.leg-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
+
+/* TIMELINE SPINE */
+.timeline{position:relative;padding-left:0;}
+
+/* STAGE BLOCK */
+.stage{
+  display:grid;
+  grid-template-columns:56px 1fr;
+  gap:0;
+  margin-bottom:4px;
+  position:relative;
+}
+
+/* Number column */
+.stage-num-col{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  position:relative;
+  z-index:2;
+}
+.stage-num{
+  width:40px;height:40px;
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Playfair Display',serif;font-size:18px;font-weight:900;
+  color:#000;flex-shrink:0;position:relative;z-index:2;
+}
+.stage-line{
+  width:2px;flex:1;min-height:20px;
+  background:linear-gradient(to bottom,var(--stage-color),rgba(0,0,0,0));
+  opacity:.3;margin-top:4px;
+}
+.stage:last-child .stage-line{display:none;}
+
+/* Stage content */
+.stage-content{
+  background:var(--s1);
+  border:1px solid var(--bd);
+  border-left:3px solid var(--stage-color);
+  margin-bottom:20px;
+  overflow:hidden;
+  transition:box-shadow .2s;
+}
+.stage-content:hover{box-shadow:0 4px 32px rgba(0,0,0,.3);}
+
+.stage-header{
+  padding:16px 20px;
+  display:grid;
+  grid-template-columns:1fr auto;
+  align-items:center;
+  gap:16px;
+  cursor:pointer;
+  background:var(--s1);
+  border-bottom:1px solid var(--bd);
+  user-select:none;
+}
+.stage-header-left{}
+.stage-macro{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.18em;text-transform:uppercase;margin-bottom:4px;}
+.stage-name{font-family:'Playfair Display',serif;font-size:20px;font-weight:700;line-height:1.15;}
+.stage-owner{display:flex;align-items:center;gap:6px;margin-top:6px;}
+.owner-chip{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.08em;text-transform:uppercase;padding:3px 9px;border:1px solid;display:inline-flex;align-items:center;gap:5px;}
+.stage-header-right{display:flex;flex-direction:column;align-items:flex-end;gap:6px;}
+.stage-week{font-family:'DM Mono',monospace;font-size:10px;color:var(--muted);}
+.toggle-btn{font-size:16px;color:var(--muted);transition:transform .2s;flex-shrink:0;}
+.toggle-btn.open{transform:rotate(180deg);}
+
+/* Stage body */
+.stage-body{display:none;padding:20px;}
+.stage-body.open{display:block;animation:fadeDown .2s ease;}
+@keyframes fadeDown{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:translateY(0)}}
+
+.body-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+@media(max-width:700px){.body-grid{grid-template-columns:1fr;}.stage{grid-template-columns:1fr;}.stage-num-col{display:none;}}
+
+.body-section h4{
+  font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.18em;text-transform:uppercase;
+  color:var(--muted);margin-bottom:10px;padding-bottom:6px;border-bottom:1px solid var(--bd);
+}
+
+/* Activity list */
+.act-list{list-style:none;display:flex;flex-direction:column;gap:6px;}
+.act-list li{
+  display:flex;align-items:flex-start;gap:8px;
+  font-size:13px;color:#8faabf;line-height:1.6;
+}
+.act-list li::before{content:'→';color:var(--muted);font-size:11px;flex-shrink:0;margin-top:2px;}
+
+/* IO block */
+.io-wrap{display:flex;flex-direction:column;gap:10px;}
+.io-block{background:var(--s2);border:1px solid var(--bd);padding:12px 14px;}
+.io-label{font-family:'DM Mono',monospace;font-size:8px;letter-spacing:.18em;text-transform:uppercase;margin-bottom:6px;}
+.io-items{display:flex;flex-direction:column;gap:4px;}
+.io-item{font-size:12px;color:#8faabf;display:flex;align-items:flex-start;gap:7px;line-height:1.5;}
+.io-item .dot{width:5px;height:5px;border-radius:50%;flex-shrink:0;margin-top:4px;}
+
+/* Professionals involved */
+.profs-row{display:flex;flex-wrap:wrap;gap:6px;margin-top:14px;padding-top:14px;border-top:1px solid var(--bd);}
+.prof-tag{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.06em;padding:3px 10px;border:1px solid var(--bd);color:var(--muted);display:flex;align-items:center;gap:4px;}
+.prof-tag.lead{border-color:var(--gold);color:var(--gold);}
+
+/* CONNECTOR arrow between stages */
+.connector{
+  display:flex;align-items:center;justify-content:center;
+  margin-left:56px;
+  height:28px;position:relative;
+}
+.connector::before{
+  content:'';position:absolute;left:20px;top:50%;
+  width:1px;height:100%;background:var(--bd);transform:translateY(-50%);
+}
+.conn-label{
+  font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.12em;text-transform:uppercase;
+  padding:4px 12px;background:var(--s2);border:1px solid var(--bd);
+  color:var(--muted);position:relative;z-index:1;
+}
+
+/* Quick stats bar */
+.stats-bar{
+  display:grid;grid-template-columns:repeat(4,1fr);
+  gap:2px;background:var(--bd);
+  border:1px solid var(--bd);
+  margin-bottom:40px;
+}
+.stat-cell{background:var(--s1);padding:16px;text-align:center;}
+.stat-num{font-family:'Playfair Display',serif;font-size:28px;font-weight:700;color:var(--gold);line-height:1;}
+.stat-label{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-top:4px;}
+
+@media(max-width:600px){.stats-bar{grid-template-columns:repeat(2,1fr);}.legend{gap:6px;}.wrap{padding:0 16px 60px;}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <div>
+    <div class="h-eyebrow">Koru Elite Performance · Protocolo de 6 meses</div>
+    <h1>Mapa de<br><em>Procesos</em></h1>
+  </div>
+  <div class="h-meta">
+    <div class="h-badge">Desde decisión de compra</div>
+    <div class="h-sub">7 etapas · 6 profesionales · 24 semanas</div>
+  </div>
+</header>
+
+<div class="stats-bar">
+  <div class="stat-cell"><div class="stat-num">7</div><div class="stat-label">Macroprocesos</div></div>
+  <div class="stat-cell"><div class="stat-num">6</div><div class="stat-label">Profesionales</div></div>
+  <div class="stat-cell"><div class="stat-num">24</div><div class="stat-label">Semanas</div></div>
+  <div class="stat-cell"><div class="stat-num">80+</div><div class="stat-label">Biomarcadores</div></div>
+</div>
+
+<div class="legend">
+  <div class="leg-item"><div class="leg-dot" style="background:#c8a84b"></div>Medicina Precisión</div>
+  <div class="leg-item"><div class="leg-dot" style="background:#34d399"></div>Preparador Físico</div>
+  <div class="leg-item"><div class="leg-dot" style="background:#818cf8"></div>Psicóloga</div>
+  <div class="leg-item"><div class="leg-dot" style="background:#22d3ee"></div>Kinesióloga</div>
+  <div class="leg-item"><div class="leg-dot" style="background:#fb923c"></div>Performance Coach</div>
+  <div class="leg-item"><div class="leg-dot" style="background:#a78bfa"></div>Guía Espiritual</div>
+</div>
+
+<div class="timeline" id="timeline"></div>
+
+</div>
+
+<script>
+const PROFS = {
+  med:  { label: 'Medicina de Precisión', color: '#c8a84b', icon: '🔬' },
+  pf:   { label: 'Preparador Físico',     color: '#34d399', icon: '🏋️' },
+  psi:  { label: 'Psicóloga',             color: '#818cf8', icon: '🧠' },
+  kin:  { label: 'Kinesióloga',           color: '#22d3ee', icon: '⚕️' },
+  pc:   { label: 'Performance Coach',     color: '#fb923c', icon: '🎯' },
+  ge:   { label: 'Guía Espiritual',       color: '#a78bfa', icon: '✨' },
+};
+
+const STAGES = [
+  {
+    id: 1,
+    color: '#c8a84b',
+    macro: 'Macroproceso 1 · Semana 0',
+    name: 'Onboarding & Activación',
+    week: 'Semana 0',
+    leadProf: 'pc',
+    owners: ['pc','med'],
+    connector: 'Cliente inscrito → activación 48h',
+    activities: [
+      'Llamada de bienvenida (Performance Coach, 60 min)',
+      'Firma de contrato, consentimientos y PDPA',
+      'Apertura de cuenta en app Koru Elite',
+      'Envío de kit de bienvenida y guía del programa',
+      'Asignación formal del equipo de 6 profesionales',
+      'Briefing interno del equipo con contexto del cliente',
+      'Definición de disponibilidad y calendario de sesiones',
+      'Establecimiento de canales de comunicación oficiales',
+    ],
+    input: [
+      'Contrato firmado y pago confirmado',
+      'Ficha de datos personales del cliente',
+      'Expectativas iniciales capturadas en pitch',
+    ],
+    output: [
+      'Cuenta Koru App activa',
+      'Calendario de sesiones confirmado',
+      'Equipo asignado y notificado',
+      'Contrato y consentimientos firmados',
+    ],
+  },
+  {
+    id: 2,
+    color: '#34d399',
+    macro: 'Macroproceso 2 · Semana 1',
+    name: 'Historia Clínica & Diagnóstico Inicial',
+    week: 'Semana 1',
+    leadProf: 'med',
+    owners: ['med','psi','pc','ge'],
+    connector: 'Anamnesis completa → orden de exámenes',
+    activities: [
+      'Anamnesis médica completa (Medicina de Precisión, 90 min)',
+      'Historia de salud, medicamentos, cirugías y antecedentes',
+      'Cuestionario psicológico inicial — DASS-21, historia emocional (Psicóloga)',
+      'Entrevista de metas, motivaciones y contexto de vida (Performance Coach)',
+      'Cuestionario de propósito, valores y bienestar existencial (Guía Espiritual)',
+      'Cuestionario de hábitos: sueño, alimentación, actividad, estrés',
+      'Orden de todos los exámenes de evaluación basal',
+      'Configuración de wearables: Whoop/Oura + app',
+    ],
+    input: [
+      'Cliente activo en el sistema',
+      'Expectativas y contexto inicial del onboarding',
+      'Formularios de historia clínica enviados vía app',
+    ],
+    output: [
+      'Historia clínica completa y digitalizada',
+      'Orden de exámenes emitida',
+      'Cuestionarios psicológicos y espirituales respondidos',
+      'Wearables configurados y sincronizados',
+    ],
+  },
+  {
+    id: 3,
+    color: '#22d3ee',
+    macro: 'Macroproceso 3 · Semanas 2–3',
+    name: 'Evaluación Basal Completa (Mes 0)',
+    week: 'Semanas 2–3',
+    leadProf: 'med',
+    owners: ['med','pf','psi','kin','ge'],
+    connector: 'Datos basales → análisis de brechas',
+    activities: [
+      'Panel molecular completo: ApoB, Lp(a), HbA1c, insulina, cortisol, testosterona, Vitamina D3, hsCRP, IL-6, BDNF, NAD+ (Medicina de Precisión)',
+      'CGM continuo 14 días — respuesta glucémica y time-in-range (Medicina de Precisión)',
+      'Microbioma intestinal y genómica deportiva (Medicina de Precisión)',
+      'Reloj epigenético — edad biológica real (Medicina de Precisión)',
+      'DEXA scan — composición corporal, masa muscular, densidad ósea (Kinesióloga)',
+      'Evaluación postural, biomecánica y detección de dolor (Kinesióloga)',
+      'VO₂ Max (CPET), fuerza máxima, lactato umbral, dead hang (Preparador Físico)',
+      'Tests cognitivos: Cambridge Brain Sciences, Cognifit (Psicóloga)',
+      'DASS-21, PERMA Profiler, Connor-Davidson Resilience Scale (Psicóloga)',
+      'PIL, MLQ, FFMQ — propósito, sentido y mindfulness (Guía Espiritual)',
+      'Consolidación del IVI Basal (score compuesto 0–100) (Medicina de Precisión)',
+    ],
+    input: [
+      'Historia clínica completa',
+      'Orden de exámenes emitida',
+      'Wearables activos y datos primeros 7 días',
+    ],
+    output: [
+      'Panel molecular completo con 80+ biomarcadores',
+      'IVI Basal consolidado (score por dimensión)',
+      'Reporte diagnóstico por cada profesional',
+      'Mapa de brechas por dimensión listo para diseño',
+    ],
+  },
+  {
+    id: 4,
+    color: '#818cf8',
+    macro: 'Macroproceso 4 · Semana 4',
+    name: 'Diseño del Protocolo Personalizado',
+    week: 'Semana 4',
+    leadProf: 'med',
+    owners: ['med','pf','psi','kin','pc','ge'],
+    connector: 'Protocolo diseñado → presentación al cliente',
+    activities: [
+      'Reunión de equipo completo: análisis de brechas del IVI por dimensión',
+      'Diseño del plan de entrenamiento: periodización, zonas, frecuencia (Preparador Físico)',
+      'Diseño del protocolo de rehabilitación y corrección postural (Kinesióloga)',
+      'Diseño del plan mental y de regulación emocional (Psicóloga)',
+      'Diseño del stack de suplementación personalizada (Medicina de Precisión)',
+      'Diseño del plan nutricional basado en CGM y microbioma (Medicina de Precisión)',
+      'Diseño de rutinas, hábitos diarios y estructura de semana (Performance Coach)',
+      'Diseño del mapa de propósito, prácticas contemplativas y meditación (Guía Espiritual)',
+      'Integración de todos los planes en Protocolo Koru Unificado',
+      'Presentación del protocolo al cliente (sesión de 90 min con equipo)',
+    ],
+    input: [
+      'IVI Basal con mapa de brechas',
+      'Reportes individuales de los 6 especialistas',
+      'Metas y motivaciones del cliente',
+    ],
+    output: [
+      'Protocolo Koru Unificado (documento maestro)',
+      'Plan de sesiones por especialista para 5 meses',
+      'Stack de suplementación personalizado',
+      'Cliente informado y alineado con el protocolo',
+    ],
+  },
+  {
+    id: 5,
+    color: '#fb923c',
+    macro: 'Macroproceso 5 · Semanas 5–23',
+    name: 'Intervención & Acompañamiento (Mes 1–5)',
+    week: 'Semanas 5–23',
+    leadProf: 'pc',
+    owners: ['med','pf','psi','kin','pc','ge'],
+    connector: 'Ciclo continuo de 5 meses → evaluación final',
+    activities: [
+      'Sesiones de entrenamiento 3x semana (Preparador Físico)',
+      'Sesiones de kinesiología 1x semana — rehab y ajuste postural (Kinesióloga)',
+      'Sesiones de coaching 1x semana — metas, hábitos, rendimiento (Performance Coach)',
+      'Sesiones de psicología 2x mes — regulación emocional, cognición (Psicóloga)',
+      'Sesiones de guía espiritual 2x mes — meditación, propósito, presencia (Guía Espiritual)',
+      'Registro diario en app: HRV, glucosa, sueño, energía, suplementos',
+      'Revisión mensual de biomarcadores clave (Medicina de Precisión)',
+      'Check-in mensual de equipo completo — ajuste de protocolos',
+      'Alertas clínicas automáticas por biomarcadores fuera de rango',
+      'Ajuste dinámico del stack de suplementación según respuesta',
+      'Informe mensual de progreso enviado al cliente vía app',
+    ],
+    input: [
+      'Protocolo Koru Unificado activo',
+      'Datos diarios de tracker en app',
+      'Reportes de sesiones por especialista',
+    ],
+    output: [
+      '5 informes mensuales de progreso',
+      'Protocolos ajustados dinámicamente',
+      'Datos continuos HRV, glucosa, sueño, suplementos',
+      'Cliente con 20 semanas de intervención documentada',
+    ],
+  },
+  {
+    id: 6,
+    color: '#22d3ee',
+    macro: 'Macroproceso 6 · Semana 24',
+    name: 'Evaluación Final & Comparativa (Mes 6)',
+    week: 'Semana 24',
+    leadProf: 'med',
+    owners: ['med','pf','psi','kin','ge'],
+    connector: 'Resultados documentados → reporte ejecutivo',
+    activities: [
+      'Panel molecular completo — mismos 80+ biomarcadores del Mes 0 (Medicina de Precisión)',
+      'CGM 14 días comparativo — mejora en time-in-range y variabilidad (Medicina de Precisión)',
+      'Reloj epigenético — comparativa de edad biológica (Medicina de Precisión)',
+      'DEXA scan comparativo — cambio en composición corporal (Kinesióloga)',
+      'Evaluación postural y biomecánica comparativa (Kinesióloga)',
+      'VO₂ Max, fuerza, lactato umbral comparativo (Preparador Físico)',
+      'Tests cognitivos Cambridge + Cognifit comparativos (Psicóloga)',
+      'DASS-21, PERMA, Connor-Davidson comparativos (Psicóloga)',
+      'PIL, MLQ, FFMQ comparativos (Guía Espiritual)',
+      'Consolidación del IVI Final y cálculo de delta vs Mes 0',
+      'Elaboración del Reporte Ejecutivo Final por especialista + integrado',
+    ],
+    input: [
+      'IVI Basal del Mes 0 como referencia',
+      '5 meses de datos continuos en app',
+      'Todos los reportes de sesiones',
+    ],
+    output: [
+      'Panel molecular comparativo Mes 0 vs Mes 6',
+      'IVI Final con delta por dimensión',
+      'Reporte ejecutivo integrado (entregable formal)',
+      'Evidencia documentada del ROI del programa',
+    ],
+  },
+  {
+    id: 7,
+    color: '#c8a84b',
+    macro: 'Macroproceso 7 · Semana 25',
+    name: 'Graduación, Cierre & Continuidad',
+    week: 'Semana 25',
+    leadProf: 'pc',
+    owners: ['med','pf','psi','kin','pc','ge'],
+    connector: 'Programa completado',
+    activities: [
+      'Ceremonia de graduación: presentación del Reporte Final al cliente (Performance Coach)',
+      'Sesión de cierre con cada especialista — reflexión y logros (Todo el equipo)',
+      'Entrega del Plan de Mantenimiento personalizado por especialista',
+      'Revisión del IVI Final y celebración de los hitos alcanzados',
+      'Presentación de opciones: Ciclo 2, Plan Mantenimiento o Alumni Koru',
+      'Activación del programa de referidos (descuento por cliente referido)',
+      'Solicitud de testimonio y caso de éxito (con autorización)',
+      'Check-in de seguimiento a 30 días post-programa',
+    ],
+    input: [
+      'Reporte Ejecutivo Final completo',
+      'IVI Final y comparativa M0 vs M6',
+      '6 meses de relación y datos documentados',
+    ],
+    output: [
+      'Plan de mantenimiento entregado',
+      'Decisión de continuidad documentada',
+      'Testimonio y caso de éxito (si autorizado)',
+      'Cliente graduado Koru Elite',
+    ],
+  },
+];
+
+function buildTimeline() {
+  const tl = document.getElementById('timeline');
+
+  STAGES.forEach((s, idx) => {
+    // STAGE
+    const stageEl = document.createElement('div');
+    stageEl.className = 'stage';
+
+    // — number col
+    const numCol = document.createElement('div');
+    numCol.className = 'stage-num-col';
+    const numEl = document.createElement('div');
+    numEl.className = 'stage-num';
+    numEl.style.background = s.color;
+    numEl.textContent = String(s.id).padStart(2,'0');
+    numCol.appendChild(numEl);
+    if (idx < STAGES.length - 1) {
+      const line = document.createElement('div');
+      line.className = 'stage-line';
+      line.style.setProperty('--stage-color', s.color);
+      line.style.background = `linear-gradient(to bottom, ${s.color}40, transparent)`;
+      numCol.appendChild(line);
+    }
+
+    // — content col
+    const content = document.createElement('div');
+    content.className = 'stage-content';
+    content.style.setProperty('--stage-color', s.color);
+    content.style.borderLeftColor = s.color;
+
+    // header
+    const hdr = document.createElement('div');
+    hdr.className = 'stage-header';
+    hdr.innerHTML = `
+      <div class="stage-header-left">
+        <div class="stage-macro" style="color:${s.color}">${s.macro}</div>
+        <div class="stage-name">${s.name}</div>
+        <div class="stage-owner">
+          <div class="owner-chip" style="border-color:${PROFS[s.leadProf].color};color:${PROFS[s.leadProf].color}">
+            ${PROFS[s.leadProf].icon} ${PROFS[s.leadProf].label} <span style="opacity:.5;margin-left:2px">· Responsable</span>
+          </div>
+        </div>
+      </div>
+      <div class="stage-header-right">
+        <div class="stage-week">${s.week}</div>
+        <div class="toggle-btn">▾</div>
+      </div>
+    `;
+    hdr.addEventListener('click', () => {
+      const body = content.querySelector('.stage-body');
+      const arrow = hdr.querySelector('.toggle-btn');
+      body.classList.toggle('open');
+      arrow.classList.toggle('open');
+    });
+
+    // body
+    const body = document.createElement('div');
+    body.className = 'stage-body';
+
+    // activities
+    const actsHtml = s.activities.map(a => `<li>${a}</li>`).join('');
+
+    // input
+    const inHtml = s.input.map(i => `
+      <div class="io-item">
+        <div class="dot" style="background:${s.color}40;border:1px solid ${s.color}60"></div>
+        <span>${i}</span>
+      </div>`).join('');
+
+    // output
+    const outHtml = s.output.map(o => `
+      <div class="io-item">
+        <div class="dot" style="background:${s.color};"></div>
+        <span>${o}</span>
+      </div>`).join('');
+
+    // professionals
+    const profsHtml = s.owners.map(k => {
+      const p = PROFS[k];
+      const isLead = k === s.leadProf;
+      return `<div class="prof-tag ${isLead ? 'lead' : ''}" style="${isLead ? `border-color:${p.color};color:${p.color}` : ''}">
+        ${p.icon} ${p.label}${isLead ? ' ★' : ''}
+      </div>`;
+    }).join('');
+
+    body.innerHTML = `
+      <div class="body-grid">
+        <div class="body-section">
+          <h4>3 · Actividades</h4>
+          <ul class="act-list">${actsHtml}</ul>
+        </div>
+        <div class="body-section">
+          <h4>4 · Input / Output</h4>
+          <div class="io-wrap">
+            <div class="io-block">
+              <div class="io-label" style="color:${s.color}">▸ Input</div>
+              <div class="io-items">${inHtml}</div>
+            </div>
+            <div class="io-block">
+              <div class="io-label" style="color:${s.color}">◆ Output</div>
+              <div class="io-items">${outHtml}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="profs-row">
+        <span style="font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);align-self:center;margin-right:4px;">Equipo:</span>
+        ${profsHtml}
+      </div>
+    `;
+
+    content.appendChild(hdr);
+    content.appendChild(body);
+
+    stageEl.appendChild(numCol);
+    stageEl.appendChild(content);
+    tl.appendChild(stageEl);
+
+    // connector between stages
+    if (idx < STAGES.length - 1 && s.connector) {
+      const conn = document.createElement('div');
+      conn.className = 'connector';
+      conn.innerHTML = `<div class="conn-label">↓ ${s.connector}</div>`;
+      tl.appendChild(conn);
+    }
+  });
+
+  // Auto-open first stage
+  const firstBody = tl.querySelector('.stage-body');
+  const firstArrow = tl.querySelector('.toggle-btn');
+  if (firstBody) firstBody.classList.add('open');
+  if (firstArrow) firstArrow.classList.add('open');
+}
+
+buildTimeline();
+</script>
+</body>
+</html>

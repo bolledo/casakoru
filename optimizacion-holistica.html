@@ -1,0 +1,1377 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Optimización Holística · Sistema de Medición</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Mono:wght@300;400;500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #080b0f;
+    --surface: #0e1318;
+    --surface2: #131920;
+    --border: #1e2a35;
+    --accent-gold: #c9a84c;
+    --accent-teal: #2dd4bf;
+    --accent-rose: #f87171;
+    --accent-violet: #a78bfa;
+    --accent-sky: #38bdf8;
+    --accent-green: #4ade80;
+    --text: #e8edf2;
+    --muted: #64748b;
+    --subtle: #1e2a35;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    line-height: 1.6;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* NOISE TEXTURE */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0.4;
+  }
+
+  .container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 32px 80px;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* HEADER */
+  header {
+    padding: 60px 0 48px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 56px;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: end;
+    gap: 32px;
+  }
+
+  .header-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    color: var(--accent-gold);
+    text-transform: uppercase;
+    margin-bottom: 16px;
+    opacity: 0.9;
+  }
+
+  h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(36px, 5vw, 64px);
+    font-weight: 900;
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+    color: var(--text);
+  }
+
+  h1 em {
+    font-style: italic;
+    color: var(--accent-gold);
+  }
+
+  .header-meta {
+    text-align: right;
+  }
+
+  .header-meta .cycle {
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    color: var(--muted);
+    margin-bottom: 8px;
+  }
+
+  .header-meta .period {
+    font-family: 'DM Mono', monospace;
+    font-size: 22px;
+    font-weight: 500;
+    color: var(--accent-teal);
+  }
+
+  /* INTRO */
+  .intro {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--accent-gold);
+    padding: 24px 28px;
+    margin-bottom: 56px;
+    font-size: 15px;
+    color: #9bb0c4;
+    line-height: 1.7;
+  }
+
+  .intro strong { color: var(--text); }
+
+  /* DIMENSION TABS */
+  .tabs {
+    display: flex;
+    gap: 4px;
+    margin-bottom: 48px;
+    flex-wrap: wrap;
+  }
+
+  .tab {
+    padding: 10px 20px;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    color: var(--muted);
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .tab:hover { border-color: var(--accent-gold); color: var(--accent-gold); }
+  .tab.active { background: var(--accent-gold); color: #000; border-color: var(--accent-gold); font-weight: 500; }
+
+  /* DIMENSION SECTION */
+  .dimension {
+    display: none;
+    animation: fadeIn 0.3s ease;
+  }
+
+  .dimension.active { display: block; }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .dimension-header {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    margin-bottom: 40px;
+    padding-bottom: 24px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .dim-icon {
+    width: 56px;
+    height: 56px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 28px;
+    flex-shrink: 0;
+  }
+
+  .dim-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 32px;
+    font-weight: 700;
+  }
+
+  .dim-subtitle {
+    color: var(--muted);
+    font-size: 13px;
+    margin-top: 4px;
+  }
+
+  .dim-badge {
+    margin-left: auto;
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    padding: 6px 14px;
+    border: 1px solid;
+    text-transform: uppercase;
+    flex-shrink: 0;
+  }
+
+  /* GRID */
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px; }
+  .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px; margin-bottom: 20px; }
+  .grid-full { margin-bottom: 20px; }
+
+  @media (max-width: 900px) {
+    .grid-2, .grid-3 { grid-template-columns: 1fr; }
+    header { grid-template-columns: 1fr; }
+    .header-meta { text-align: left; }
+  }
+
+  /* CARDS */
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    padding: 24px;
+    transition: border-color 0.2s;
+  }
+
+  .card:hover { border-color: #2a3a4a; }
+
+  .card-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 14px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .card-label::before {
+    content: '';
+    display: inline-block;
+    width: 16px;
+    height: 1px;
+    background: currentColor;
+    opacity: 0.6;
+  }
+
+  .card h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 18px;
+    font-weight: 700;
+    margin-bottom: 16px;
+    color: var(--text);
+  }
+
+  .card p {
+    font-size: 13px;
+    color: #7a90a4;
+    line-height: 1.7;
+    margin-bottom: 12px;
+  }
+
+  /* MARKERS / BIOMARKERS */
+  .marker-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-top: 4px;
+  }
+
+  .marker-list li {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+    font-size: 13px;
+    color: #8fa5ba;
+    padding: 6px 0;
+    border-bottom: 1px solid var(--subtle);
+  }
+
+  .marker-list li:last-child { border-bottom: none; }
+
+  .marker-name {
+    flex: 1;
+    color: var(--text);
+    font-size: 13px;
+  }
+
+  .marker-range {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--muted);
+    flex-shrink: 0;
+  }
+
+  .marker-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+
+  /* SCORE CARD */
+  .score-card {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    padding: 28px;
+    text-align: center;
+  }
+
+  .score-num {
+    font-family: 'DM Mono', monospace;
+    font-size: 56px;
+    font-weight: 500;
+    line-height: 1;
+    margin-bottom: 8px;
+  }
+
+  .score-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  /* PROTOCOL STEPS */
+  .steps {
+    counter-reset: steps;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .step {
+    counter-increment: steps;
+    display: grid;
+    grid-template-columns: 36px 1fr;
+    gap: 16px;
+    align-items: start;
+    padding: 16px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+  }
+
+  .step::before {
+    content: counter(steps, decimal-leading-zero);
+    font-family: 'DM Mono', monospace;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--accent-gold);
+    padding-top: 1px;
+  }
+
+  .step-content strong {
+    display: block;
+    font-size: 14px;
+    margin-bottom: 4px;
+    color: var(--text);
+  }
+
+  .step-content span {
+    font-size: 12px;
+    color: var(--muted);
+    line-height: 1.6;
+  }
+
+  /* TAGS */
+  .tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 12px;
+  }
+
+  .tag {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    padding: 4px 10px;
+    border: 1px solid var(--border);
+    color: var(--muted);
+    text-transform: uppercase;
+  }
+
+  .tag.highlight {
+    border-color: currentColor;
+    color: var(--accent-gold);
+  }
+
+  /* FREQUENCY BADGE */
+  .freq {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    padding: 3px 8px;
+    background: var(--subtle);
+    color: var(--muted);
+    margin-left: auto;
+    flex-shrink: 0;
+    align-self: center;
+  }
+
+  /* SECTION TITLE */
+  .section-title {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.25em;
+    color: var(--muted);
+    text-transform: uppercase;
+    margin-bottom: 16px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  /* HIGHLIGHT BOX */
+  .highlight-box {
+    background: linear-gradient(135deg, rgba(201,168,76,0.06) 0%, rgba(201,168,76,0.02) 100%);
+    border: 1px solid rgba(201,168,76,0.2);
+    padding: 20px 24px;
+    margin-bottom: 20px;
+  }
+
+  .highlight-box p { color: #9bb0c4; font-size: 13px; margin: 0; }
+  .highlight-box strong { color: var(--accent-gold); }
+
+  /* PROGRESS TRACKER */
+  .tracker-row {
+    display: grid;
+    grid-template-columns: 200px 1fr 80px 80px;
+    gap: 16px;
+    align-items: center;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--subtle);
+    font-size: 13px;
+  }
+
+  .tracker-row:last-child { border-bottom: none; }
+  .tracker-row.header { font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); }
+
+  .bar-wrap { background: var(--subtle); height: 4px; border-radius: 0; }
+  .bar { height: 4px; }
+
+  .tracker-val {
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    color: var(--muted);
+    text-align: right;
+  }
+
+  /* TIMELINE */
+  .timeline {
+    display: flex;
+    gap: 0;
+    margin-bottom: 20px;
+    overflow-x: auto;
+  }
+
+  .tl-item {
+    flex: 1;
+    min-width: 120px;
+    padding: 16px;
+    border: 1px solid var(--border);
+    border-right: none;
+    position: relative;
+  }
+
+  .tl-item:last-child { border-right: 1px solid var(--border); }
+
+  .tl-time {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: var(--accent-gold);
+    letter-spacing: 0.1em;
+    margin-bottom: 8px;
+  }
+
+  .tl-title {
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--text);
+    margin-bottom: 6px;
+  }
+
+  .tl-items {
+    font-size: 11px;
+    color: var(--muted);
+    line-height: 1.7;
+  }
+
+  /* OVERALL DASHBOARD */
+  .overall-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 12px;
+    margin-bottom: 48px;
+  }
+
+  @media (max-width: 900px) { .overall-grid { grid-template-columns: repeat(3, 1fr); } }
+
+  .dim-pill {
+    border: 1px solid var(--border);
+    padding: 20px 16px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.2s;
+    background: var(--surface);
+  }
+
+  .dim-pill:hover { transform: translateY(-2px); }
+
+  .dim-pill .icon { font-size: 24px; margin-bottom: 10px; }
+
+  .dim-pill .name {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 6px;
+  }
+
+  .dim-pill .score {
+    font-family: 'DM Mono', monospace;
+    font-size: 24px;
+    font-weight: 500;
+  }
+
+  .dim-pill .desc {
+    font-size: 11px;
+    color: var(--muted);
+    margin-top: 6px;
+  }
+
+  /* COLOR ACCENTS PER DIMENSION */
+  .color-fisica { color: var(--accent-green); }
+  .color-metabolica { color: var(--accent-teal); }
+  .color-mental { color: var(--accent-sky); }
+  .color-emocional { color: var(--accent-rose); }
+  .color-espiritual { color: var(--accent-violet); }
+
+  .border-fisica { border-color: var(--accent-green) !important; }
+  .border-metabolica { border-color: var(--accent-teal) !important; }
+  .border-mental { border-color: var(--accent-sky) !important; }
+  .border-emocional { border-color: var(--accent-rose) !important; }
+  .border-espiritual { border-color: var(--accent-violet) !important; }
+
+  .bg-fisica { background: rgba(74, 222, 128, 0.06); }
+  .bg-metabolica { background: rgba(45, 212, 191, 0.06); }
+  .bg-mental { background: rgba(56, 189, 248, 0.06); }
+  .bg-emocional { background: rgba(248, 113, 113, 0.06); }
+  .bg-espiritual { background: rgba(167, 139, 250, 0.06); }
+
+  /* SCORING */
+  .score-breakdown {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    margin-top: 16px;
+  }
+
+  .score-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 12px;
+    background: var(--surface2);
+    border: 1px solid var(--subtle);
+    font-size: 12px;
+  }
+
+  .score-item span:last-child {
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+  }
+
+  /* WEARABLES */
+  .device-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+  }
+
+  @media (max-width: 700px) { .device-grid { grid-template-columns: 1fr; } }
+
+  .device-card {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    padding: 18px;
+  }
+
+  .device-card .icon { font-size: 20px; margin-bottom: 10px; }
+  .device-card .name { font-size: 14px; font-weight: 500; margin-bottom: 4px; }
+  .device-card .metrics { font-size: 12px; color: var(--muted); line-height: 1.7; }
+
+  /* FOOTER */
+  footer {
+    margin-top: 64px;
+    padding-top: 32px;
+    border-top: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--muted);
+    flex-wrap: gap;
+    gap: 16px;
+  }
+
+  .scrolltop {
+    position: fixed;
+    bottom: 32px;
+    right: 32px;
+    width: 40px;
+    height: 40px;
+    background: var(--accent-gold);
+    color: #000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 18px;
+    z-index: 100;
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+
+  .scrolltop.visible { opacity: 1; }
+</style>
+</head>
+<body>
+
+<div class="container">
+
+  <header>
+    <div>
+      <div class="header-label">Sistema de Optimización Personal · v1.0</div>
+      <h1>Protocolo de<br><em>Salud Holística</em><br>de Precisión</h1>
+    </div>
+    <div class="header-meta">
+      <div class="cycle">Ciclo de evaluación</div>
+      <div class="period">cada 6 meses</div>
+    </div>
+  </header>
+
+  <div class="intro">
+    <strong>Marco metodológico:</strong> Este protocolo integra medicina de precisión, biomarcadores moleculares, tecnología wearable y métricas psicológicas validadas para crear un mapa cuantificable de tu salud en <strong>5 dimensiones</strong>. Cada dimensión tiene indicadores objetivos y subjetivos medibles, comparables periodo a periodo, con umbrales óptimos basados en las últimas evidencias científicas (2023–2025).
+  </div>
+
+  <!-- NAVIGATION TABS -->
+  <div class="tabs">
+    <div class="tab active" onclick="switchTab('overview')">◈ Visión Global</div>
+    <div class="tab" onclick="switchTab('fisica')">◉ Física</div>
+    <div class="tab" onclick="switchTab('metabolica')">◎ Metabólica</div>
+    <div class="tab" onclick="switchTab('mental')">◈ Mental</div>
+    <div class="tab" onclick="switchTab('emocional')">◇ Emocional</div>
+    <div class="tab" onclick="switchTab('espiritual')">✦ Espiritual</div>
+    <div class="tab" onclick="switchTab('protocolo')">⟳ Protocolo</div>
+  </div>
+
+  <!-- ===================== OVERVIEW ===================== -->
+  <div id="tab-overview" class="dimension active">
+
+    <div class="dimension-header">
+      <div class="dim-icon">◈</div>
+      <div>
+        <div class="dim-title">Dashboard Global</div>
+        <div class="dim-subtitle">Las 5 dimensiones · Índice de Vitalidad Integrada (IVI)</div>
+      </div>
+      <div class="dim-badge" style="border-color: var(--accent-gold); color: var(--accent-gold);">Línea Base</div>
+    </div>
+
+    <div class="overall-grid">
+      <div class="dim-pill" onclick="switchTab('fisica')" style="border-top: 3px solid var(--accent-green);">
+        <div class="icon">💪</div>
+        <div class="name">Física</div>
+        <div class="score color-fisica">—/100</div>
+        <div class="desc">Fuerza · Cardio · Cuerpo</div>
+      </div>
+      <div class="dim-pill" onclick="switchTab('metabolica')" style="border-top: 3px solid var(--accent-teal);">
+        <div class="icon">⚡</div>
+        <div class="name">Metabólica</div>
+        <div class="score color-metabolica">—/100</div>
+        <div class="desc">Glucosa · Hormonas · Mitoc.</div>
+      </div>
+      <div class="dim-pill" onclick="switchTab('mental')" style="border-top: 3px solid var(--accent-sky);">
+        <div class="icon">🧠</div>
+        <div class="name">Mental</div>
+        <div class="score color-mental">—/100</div>
+        <div class="desc">Cognitivo · Neurológico</div>
+      </div>
+      <div class="dim-pill" onclick="switchTab('emocional')" style="border-top: 3px solid var(--accent-rose);">
+        <div class="icon">❤️</div>
+        <div class="name">Emocional</div>
+        <div class="score color-emocional">—/100</div>
+        <div class="desc">Regulación · Relaciones</div>
+      </div>
+      <div class="dim-pill" onclick="switchTab('espiritual')" style="border-top: 3px solid var(--accent-violet);">
+        <div class="icon">✨</div>
+        <div class="name">Espiritual</div>
+        <div class="score color-espiritual">—/100</div>
+        <div class="desc">Propósito · Conciencia</div>
+      </div>
+    </div>
+
+    <div class="grid-2">
+      <div class="card">
+        <div class="card-label">Metodología de Puntuación</div>
+        <h3>¿Cómo se calcula el IVI?</h3>
+        <p>El Índice de Vitalidad Integrada (IVI) es un score compuesto de 0–100 que promedia las 5 dimensiones con pesos ajustables según tus objetivos personales.</p>
+        <div class="score-breakdown">
+          <div class="score-item"><span>Salud Física</span><span class="color-fisica">20%</span></div>
+          <div class="score-item"><span>Metabólica</span><span class="color-metabolica">25%</span></div>
+          <div class="score-item"><span>Mental</span><span class="color-mental">20%</span></div>
+          <div class="score-item"><span>Emocional</span><span class="color-emocional">20%</span></div>
+          <div class="score-item"><span>Espiritual</span><span class="color-espiritual">15%</span></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-label">Cronograma de Evaluación</div>
+        <h3>Ciclos de Medición</h3>
+        <div class="steps">
+          <div class="step">
+            <div class="step-content">
+              <strong>Basal (Mes 0)</strong>
+              <span>Evaluación completa de todas las dimensiones. Establece tu punto de partida.</span>
+            </div>
+          </div>
+          <div class="step">
+            <div class="step-content">
+              <strong>Check-in Mensual</strong>
+              <span>Métricas rápidas: peso, HRV, estado de ánimo, energía subjetiva.</span>
+            </div>
+          </div>
+          <div class="step">
+            <div class="step-content">
+              <strong>Revisión a los 6 meses</strong>
+              <span>Panel completo de laboratorio + evaluaciones psicológicas + comparativa.</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="grid-full">
+      <div class="card">
+        <div class="card-label">Tecnología · Wearables Recomendados</div>
+        <h3>Stack de Monitoreo Continuo</h3>
+        <div class="device-grid">
+          <div class="device-card">
+            <div class="icon">⌚</div>
+            <div class="name">Whoop 4.0 / Oura Ring 4</div>
+            <div class="metrics">HRV · Frecuencia cardíaca en reposo · Calidad del sueño · Carga de entrenamiento · Recuperación diaria</div>
+          </div>
+          <div class="device-card">
+            <div class="icon">📊</div>
+            <div class="name">CGM (Glucosa Continua)</div>
+            <div class="metrics">Levels Health · Nutrisense · Dexterity G7 · Variabilidad glucémica 24h · Respuesta postprandial · Time-in-range</div>
+          </div>
+          <div class="device-card">
+            <div class="icon">🧪</div>
+            <div class="name">Apps de Seguimiento</div>
+            <div class="metrics">InsideTracker · Viome · Function Health · Cronómetro para nutrición · Eight Sleep para temperatura corporal</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===================== FÍSICA ===================== -->
+  <div id="tab-fisica" class="dimension">
+
+    <div class="dimension-header">
+      <div class="dim-icon" style="color: var(--accent-green);">💪</div>
+      <div>
+        <div class="dim-title color-fisica">Salud Física</div>
+        <div class="dim-subtitle">Composición corporal · Rendimiento · Capacidad cardiovascular · Longevidad estructural</div>
+      </div>
+      <div class="dim-badge border-fisica color-fisica">Dimensión 1</div>
+    </div>
+
+    <div class="highlight-box" style="border-color: rgba(74,222,128,0.25); background: rgba(74,222,128,0.04);">
+      <p><strong>Enfoque:</strong> La salud física de precisión va más allá del peso y el IMC. Evalúa composición corporal real (músculo vs. grasa), capacidad funcional y biomarcadores de daño tisular y longevidad estructural.</p>
+    </div>
+
+    <div class="grid-2">
+      <div class="card bg-fisica">
+        <div class="card-label">Composición Corporal</div>
+        <h3>Evaluaciones Prioritarias</h3>
+        <ul class="marker-list">
+          <li><div class="marker-dot" style="background: var(--accent-green)"></div><span class="marker-name">DEXA Scan — Masa muscular/grasa/ósea</span><span class="marker-range freq">Cada 6M</span></li>
+          <li><div class="marker-dot" style="background: var(--accent-green)"></div><span class="marker-name">InBody 770 — Agua intracelular/extracelular</span><span class="marker-range freq">Mensual</span></li>
+          <li><div class="marker-dot" style="background: #64748b"></div><span class="marker-name">% Grasa Visceral (VAT)</span><span class="marker-range">< 100 cm²</span></li>
+          <li><div class="marker-dot" style="background: #64748b"></div><span class="marker-name">Índice músculo esquelético (SMI)</span><span class="marker-range">> 7.0 kg/m²</span></li>
+          <li><div class="marker-dot" style="background: #64748b"></div><span class="marker-name">Densidad ósea (T-Score)</span><span class="marker-range">> -1.0</span></li>
+        </ul>
+      </div>
+
+      <div class="card bg-fisica">
+        <div class="card-label">Rendimiento Funcional</div>
+        <h3>Tests de Capacidad</h3>
+        <ul class="marker-list">
+          <li><div class="marker-dot" style="background: var(--accent-green)"></div><span class="marker-name">VO₂ Max (CPET en laboratorio)</span><span class="marker-range">> 45 ml/kg/min</span></li>
+          <li><div class="marker-dot" style="background: var(--accent-green)"></div><span class="marker-name">Grip Strength (dinamómetro)</span><span class="marker-range">> 48 kg hombre</span></li>
+          <li><div class="marker-dot" style="background: #64748b"></div><span class="marker-name">Dead Hang Time</span><span class="marker-range">> 60 seg</span></li>
+          <li><div class="marker-dot" style="background: #64748b"></div><span class="marker-name">Standing Broad Jump</span><span class="marker-range">> 200 cm</span></li>
+          <li><div class="marker-dot" style="background: #64748b"></div><span class="marker-name">Sit & Rise Test (SRT)</span><span class="marker-range">10/10</span></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="grid-3">
+      <div class="card">
+        <div class="card-label">Biomarcadores Séricos</div>
+        <h3>Panel Muscular & Óseo</h3>
+        <ul class="marker-list">
+          <li><div class="marker-dot" style="background: var(--accent-green)"></div><span class="marker-name">CPK (Creatina Quinasa)</span><span class="marker-range">< 200 U/L</span></li>
+          <li><div class="marker-dot" style="background: #64748b"></div><span class="marker-name">Vitamina D3 (25-OH)</span><span class="marker-range">50–80 ng/ml</span></li>
+          <li><div class="marker-dot" style="background: #64748b"></div><span class="marker-name">Calcio iónico</span><span class="marker-range">1.15–1.35</span></li>
+          <li><div class="marker-dot" style="background: #64748b"></div><span class="marker-name">P1NP (formación ósea)</span><span class="marker-range"></span></li>
+          <li><div class="marker-dot" style="background: #64748b"></div><span class="marker-name">β-CTX (resorción ósea)</span><span class="marker-range"></span></li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <div class="card-label">Cardiovascular</div>
+        <h3>Salud del Corazón</h3>
+        <ul class="marker-list">
+          <li><div class="marker-dot" style="background: var(--accent-green)"></div><span class="marker-name">HRV (rMSSD diario)</span><span class="marker-range">> 50 ms</span></li>
+          <li><div class="marker-dot" style="background: #64748b"></div><span class="marker-name">FC en reposo</span><span class="marker-range">< 60 bpm</span></li>
+          <li><div class="marker-dot" style="background: #64748b"></div><span class="marker-name">Presión arterial</span><span class="marker-range">< 120/80</span></li>
+          <li><div class="marker-dot" style="background: #64748b"></div><span class="marker-name">Score de Calcio Coronario (CAC)</span><span class="marker-range">= 0</span></li>
+          <li><div class="marker-dot" style="background: #64748b"></div><span class="marker-name">ABI (índice tobillo-brazo)</span><span class="marker-range">0.9–1.3</span></li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <div class="card-label">Tendencias 2025</div>
+        <h3>Medicina de Precisión</h3>
+        <ul class="marker-list">
+          <li><div class="marker-dot" style="background: var(--accent-gold)"></div><span class="marker-name">Genómica deportiva (ACTN3, ACE)</span></li>
+          <li><div class="marker-dot" style="background: var(--accent-gold)"></div><span class="marker-name">Mioquinas (IL-6, irisin, BDNF)</span></li>
+          <li><div class="marker-dot" style="background: var(--accent-gold)"></div><span class="marker-name">Análisis de marcha 3D</span></li>
+          <li><div class="marker-dot" style="background: var(--accent-gold)"></div><span class="marker-name">Electromiografía superficial (sEMG)</span></li>
+          <li><div class="marker-dot" style="background: var(--accent-gold)"></div><span class="marker-name">Recuperación: HRV + lactato umbral</span></li>
+        </ul>
+        <div class="tags">
+          <div class="tag highlight">Longevidad</div>
+          <div class="tag highlight">Precision Sport</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===================== METABÓLICA ===================== -->
+  <div id="tab-metabolica" class="dimension">
+
+    <div class="dimension-header">
+      <div class="dim-icon" style="color: var(--accent-teal);">⚡</div>
+      <div>
+        <div class="dim-title color-metabolica">Salud Metabólica</div>
+        <div class="dim-subtitle">Glucosa · Hormonas · Mitocondrias · Inflamación · Microbioma · Envejecimiento celular</div>
+      </div>
+      <div class="dim-badge border-metabolica color-metabolica">Dimensión 2</div>
+    </div>
+
+    <div class="highlight-box" style="border-color: rgba(45,212,191,0.25); background: rgba(45,212,191,0.04);">
+      <p><strong>Enfoque:</strong> La disfunción metabólica precede a casi todas las enfermedades crónicas por décadas. Esta dimensión usa <strong>medicina molecular</strong> para detectar deterioro sub-clínico y optimizar la función mitocondrial, hormonal y metabólica.</p>
+    </div>
+
+    <div class="grid-2">
+      <div class="card bg-metabolica">
+        <div class="card-label">Panel Metabólico Avanzado</div>
+        <h3>Glucosa & Resistencia a Insulina</h3>
+        <ul class="marker-list">
+          <li><div class="marker-dot" style="background: var(--accent-teal)"></div><span class="marker-name">Glucosa en ayunas</span><span class="marker-range">70–85 mg/dl</span></li>
+          <li><div class="marker-dot" style="background: var(--accent-teal)"></div><span class="marker-name">HbA1c</span><span class="marker-range">< 5.3%</span></li>
+          <li><div class="marker-dot" style="background: var(--accent-teal)"></div><span class="marker-name">Insulina en ayunas</span><span class="marker-range">< 5 uIU/ml</span></li>
+          <li><div class="marker-dot" style="background: #64748b"></div><span class="marker-name">HOMA-IR (índice resistencia)</span><span class="marker-range">< 1.0</span></li>
+          <li><div class="marker-dot" style="background: #64748b"></div><span class="marker-name">Fructosamina</span><span class="marker-range">< 200 umol/L</span></li>
+          <li><div class="marker-dot" style="background: #64748b"></div><span class="marker-name">CGM — Time in Range (70–140)</span><span class="marker-range">> 90%</span></li>
+        </ul>
+      </div>
+
+      <div class="card bg-metabolica">
+        <div class="card-label">Panel Lipídico Avanzado (NMR)</div>
+        <h3>Riesgo Cardiovascular Real</h3>
+        <ul class="marker-list">
+          <li><div class="marker-dot" style="background: var(--accent-teal)"></div><span class="marker-name">ApoB (partículas LDL aterógenas)</span><span class="marker-range">< 60 mg/dl</span></li>
+          <li><div class="marker-dot" style="background: var(--accent-teal)"></div><span class="marker-name">Lp(a) — Lipoproteína a</span><span class="marker-range">< 30 mg/dl</span></li>
+          <li><div class="marker-dot" style="background: #64748b"></div><span class="marker-name">LDL-P (partículas LDL)</span><span class="marker-range">< 1000</span></li>
+          <li><div class="marker-dot" style="background: #64748b"></div><span class="marker-name">HDL-P (partículas HDL)</span><span class="marker-range">> 30.5</span></li>
+          <li><div class="marker-dot" style="background: #64748b"></div><span class="marker-name">Triglicéridos</span><span class="marker-range">< 70 mg/dl</span></li>
+          <li><div class="marker-dot" style="background: #64748b"></div><span class="marker-name">Ratio Trig/HDL</span><span class="marker-range">< 1.0</span></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="grid-3">
+      <div class="card">
+        <div class="card-label">Eje Hormonal</div>
+        <h3>Hormonas Clave</h3>
+        <ul class="marker-list">
+          <li><div class="marker-dot" style="background: var(--accent-teal)"></div><span class="marker-name">Testosterona Total & Libre</span><span class="marker-range">600–1000 ng/dl</span></li>
+          <li><div class="marker-dot" style="background: #64748b"></div><span class="marker-name">SHBG</span><span class="marker-range">20–50 nmol/L</span></li>
+          <li><div class="marker-dot" style="background: #64748b"></div><span class="marker-name">DHEA-S</span><span class="marker-range">200–400 ug/dl</span></li>
+          <li><div class="marker-dot" style="background: #64748b"></div><span class="marker-name">IGF-1</span><span class="marker-range">150–250 ng/ml</span></li>
+          <li><div class="marker-dot" style="background: #64748b"></div><span class="marker-name">Cortisol matutino</span><span class="marker-range">15–25 ug/dl</span></li>
+          <li><div class="marker-dot" style="background: #64748b"></div><span class="marker-name">TSH / T4L / T3L</span><span class="marker-range">0.5–2.0</span></li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <div class="card-label">Inflamación & Envejecimiento</div>
+        <h3>Biomarcadores de Longevidad</h3>
+        <ul class="marker-list">
+          <li><div class="marker-dot" style="background: var(--accent-teal)"></div><span class="marker-name">hsCRP (inflamación sensible)</span><span class="marker-range">< 0.5 mg/L</span></li>
+          <li><div class="marker-dot" style="background: var(--accent-teal)"></div><span class="marker-name">IL-6 (interleucina)</span><span class="marker-range">< 1.8 pg/ml</span></li>
+          <li><div class="marker-dot" style="background: #64748b"></div><span class="marker-name">Homocisteína</span><span class="marker-range">< 7 umol/L</span></li>
+          <li><div class="marker-dot" style="background: #64748b"></div><span class="marker-name">Edad biológica (reloj epigenético)</span><span class="marker-range">< Edad real</span></li>
+          <li><div class="marker-dot" style="background: #64748b"></div><span class="marker-name">Longitud de telómeros</span><span class="marker-range">Percentil > 50</span></li>
+          <li><div class="marker-dot" style="background: #64748b"></div><span class="marker-name">8-OHdG (daño oxidativo ADN)</span><span class="marker-range">< 8 ng/mgCr</span></li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <div class="card-label">Microbioma & Mitocondrias</div>
+        <h3>Frontera de Precisión</h3>
+        <ul class="marker-list">
+          <li><div class="marker-dot" style="background: var(--accent-gold)"></div><span class="marker-name">Secuenciación microbioma (Viome)</span></li>
+          <li><div class="marker-dot" style="background: var(--accent-gold)"></div><span class="marker-name">Ácidos grasos de cadena corta (SCFA)</span></li>
+          <li><div class="marker-dot" style="background: var(--accent-gold)"></div><span class="marker-name">Lactato / Piruvato (función mitoc.)</span></li>
+          <li><div class="marker-dot" style="background: var(--accent-gold)"></div><span class="marker-name">NAD+ / NADH ratio</span></li>
+          <li><div class="marker-dot" style="background: var(--accent-gold)"></div><span class="marker-name">Omega-3 Index (> 8%)</span></li>
+          <li><div class="marker-dot" style="background: var(--accent-gold)"></div><span class="marker-name">GlycanAge (inflamación crónica)</span></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===================== MENTAL ===================== -->
+  <div id="tab-mental" class="dimension">
+
+    <div class="dimension-header">
+      <div class="dim-icon" style="color: var(--accent-sky);">🧠</div>
+      <div>
+        <div class="dim-title color-mental">Salud Mental & Cognitiva</div>
+        <div class="dim-subtitle">Neurología funcional · Cognición · Sueño · Neuroinflamación · Bienestar psicológico</div>
+      </div>
+      <div class="dim-badge border-mental color-mental">Dimensión 3</div>
+    </div>
+
+    <div class="highlight-box" style="border-color: rgba(56,189,248,0.25); background: rgba(56,189,248,0.04);">
+      <p><strong>Enfoque:</strong> El cerebro es el órgano más costoso metabólicamente. La salud cognitiva se mide mediante tests neuropsicológicos validados, biomarcadores de neuroinflamación y tecnologías emergentes de neuroimagen funcional. <strong>El sueño es la intervención #1.</strong></p>
+    </div>
+
+    <div class="grid-2">
+      <div class="card bg-mental">
+        <div class="card-label">Evaluación Cognitiva</div>
+        <h3>Tests Neuropsicológicos</h3>
+        <ul class="marker-list">
+          <li><div class="marker-dot" style="background: var(--accent-sky)"></div><span class="marker-name">Cambridge Brain Sciences (CBS)</span><span class="marker-range freq">Cada 6M</span></li>
+          <li><div class="marker-dot" style="background: var(--accent-sky)"></div><span class="marker-name">Cognifit — Batería completa</span><span class="marker-range freq">Cada 6M</span></li>
+          <li><div class="marker-dot" style="background: #64748b"></div><span class="marker-name">Velocidad de procesamiento</span><span class="marker-range">P > 50</span></li>
+          <li><div class="marker-dot" style="background: #64748b"></div><span class="marker-name">Memoria de trabajo (N-back)</span><span class="marker-range">P > 50</span></li>
+          <li><div class="marker-dot" style="background: #64748b"></div><span class="marker-name">Atención sostenida (CPT)</span><span class="marker-range"></span></li>
+          <li><div class="marker-dot" style="background: #64748b"></div><span class="marker-name">Función ejecutiva (TMT-B)</span><span class="marker-range">< 90 seg</span></li>
+        </ul>
+      </div>
+
+      <div class="card bg-mental">
+        <div class="card-label">Arquitectura del Sueño</div>
+        <h3>Métricas de Recuperación Neural</h3>
+        <ul class="marker-list">
+          <li><div class="marker-dot" style="background: var(--accent-sky)"></div><span class="marker-name">Sueño profundo (SWS)</span><span class="marker-range">> 20%</span></li>
+          <li><div class="marker-dot" style="background: var(--accent-sky)"></div><span class="marker-name">Sueño REM</span><span class="marker-range">> 20%</span></li>
+          <li><div class="marker-dot" style="background: #64748b"></div><span class="marker-name">Latencia al sueño</span><span class="marker-range">< 20 min</span></li>
+          <li><div class="marker-dot" style="background: #64748b"></div><span class="marker-name">Eficiencia del sueño</span><span class="marker-range">> 85%</span></li>
+          <li><div class="marker-dot" style="background: #64748b"></div><span class="marker-name">Temperatura corporal nocturna</span><span class="marker-range">Eight Sleep</span></li>
+          <li><div class="marker-dot" style="background: #64748b"></div><span class="marker-name">Apnea (STOP-BANG + PSG)</span><span class="marker-range">AHI < 5</span></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="grid-3">
+      <div class="card">
+        <div class="card-label">Biomarcadores Neurológicos</div>
+        <h3>Panel Cerebral en Sangre</h3>
+        <ul class="marker-list">
+          <li><div class="marker-dot" style="background: var(--accent-sky)"></div><span class="marker-name">BDNF (factor neurotrófico)</span><span class="marker-range">> 900 pg/ml</span></li>
+          <li><div class="marker-dot" style="background: #64748b"></div><span class="marker-name">GFAP (neuroinflamación)</span><span class="marker-range">< 200 pg/ml</span></li>
+          <li><div class="marker-dot" style="background: #64748b"></div><span class="marker-name">NfL (daño axonal)</span><span class="marker-range">Según edad</span></li>
+          <li><div class="marker-dot" style="background: #64748b"></div><span class="marker-name">Pfosfato-tau (Alzheimer precoz)</span><span class="marker-range"></span></li>
+          <li><div class="marker-dot" style="background: #64748b"></div><span class="marker-name">ApoE4 genético (riesgo)</span><span class="marker-range">Una vez</span></li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <div class="card-label">Nutrición Neurológica</div>
+        <h3>Cofactores Cerebrales</h3>
+        <ul class="marker-list">
+          <li><div class="marker-dot" style="background: var(--accent-sky)"></div><span class="marker-name">Magnesio eritrocitario</span><span class="marker-range">5.2–6.5</span></li>
+          <li><div class="marker-dot" style="background: #64748b"></div><span class="marker-name">Vitamina B12 activa (holoTC)</span><span class="marker-range">> 50 pmol/L</span></li>
+          <li><div class="marker-dot" style="background: #64748b"></div><span class="marker-name">Folato</span><span class="marker-range">> 15 ng/ml</span></li>
+          <li><div class="marker-dot" style="background: #64748b"></div><span class="marker-name">Zinc sérico</span><span class="marker-range">80–120 ug/dl</span></li>
+          <li><div class="marker-dot" style="background: #64748b"></div><span class="marker-name">Litio en orina (neuroprotector)</span><span class="marker-range"></span></li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <div class="card-label">Neurotecnología · 2025</div>
+        <h3>Herramientas de Vanguardia</h3>
+        <ul class="marker-list">
+          <li><div class="marker-dot" style="background: var(--accent-gold)"></div><span class="marker-name">EEG portátil (Muse 2, Neurosity)</span></li>
+          <li><div class="marker-dot" style="background: var(--accent-gold)"></div><span class="marker-name">fNIRS cerebral no invasivo</span></li>
+          <li><div class="marker-dot" style="background: var(--accent-gold)"></div><span class="marker-name">qEEG cuantitativo (Brainscope)</span></li>
+          <li><div class="marker-dot" style="background: var(--accent-gold)"></div><span class="marker-name">Neurofeedback adaptativo</span></li>
+          <li><div class="marker-dot" style="background: var(--accent-gold)"></div><span class="marker-name">Hiperbárico (HBOT) cognitivo</span></li>
+        </ul>
+        <div class="tags">
+          <div class="tag highlight">Neuroplasticidad</div>
+          <div class="tag highlight">Longevidad Neural</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===================== EMOCIONAL ===================== -->
+  <div id="tab-emocional" class="dimension">
+
+    <div class="dimension-header">
+      <div class="dim-icon" style="color: var(--accent-rose);">❤️</div>
+      <div>
+        <div class="dim-title color-emocional">Salud Emocional</div>
+        <div class="dim-subtitle">Regulación · Bienestar subjetivo · Relaciones · Resiliencia · Inteligencia emocional</div>
+      </div>
+      <div class="dim-badge border-emocional color-emocional">Dimensión 4</div>
+    </div>
+
+    <div class="highlight-box" style="border-color: rgba(248,113,113,0.25); background: rgba(248,113,113,0.04);">
+      <p><strong>Enfoque:</strong> La salud emocional se mide con escalas psicométricas validadas internacionalmente + biomarcadores de estrés. El bienestar emocional es cuantificable y mejorable sistemáticamente. <strong>No es subjetivo, es mesurable.</strong></p>
+    </div>
+
+    <div class="grid-2">
+      <div class="card bg-emocional">
+        <div class="card-label">Escalas Psicométricas Validadas</div>
+        <h3>Evaluación Cada 6 Meses</h3>
+        <ul class="marker-list">
+          <li><div class="marker-dot" style="background: var(--accent-rose)"></div><span class="marker-name">DASS-21 (Depresión / Ansiedad / Estrés)</span><span class="marker-range freq">Cada 6M</span></li>
+          <li><div class="marker-dot" style="background: var(--accent-rose)"></div><span class="marker-name">PANAS (Afecto Positivo y Negativo)</span><span class="marker-range freq">Mensual</span></li>
+          <li><div class="marker-dot" style="background: #64748b"></div><span class="marker-name">SWLS (Satisfacción con la Vida)</span><span class="marker-range">> 26/35</span></li>
+          <li><div class="marker-dot" style="background: #64748b"></div><span class="marker-name">PERMA Profiler (Seligman)</span><span class="marker-range">> 7/10</span></li>
+          <li><div class="marker-dot" style="background: #64748b"></div><span class="marker-name">MSCEIT (Inteligencia Emocional)</span><span class="marker-range">Percentil 50+</span></li>
+          <li><div class="marker-dot" style="background: #64748b"></div><span class="marker-name">Connor-Davidson Resilience Scale</span><span class="marker-range">> 32/40</span></li>
+        </ul>
+      </div>
+
+      <div class="card bg-emocional">
+        <div class="card-label">Biomarcadores de Estrés</div>
+        <h3>Fisiología del Estrés</h3>
+        <ul class="marker-list">
+          <li><div class="marker-dot" style="background: var(--accent-rose)"></div><span class="marker-name">Cortisol urinario de 24h</span><span class="marker-range">20–90 ug/dia</span></li>
+          <li><div class="marker-dot" style="background: var(--accent-rose)"></div><span class="marker-name">Cortisol salival (curva diurna)</span><span class="marker-range">Patrón normal</span></li>
+          <li><div class="marker-dot" style="background: #64748b"></div><span class="marker-name">DHEA-S / Cortisol ratio</span><span class="marker-range">> 5</span></li>
+          <li><div class="marker-dot" style="background: #64748b"></div><span class="marker-name">Serotonina sérica</span><span class="marker-range">101–283 ng/ml</span></li>
+          <li><div class="marker-dot" style="background: #64748b"></div><span class="marker-name">Dopamina urinaria</span><span class="marker-range">65–400 ug/g</span></li>
+          <li><div class="marker-dot" style="background: #64748b"></div><span class="marker-name">Alfa-amilasa salival (SNS)</span><span class="marker-range"></span></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="grid-3">
+      <div class="card">
+        <div class="card-label">Métricas de Relaciones</div>
+        <h3>Capital Social & Vínculos</h3>
+        <ul class="marker-list">
+          <li><div class="marker-dot" style="background: var(--accent-rose)"></div><span class="marker-name">Índice de soledad (UCLA-3)</span><span class="marker-range">< 5</span></li>
+          <li><div class="marker-dot" style="background: #64748b"></div><span class="marker-name">Calidad relacional (RQI)</span><span class="marker-range">> 70%</span></li>
+          <li><div class="marker-dot" style="background: #64748b"></div><span class="marker-name">Cercanía subjetiva percibida</span><span class="marker-range">Escala 1-10</span></li>
+          <li><div class="marker-dot" style="background: #64748b"></div><span class="marker-name">Horas de conexión social/semana</span><span class="marker-range">> 10h</span></li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <div class="card-label">Regulación Emocional</div>
+        <h3>Coherencia Cardíaca</h3>
+        <ul class="marker-list">
+          <li><div class="marker-dot" style="background: var(--accent-rose)"></div><span class="marker-name">HRV coherencia (HeartMath)</span><span class="marker-range">Alto</span></li>
+          <li><div class="marker-dot" style="background: #64748b"></div><span class="marker-name">Temperatura cutánea (estrés)</span><span class="marker-range">Biofeedback</span></li>
+          <li><div class="marker-dot" style="background: #64748b"></div><span class="marker-name">GSR (respuesta galvánica)</span><span class="marker-range">Emwave Pro</span></li>
+          <li><div class="marker-dot" style="background: #64748b"></div><span class="marker-name">Práctica de meditación (min/día)</span><span class="marker-range">> 20 min</span></li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <div class="card-label">Tendencias · Psicología Positiva</div>
+        <h3>Intervenciones con Evidencia</h3>
+        <ul class="marker-list">
+          <li><div class="marker-dot" style="background: var(--accent-gold)"></div><span class="marker-name">Terapia basada en IFS / ACT</span></li>
+          <li><div class="marker-dot" style="background: var(--accent-gold)"></div><span class="marker-name">Psychedelics asistidos (psilocibina)</span></li>
+          <li><div class="marker-dot" style="background: var(--accent-gold)"></div><span class="marker-name">EMDR para trauma</span></li>
+          <li><div class="marker-dot" style="background: var(--accent-gold)"></div><span class="marker-name">Journaling estructurado (WRITE)</span></li>
+          <li><div class="marker-dot" style="background: var(--accent-gold)"></div><span class="marker-name">Social prescribing</span></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===================== ESPIRITUAL ===================== -->
+  <div id="tab-espiritual" class="dimension">
+
+    <div class="dimension-header">
+      <div class="dim-icon" style="color: var(--accent-violet);">✨</div>
+      <div>
+        <div class="dim-title color-espiritual">Salud Espiritual</div>
+        <div class="dim-subtitle">Propósito · Valores · Trascendencia · Mindfulness · Coherencia de vida</div>
+      </div>
+      <div class="dim-badge border-espiritual color-espiritual">Dimensión 5</div>
+    </div>
+
+    <div class="highlight-box" style="border-color: rgba(167,139,250,0.25); background: rgba(167,139,250,0.04);">
+      <p><strong>Enfoque:</strong> La salud espiritual no requiere religión. Se mide como <strong>coherencia entre valores y acciones</strong>, sentido de propósito, capacidad de presencia, y conexión con algo mayor que uno mismo. Estas métricas predicen longevidad y resiliencia.</p>
+    </div>
+
+    <div class="grid-2">
+      <div class="card bg-espiritual">
+        <div class="card-label">Escalas de Bienestar Existencial</div>
+        <h3>Propósito & Sentido</h3>
+        <ul class="marker-list">
+          <li><div class="marker-dot" style="background: var(--accent-violet)"></div><span class="marker-name">PIL (Purpose in Life Test)</span><span class="marker-range">> 92/140</span></li>
+          <li><div class="marker-dot" style="background: var(--accent-violet)"></div><span class="marker-name">MLQ (Meaning in Life Questionnaire)</span><span class="marker-range">> 24/35</span></li>
+          <li><div class="marker-dot" style="background: #64748b"></div><span class="marker-name">VIA Character Strengths</span><span class="marker-range">Uso top-5</span></li>
+          <li><div class="marker-dot" style="background: #64748b"></div><span class="marker-name">FACIT-Sp (bienestar espiritual)</span><span class="marker-range">> 32/48</span></li>
+          <li><div class="marker-dot" style="background: #64748b"></div><span class="marker-name">Coherencia vida-valores (0-10)</span><span class="marker-range">> 8/10</span></li>
+          <li><div class="marker-dot" style="background: #64748b"></div><span class="marker-name">Deathbed test (Bronnie Ware)</span><span class="marker-range">Reflexión</span></li>
+        </ul>
+      </div>
+
+      <div class="card bg-espiritual">
+        <div class="card-label">Mindfulness & Presencia</div>
+        <h3>Conciencia Plena</h3>
+        <ul class="marker-list">
+          <li><div class="marker-dot" style="background: var(--accent-violet)"></div><span class="marker-name">FFMQ (Mindfulness Facets)</span><span class="marker-range">> 120/195</span></li>
+          <li><div class="marker-dot" style="background: var(--accent-violet)"></div><span class="marker-name">Minutos de meditación/día</span><span class="marker-range">> 20 min</span></li>
+          <li><div class="marker-dot" style="background: #64748b"></div><span class="marker-name">Días de práctica consecutivos</span><span class="marker-range">> 90%</span></li>
+          <li><div class="marker-dot" style="background: #64748b"></div><span class="marker-name">Momentos de flujo/semana</span><span class="marker-range">> 3</span></li>
+          <li><div class="marker-dot" style="background: #64748b"></div><span class="marker-name">Mind-wandering (EMA)</span><span class="marker-range">< 40%</span></li>
+          <li><div class="marker-dot" style="background: #64748b"></div><span class="marker-name">Tiempo en naturaleza/semana</span><span class="marker-range">> 2h</span></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="grid-3">
+      <div class="card">
+        <div class="card-label">Gratitud & Conexión</div>
+        <h3>Prácticas Medibles</h3>
+        <ul class="marker-list">
+          <li><div class="marker-dot" style="background: var(--accent-violet)"></div><span class="marker-name">Diario de gratitud (frecuencia)</span><span class="marker-range">> 5x/sem</span></li>
+          <li><div class="marker-dot" style="background: #64748b"></div><span class="marker-name">Actos de generosidad/semana</span><span class="marker-range">> 3</span></li>
+          <li><div class="marker-dot" style="background: #64748b"></div><span class="marker-name">Horas de servicio/mes</span><span class="marker-range">> 4h</span></li>
+          <li><div class="marker-dot" style="background: #64748b"></div><span class="marker-name">Experiencias de asombro (AWE)</span><span class="marker-range">Semanales</span></li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <div class="card-label">Biología de la Espiritualidad</div>
+        <h3>Correlatos Fisiológicos</h3>
+        <ul class="marker-list">
+          <li><div class="marker-dot" style="background: var(--accent-violet)"></div><span class="marker-name">Oxitocina (conexión)</span><span class="marker-range">Mejora c/contacto</span></li>
+          <li><div class="marker-dot" style="background: #64748b"></div><span class="marker-name">Ondas gamma EEG (meditadores)</span><span class="marker-range">Muse/qEEG</span></li>
+          <li><div class="marker-dot" style="background: #64748b"></div><span class="marker-name">HRV alta durante meditación</span><span class="marker-range">> 50 ms</span></li>
+          <li><div class="marker-dot" style="background: #64748b"></div><span class="marker-name">IL-6 baja (meditación sostenida)</span><span class="marker-range">Efecto documentado</span></li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <div class="card-label">Prácticas con Evidencia</div>
+        <h3>Herramientas 2025</h3>
+        <ul class="marker-list">
+          <li><div class="marker-dot" style="background: var(--accent-gold)"></div><span class="marker-name">Retiros de silencio (vipassana)</span></li>
+          <li><div class="marker-dot" style="background: var(--accent-gold)"></div><span class="marker-name">Ikigai Map (propósito japonés)</span></li>
+          <li><div class="marker-dot" style="background: var(--accent-gold)"></div><span class="marker-name">Terapia de integración de sentido</span></li>
+          <li><div class="marker-dot" style="background: var(--accent-gold)"></div><span class="marker-name">AWE walk (Stanford awe protocol)</span></li>
+          <li><div class="marker-dot" style="background: var(--accent-gold)"></div><span class="marker-name">Diario de legado (perspectiva)</span></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===================== PROTOCOLO ===================== -->
+  <div id="tab-protocolo" class="dimension">
+
+    <div class="dimension-header">
+      <div class="dim-icon" style="color: var(--accent-gold);">⟳</div>
+      <div>
+        <div class="dim-title" style="color: var(--accent-gold);">Protocolo de Implementación</div>
+        <div class="dim-subtitle">Secuencia de exámenes · Cronograma · Equipo de profesionales · Stack de suplementos</div>
+      </div>
+      <div class="dim-badge" style="border-color: var(--accent-gold); color: var(--accent-gold);">Guía Práctica</div>
+    </div>
+
+    <div class="section-title">Cronograma semestral de evaluaciones</div>
+
+    <div class="timeline">
+      <div class="tl-item">
+        <div class="tl-time">MES 0 · Basal</div>
+        <div class="tl-title">Evaluación Completa</div>
+        <div class="tl-items">Panel completo de laboratorio<br>DEXA Scan<br>VO₂ Max (CPET)<br>Tests psicológicos completos<br>CGM 14 días<br>Microbioma</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-time">MES 1</div>
+        <div class="tl-title">Check-in Rápido</div>
+        <div class="tl-items">Peso + InBody<br>HRV promedio<br>Glucosa ayunas<br>Energía subjetiva 1-10<br>PANAS semanal</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-time">MES 2-3</div>
+        <div class="tl-title">Revisión Media</div>
+        <div class="tl-items">Panel metabólico básico<br>Cortisol matutino<br>CBS cognitivo<br>DASS-21<br>Ajuste protocolos</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-time">MES 4-5</div>
+        <div class="tl-title">Continuidad</div>
+        <div class="tl-items">Métricas wearables<br>Composición corporal<br>Tests de rendimiento<br>Escalas emocionales</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-time">MES 6 · Revisión</div>
+        <div class="tl-title">Evaluación Completa</div>
+        <div class="tl-items">Panel completo repetido<br>DEXA Scan<br>Todos los tests<br>Comparativa vs Mes 0<br>Nuevo protocolo</div>
+      </div>
+    </div>
+
+    <div class="grid-2">
+      <div class="card">
+        <div class="card-label">Equipo Multidisciplinario Ideal</div>
+        <h3>Tu Red de Especialistas</h3>
+        <div class="steps">
+          <div class="step">
+            <div class="step-content">
+              <strong>Médico de Medicina Funcional / de Longevidad</strong>
+              <span>Directores del protocolo. Interpreta panel completo, ajusta biomarcadores, coordina.</span>
+            </div>
+          </div>
+          <div class="step">
+            <div class="step-content">
+              <strong>Endocrinólogo o Internista avanzado</strong>
+              <span>Eje hormonal, metabólico, tiroides, cortisol, resistencia a insulina.</span>
+            </div>
+          </div>
+          <div class="step">
+            <div class="step-content">
+              <strong>Nutricionista de precisión / Coach metabólico</strong>
+              <span>Diseño alimentario basado en microbioma, genómica nutricional y CGM.</span>
+            </div>
+          </div>
+          <div class="step">
+            <div class="step-content">
+              <strong>Psicólogo / Psicoterapeuta</strong>
+              <span>Evaluación y seguimiento emocional, trauma, regulación, IFS o ACT.</span>
+            </div>
+          </div>
+          <div class="step">
+            <div class="step-content">
+              <strong>Coach de rendimiento + Entrenador de fuerza</strong>
+              <span>Periodización del entrenamiento según HRV y objetivos funcionales.</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-label">Protocolo Diario</div>
+        <h3>Rutinas de Medición Continua</h3>
+        <div class="steps">
+          <div class="step">
+            <div class="step-content">
+              <strong>Al despertar (5 min)</strong>
+              <span>Revisar HRV + score de recuperación en Whoop/Oura. Glucosa en ayunas (dedo o CGM). Temperatura.</span>
+            </div>
+          </div>
+          <div class="step">
+            <div class="step-content">
+              <strong>Mañana (10 min)</strong>
+              <span>Journaling: energía 1-10, estado emocional, 3 gratitudes. Meditación 20 min.</span>
+            </div>
+          </div>
+          <div class="step">
+            <div class="step-content">
+              <strong>Mediodía</strong>
+              <span>Respuesta glucémica postprandial (CGM). Nivel de foco y productividad 1-10.</span>
+            </div>
+          </div>
+          <div class="step">
+            <div class="step-content">
+              <strong>Noche (5 min)</strong>
+              <span>PANAS abreviado. Revisar sueño anterior. Preparar temperatura Eight Sleep.</span>
+            </div>
+          </div>
+          <div class="step">
+            <div class="step-content">
+              <strong>Semanal (30 min)</strong>
+              <span>Revisión de todas las métricas. Peso + medidas. Ajuste de intervenciones.</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="grid-full">
+      <div class="card">
+        <div class="card-label">Sistema de Puntuación · Comparativa Semestral</div>
+        <h3>Cómo Comparar Periodos</h3>
+        <div class="tracker-row header">
+          <span>Dimensión</span>
+          <span>Progreso</span>
+          <span>Mes 0</span>
+          <span>Mes 6</span>
+        </div>
+        <div class="tracker-row">
+          <span>Salud Física</span>
+          <div class="bar-wrap"><div class="bar bg-fisica" style="width: 0%"></div></div>
+          <span class="tracker-val color-fisica">—</span>
+          <span class="tracker-val color-fisica">—</span>
+        </div>
+        <div class="tracker-row">
+          <span>Salud Metabólica</span>
+          <div class="bar-wrap"><div class="bar bg-metabolica" style="width: 0%"></div></div>
+          <span class="tracker-val color-metabolica">—</span>
+          <span class="tracker-val color-metabolica">—</span>
+        </div>
+        <div class="tracker-row">
+          <span>Salud Mental</span>
+          <div class="bar-wrap"><div class="bar bg-mental" style="width: 0%"></div></div>
+          <span class="tracker-val color-mental">—</span>
+          <span class="tracker-val color-mental">—</span>
+        </div>
+        <div class="tracker-row">
+          <span>Salud Emocional</span>
+          <div class="bar-wrap"><div class="bar bg-emocional" style="width: 0%"></div></div>
+          <span class="tracker-val color-emocional">—</span>
+          <span class="tracker-val color-emocional">—</span>
+        </div>
+        <div class="tracker-row">
+          <span>Salud Espiritual</span>
+          <div class="bar-wrap"><div class="bar bg-espiritual" style="width: 0%"></div></div>
+          <span class="tracker-val color-espiritual">—</span>
+          <span class="tracker-val color-espiritual">—</span>
+        </div>
+        <p style="margin-top: 16px; color: var(--muted); font-size: 12px;">Completa los valores en cada revisión. Una mejora de 5–10 puntos en 6 meses en cualquier dimensión es clínicamente significativa.</p>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <span>Protocolo de Optimización Holística · 2025</span>
+    <span>Basado en evidencia · Medicina de precisión · Actualizado con tendencias 2023–2025</span>
+  </footer>
+
+</div>
+
+<div class="scrolltop" id="scrollBtn" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</div>
+
+<script>
+  function switchTab(id) {
+    document.querySelectorAll('.dimension').forEach(d => d.classList.remove('active'));
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    document.getElementById('tab-' + id).classList.add('active');
+    const tabs = document.querySelectorAll('.tab');
+    const map = ['overview','fisica','metabolica','mental','emocional','espiritual','protocolo'];
+    tabs[map.indexOf(id)].classList.add('active');
+    window.scrollTo({top: 0, behavior: 'smooth'});
+  }
+
+  window.addEventListener('scroll', () => {
+    document.getElementById('scrollBtn').classList.toggle('visible', window.scrollY > 300);
+  });
+</script>
+</body>
+</html>

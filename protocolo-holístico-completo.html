@@ -1,0 +1,1447 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Protocolo de Optimización Holística</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=DM+Mono:wght@300;400;500&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:       #07090d;
+  --surface:  #0c1018;
+  --surface2: #111720;
+  --surface3: #161e28;
+  --border:   #1c2733;
+  --border2:  #243140;
+  --text:     #dde4ec;
+  --muted:    #556070;
+  --subtle:   #131b24;
+
+  --gold:     #c8a84b;
+  --gold-dim: rgba(200,168,75,0.12);
+
+  --c-fisica:     #34d399;
+  --c-metabolica: #22d3ee;
+  --c-mental:     #818cf8;
+  --c-emocional:  #fb7185;
+  --c-espiritual: #fb923c;
+  --c-supp:       #a78bfa;
+
+  --c-fisica-bg:     rgba(52,211,153,0.07);
+  --c-metabolica-bg: rgba(34,211,238,0.07);
+  --c-mental-bg:     rgba(129,140,248,0.07);
+  --c-emocional-bg:  rgba(251,113,133,0.07);
+  --c-espiritual-bg: rgba(251,146,60,0.07);
+  --c-supp-bg:       rgba(167,139,250,0.07);
+}
+
+*{margin:0;padding:0;box-sizing:border-box}
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14px;
+  line-height: 1.6;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* GRAIN */
+body::after {
+  content:'';
+  position:fixed;
+  inset:0;
+  pointer-events:none;
+  z-index:999;
+  opacity:.025;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+}
+
+/* ── SIDEBAR ── */
+#sidebar {
+  position: fixed;
+  left: 0; top: 0; bottom: 0;
+  width: 220px;
+  background: var(--surface);
+  border-right: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  z-index: 100;
+  transition: transform .3s;
+}
+
+.sidebar-logo {
+  padding: 28px 20px 20px;
+  border-bottom: 1px solid var(--border);
+}
+
+.sidebar-logo .mark {
+  font-family: 'DM Mono', monospace;
+  font-size: 9px;
+  letter-spacing: .22em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 6px;
+}
+
+.sidebar-logo .title {
+  font-family: 'Playfair Display', serif;
+  font-size: 17px;
+  font-weight: 700;
+  line-height: 1.25;
+  color: var(--text);
+}
+
+.sidebar-logo .title em { font-style:italic; color: var(--gold); }
+
+.sidebar-nav { flex:1; overflow-y:auto; padding: 12px 0; }
+
+.nav-section {
+  padding: 8px 20px 4px;
+  font-family: 'DM Mono', monospace;
+  font-size: 9px;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 20px;
+  cursor: pointer;
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 400;
+  transition: all .15s;
+  border-left: 2px solid transparent;
+  position: relative;
+}
+
+.nav-item:hover { color: var(--text); background: var(--surface2); }
+
+.nav-item.active {
+  color: var(--text);
+  background: var(--surface2);
+  border-left-color: var(--gold);
+}
+
+.nav-item .dot {
+  width: 7px; height: 7px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.nav-item .badge {
+  margin-left: auto;
+  font-family: 'DM Mono', monospace;
+  font-size: 8px;
+  padding: 1px 6px;
+  background: var(--gold-dim);
+  color: var(--gold);
+  border-radius: 0;
+}
+
+.sidebar-footer {
+  padding: 16px 20px;
+  border-top: 1px solid var(--border);
+  font-family: 'DM Mono', monospace;
+  font-size: 9px;
+  color: var(--muted);
+  line-height: 1.7;
+}
+
+/* ── MAIN ── */
+#main {
+  margin-left: 220px;
+  min-height: 100vh;
+}
+
+/* ── TOPBAR ── */
+.topbar {
+  position: sticky;
+  top: 0;
+  background: rgba(7,9,13,.92);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border);
+  padding: 0 36px;
+  height: 52px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  z-index: 50;
+}
+
+.topbar-title {
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  letter-spacing: .15em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.topbar-pills { display:flex; gap:6px; }
+
+.tp {
+  font-family: 'DM Mono', monospace;
+  font-size: 9px;
+  letter-spacing: .08em;
+  padding: 4px 10px;
+  border: 1px solid var(--border);
+  color: var(--muted);
+  cursor: pointer;
+  transition: all .15s;
+  text-transform: uppercase;
+}
+
+.tp:hover, .tp.active { border-color: var(--gold); color: var(--gold); background: var(--gold-dim); }
+
+/* ── PAGES ── */
+.page { display:none; padding: 36px; max-width: 1100px; animation: fadeUp .25s ease; }
+.page.active { display:block; }
+
+@keyframes fadeUp {
+  from { opacity:0; transform:translateY(8px); }
+  to   { opacity:1; transform:translateY(0); }
+}
+
+/* ── PAGE HEADER ── */
+.page-header {
+  margin-bottom: 36px;
+  padding-bottom: 24px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.page-header h2 {
+  font-family: 'Playfair Display', serif;
+  font-size: 36px;
+  font-weight: 900;
+  line-height: 1.05;
+  letter-spacing: -.01em;
+}
+
+.page-header h2 em { font-style:italic; color: var(--gold); }
+
+.page-header p {
+  color: var(--muted);
+  font-size: 13px;
+  max-width: 460px;
+  line-height: 1.7;
+  margin-top: 6px;
+}
+
+.dim-tag-header {
+  font-family: 'DM Mono', monospace;
+  font-size: 9px;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  padding: 6px 14px;
+  border: 1px solid;
+  flex-shrink: 0;
+}
+
+/* ── GRID HELPERS ── */
+.g2  { display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-bottom:16px; }
+.g3  { display:grid; grid-template-columns:1fr 1fr 1fr; gap:16px; margin-bottom:16px; }
+.g5  { display:grid; grid-template-columns:repeat(5,1fr); gap:12px; margin-bottom:16px; }
+.gfull { margin-bottom:16px; }
+
+@media(max-width:900px){
+  #sidebar{ transform:translateX(-220px); }
+  #main{ margin-left:0; }
+  .g2,.g3,.g5{ grid-template-columns:1fr; }
+  .page{ padding:20px; }
+}
+
+/* ── CARDS ── */
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  padding: 20px;
+}
+
+.card-label {
+  font-family: 'DM Mono', monospace;
+  font-size: 9px;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.card-label::before { content:''; width:12px; height:1px; background:var(--muted); opacity:.5; }
+
+.card h3 {
+  font-family: 'Playfair Display', serif;
+  font-size: 18px;
+  font-weight: 700;
+  margin-bottom: 12px;
+}
+
+.card p { font-size:13px; color:#6a8099; line-height:1.75; margin-bottom:10px; }
+
+/* ── MARKER LIST ── */
+.mlist { list-style:none; display:flex; flex-direction:column; gap:0; }
+
+.mlist li {
+  display:grid;
+  grid-template-columns: 6px 1fr auto;
+  gap:10px;
+  align-items:center;
+  padding:7px 0;
+  border-bottom:1px solid var(--subtle);
+  font-size:12.5px;
+}
+.mlist li:last-child { border-bottom:none; }
+
+.mlist .dot { width:6px; height:6px; border-radius:50%; flex-shrink:0; }
+.mlist .name { color:var(--text); }
+.mlist .range {
+  font-family:'DM Mono',monospace;
+  font-size:10px;
+  color:var(--muted);
+  text-align:right;
+  white-space:nowrap;
+}
+
+/* ── OVERVIEW PILLS ── */
+.dim-pill {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  padding: 18px 14px;
+  text-align: center;
+  cursor: pointer;
+  transition: all .2s;
+}
+.dim-pill:hover { transform:translateY(-2px); border-color:var(--border2); }
+
+.dim-pill .icon { font-size:22px; margin-bottom:8px; }
+.dim-pill .name {
+  font-family:'DM Mono',monospace;
+  font-size:9px;
+  letter-spacing:.1em;
+  text-transform:uppercase;
+  color:var(--muted);
+  margin-bottom:4px;
+}
+.dim-pill .score {
+  font-family:'DM Mono',monospace;
+  font-size:22px;
+  font-weight:500;
+}
+.dim-pill .desc { font-size:10px; color:var(--muted); margin-top:4px; }
+
+/* ── STEPS ── */
+.steps { counter-reset:s; display:flex; flex-direction:column; gap:10px; }
+.step {
+  counter-increment:s;
+  display:grid;
+  grid-template-columns:30px 1fr;
+  gap:14px;
+  padding:14px;
+  background:var(--surface2);
+  border:1px solid var(--border);
+}
+.step::before {
+  content:counter(s,decimal-leading-zero);
+  font-family:'DM Mono',monospace;
+  font-size:13px;
+  color:var(--gold);
+  padding-top:1px;
+}
+.step strong { display:block; font-size:13px; margin-bottom:3px; }
+.step span { font-size:12px; color:var(--muted); line-height:1.6; }
+
+/* ── TAGS ── */
+.tags { display:flex; flex-wrap:wrap; gap:5px; margin-top:10px; }
+.tag {
+  font-family:'DM Mono',monospace;
+  font-size:9px;
+  letter-spacing:.08em;
+  padding:3px 9px;
+  border:1px solid var(--border);
+  color:var(--muted);
+  text-transform:uppercase;
+}
+.tag.hi { border-color:var(--gold); color:var(--gold); }
+
+/* ── HIGHLIGHT BOX ── */
+.hbox {
+  border-left:3px solid var(--gold);
+  background:var(--gold-dim);
+  padding:16px 20px;
+  margin-bottom:16px;
+  font-size:13px;
+  color:#8faabf;
+  line-height:1.75;
+}
+.hbox strong { color:var(--text); }
+
+/* ── TIMELINE ── */
+.timeline { display:flex; overflow-x:auto; margin-bottom:16px; }
+.tl { flex:1; min-width:110px; border:1px solid var(--border); border-right:none; padding:14px; }
+.tl:last-child { border-right:1px solid var(--border); }
+.tl-time { font-family:'DM Mono',monospace; font-size:9px; color:var(--gold); letter-spacing:.1em; margin-bottom:6px; }
+.tl-title { font-size:12px; font-weight:600; color:var(--text); margin-bottom:5px; }
+.tl-body { font-size:11px; color:var(--muted); line-height:1.7; }
+
+/* ── TRACKER ── */
+.tracker-row {
+  display:grid;
+  grid-template-columns:180px 1fr 70px 70px;
+  gap:12px;
+  align-items:center;
+  padding:10px 0;
+  border-bottom:1px solid var(--subtle);
+  font-size:12px;
+}
+.tracker-row.hdr {
+  font-family:'DM Mono',monospace;
+  font-size:9px;
+  letter-spacing:.1em;
+  text-transform:uppercase;
+  color:var(--muted);
+}
+.bar-bg { background:var(--subtle); height:3px; }
+.bar-fg { height:3px; }
+.tv { font-family:'DM Mono',monospace; font-size:11px; color:var(--muted); text-align:right; }
+
+/* ────────────────────────────────
+   SUPPLEMENT COMPONENTS
+──────────────────────────────── */
+
+/* Supp card */
+.sc {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  margin-bottom: 12px;
+  overflow: hidden;
+}
+
+.sc-head {
+  display: grid;
+  grid-template-columns: 48px 1fr auto;
+  cursor: pointer;
+  align-items: center;
+}
+
+.sc-num {
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Playfair Display', serif;
+  font-size: 20px;
+  font-weight: 700;
+  color: #000;
+  flex-shrink: 0;
+}
+
+.sc-info { padding: 10px 16px; }
+.sc-name { font-family:'Playfair Display',serif; font-size:18px; font-weight:700; color:var(--text); line-height:1.2; }
+.sc-tag  { font-size:11px; color:var(--muted); margin-top:2px; }
+
+.sc-meta {
+  padding: 10px 14px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 4px;
+}
+
+.ev-badge {
+  font-family:'DM Mono',monospace;
+  font-size:8px;
+  letter-spacing:.1em;
+  padding:2px 7px;
+  border:1px solid var(--c-fisica);
+  color:var(--c-fisica);
+  text-transform:uppercase;
+}
+.ev-b { border-color:var(--c-mental); color:var(--c-mental); }
+
+.pri-pill {
+  font-family:'DM Mono',monospace;
+  font-size:8px;
+  padding:2px 7px;
+  background:var(--gold-dim);
+  color:var(--gold);
+  border:1px solid rgba(200,168,75,.25);
+}
+
+.sc-dims {
+  display:flex;
+  flex-wrap:wrap;
+  gap:4px;
+  padding:8px 14px;
+  background:var(--subtle);
+  border-top:1px solid var(--border);
+}
+
+.sdim {
+  font-family:'DM Mono',monospace;
+  font-size:8px;
+  letter-spacing:.07em;
+  padding:2px 7px;
+  text-transform:uppercase;
+}
+
+.sc-body {
+  display:none;
+  padding:20px;
+  border-top:1px solid var(--border);
+  background:var(--surface2);
+}
+.sc-body.open { display:block; }
+
+/* dosage box */
+.dose-box {
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:1px;
+  background:var(--border);
+  border:1px solid var(--border);
+  margin-bottom:16px;
+}
+.dose-cell { background:var(--surface); padding:12px; }
+.dose-lbl { font-family:'DM Mono',monospace; font-size:8px; letter-spacing:.15em; text-transform:uppercase; color:var(--muted); margin-bottom:4px; }
+.dose-val { font-family:'Playfair Display',serif; font-size:18px; font-weight:700; color:var(--text); line-height:1.2; }
+.dose-sub { font-size:10px; color:var(--muted); margin-top:2px; }
+
+.sc-grid { display:grid; grid-template-columns:1fr 1fr 1fr; gap:16px; margin-bottom:14px; }
+@media(max-width:800px){ .sc-grid{ grid-template-columns:1fr; } .sc-head{ grid-template-columns:48px 1fr; } .sc-meta{ display:none; } .dose-box{ grid-template-columns:1fr; } }
+
+.ib h4 {
+  font-family:'DM Mono',monospace;
+  font-size:8px;
+  letter-spacing:.18em;
+  text-transform:uppercase;
+  color:var(--muted);
+  margin-bottom:8px;
+  padding-bottom:5px;
+  border-bottom:1px solid var(--border);
+}
+.ib p { font-size:12px; color:#6a8099; line-height:1.7; }
+.ib ul { list-style:none; display:flex; flex-direction:column; gap:3px; }
+.ib li { font-size:12px; color:#6a8099; line-height:1.6; }
+.ib li::before { content:'→ '; color:var(--muted); font-size:10px; }
+
+/* mrow */
+.mrow {
+  display:grid;
+  grid-template-columns:1fr 120px 80px;
+  gap:8px;
+  padding:7px 10px;
+  border-bottom:1px solid var(--subtle);
+  font-size:12px;
+  align-items:center;
+  background:var(--surface);
+  border:1px solid var(--border);
+  margin-bottom:4px;
+}
+.mrow:last-child { margin-bottom:0; }
+.mrow .mn { color:var(--text); }
+.mrow .mr { font-family:'DM Mono',monospace; font-size:10px; color:var(--muted); text-align:center; }
+.mrow .mf { font-family:'DM Mono',monospace; font-size:9px; color:var(--muted); text-align:right; }
+
+.warn {
+  background:rgba(255,200,50,.04);
+  border:1px solid rgba(255,200,50,.18);
+  border-left:2px solid #c8a84b;
+  padding:8px 12px;
+  font-size:11px;
+  color:#9a8040;
+  margin-top:10px;
+  line-height:1.6;
+}
+.warn::before { content:'⚠ '; }
+
+.syn-list { display:flex; flex-wrap:wrap; gap:5px; margin-top:6px; }
+.syn-pill {
+  font-family:'DM Mono',monospace;
+  font-size:9px;
+  padding:3px 9px;
+  border:1px solid var(--border);
+  color:var(--muted);
+}
+.syn-pill.s { border-color:var(--gold); color:var(--gold); background:var(--gold-dim); }
+
+/* toggle arrow */
+.tarr { padding:0 14px; font-size:14px; color:var(--muted); transition:transform .2s; user-select:none; }
+.tarr.open { transform:rotate(180deg); }
+
+/* ── MATRIX ── */
+.mat-wrap { overflow-x:auto; margin-bottom:16px; }
+.mat { width:100%; border-collapse:collapse; font-size:12px; }
+.mat th {
+  font-family:'DM Mono',monospace;
+  font-size:8px;
+  letter-spacing:.1em;
+  text-transform:uppercase;
+  padding:10px 12px;
+  background:var(--surface2);
+  color:var(--muted);
+  text-align:left;
+  white-space:nowrap;
+  border-bottom:1px solid var(--border);
+}
+.mat td {
+  padding:9px 12px;
+  border-bottom:1px solid var(--subtle);
+  background:var(--surface);
+  vertical-align:middle;
+}
+.mat tr:hover td { background:var(--surface2); }
+.mat td:first-child { font-family:'Playfair Display',serif; font-size:15px; font-weight:600; white-space:nowrap; }
+
+/* dot-rating */
+.dr { display:flex; gap:2px; align-items:center; }
+.dr span { width:8px; height:8px; border-radius:50%; }
+
+/* ── TIMING GRID ── */
+.timing-table { display:flex; flex-direction:column; gap:2px; margin-bottom:16px; }
+.timing-row { display:grid; grid-template-columns:110px 1fr; gap:2px; }
+.t-lbl {
+  background:var(--surface2);
+  padding:10px 14px;
+  font-family:'DM Mono',monospace;
+  font-size:9px;
+  letter-spacing:.1em;
+  text-transform:uppercase;
+  color:var(--muted);
+  display:flex;
+  align-items:center;
+  line-height:1.5;
+}
+.t-content {
+  background:var(--surface);
+  padding:10px 14px;
+  display:flex;
+  flex-wrap:wrap;
+  gap:5px;
+  align-items:center;
+  border:1px solid var(--border);
+}
+.tp2 {
+  font-size:11px;
+  padding:3px 10px;
+  border:1px solid var(--border);
+  color:#6a8099;
+  white-space:nowrap;
+}
+.tp2.core { background:var(--surface3); color:var(--text); border-color:var(--border2); }
+
+/* ── BUDGET ── */
+.budget-row {
+  display:grid;
+  grid-template-columns:1fr 130px 90px 70px;
+  gap:12px;
+  padding:10px 14px;
+  border-bottom:1px solid var(--subtle);
+  align-items:center;
+  font-size:12px;
+  background:var(--surface);
+  border:1px solid var(--border);
+  margin-bottom:3px;
+}
+.budget-row.hdr {
+  background:var(--surface2);
+  font-family:'DM Mono',monospace;
+  font-size:8px;
+  letter-spacing:.1em;
+  text-transform:uppercase;
+  color:var(--muted);
+}
+.bp { font-family:'DM Mono',monospace; font-size:11px; color:var(--muted); text-align:right; }
+.bt {
+  font-family:'DM Mono',monospace;
+  font-size:8px;
+  padding:2px 7px;
+  text-transform:uppercase;
+  text-align:center;
+}
+.bt-core { background:var(--text); color:var(--bg); }
+.bt-opt  { border:1px solid var(--border); color:var(--muted); }
+.bt-adv  { background:var(--gold-dim); color:var(--gold); border:1px solid rgba(200,168,75,.2); }
+
+/* ── SECTION RULE ── */
+.srule {
+  font-family:'DM Mono',monospace;
+  font-size:9px;
+  letter-spacing:.2em;
+  text-transform:uppercase;
+  color:var(--muted);
+  margin:24px 0 14px;
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+.srule::after { content:''; flex:1; height:1px; background:var(--border); }
+
+/* ── DEVICE GRID ── */
+.dev-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:12px; margin-bottom:16px; }
+@media(max-width:700px){ .dev-grid{ grid-template-columns:1fr; } }
+.dev-card { background:var(--surface2); border:1px solid var(--border); padding:16px; }
+.dev-card .di { font-size:18px; margin-bottom:8px; }
+.dev-card .dn { font-size:13px; font-weight:600; margin-bottom:4px; }
+.dev-card .dm { font-size:11px; color:var(--muted); line-height:1.7; }
+</style>
+</head>
+<body>
+
+<!-- ══════════════ SIDEBAR ══════════════ -->
+<nav id="sidebar">
+  <div class="sidebar-logo">
+    <div class="mark">Sistema Holístico · v2.0</div>
+    <div class="title">Protocolo de<br><em>Optimización</em><br>Personal</div>
+  </div>
+
+  <div class="sidebar-nav">
+    <div class="nav-section">Visión global</div>
+    <div class="nav-item active" onclick="go('overview')">
+      <div class="dot" style="background:var(--gold)"></div>
+      Dashboard Global
+    </div>
+    <div class="nav-item" onclick="go('protocolo')">
+      <div class="dot" style="background:var(--gold)"></div>
+      Protocolo &amp; Cronograma
+    </div>
+
+    <div class="nav-section" style="margin-top:8px">5 Dimensiones</div>
+    <div class="nav-item" onclick="go('fisica')">
+      <div class="dot" style="background:var(--c-fisica)"></div>
+      Física
+    </div>
+    <div class="nav-item" onclick="go('metabolica')">
+      <div class="dot" style="background:var(--c-metabolica)"></div>
+      Metabólica
+    </div>
+    <div class="nav-item" onclick="go('mental')">
+      <div class="dot" style="background:var(--c-mental)"></div>
+      Mental &amp; Cognitiva
+    </div>
+    <div class="nav-item" onclick="go('emocional')">
+      <div class="dot" style="background:var(--c-emocional)"></div>
+      Emocional
+    </div>
+    <div class="nav-item" onclick="go('espiritual')">
+      <div class="dot" style="background:var(--c-espiritual)"></div>
+      Espiritual
+    </div>
+
+    <div class="nav-section" style="margin-top:8px">Suplementación</div>
+    <div class="nav-item" onclick="go('supp-intro')">
+      <div class="dot" style="background:var(--c-supp)"></div>
+      Principios
+      <span class="badge">Nuevo</span>
+    </div>
+    <div class="nav-item" onclick="go('supp-lista')">
+      <div class="dot" style="background:var(--c-supp)"></div>
+      Suplementos Clave
+    </div>
+    <div class="nav-item" onclick="go('supp-matrix')">
+      <div class="dot" style="background:var(--c-supp)"></div>
+      Matriz de Impacto
+    </div>
+    <div class="nav-item" onclick="go('supp-timing')">
+      <div class="dot" style="background:var(--c-supp)"></div>
+      Protocolo Horario
+    </div>
+    <div class="nav-item" onclick="go('supp-stack')">
+      <div class="dot" style="background:var(--c-supp)"></div>
+      Stack &amp; Costos
+    </div>
+  </div>
+
+  <div class="sidebar-footer">
+    Ciclo de evaluación<br>
+    <span style="color:var(--gold)">cada 6 meses</span><br><br>
+    Evidencia 2023–2025
+  </div>
+</nav>
+
+<!-- ══════════════ MAIN ══════════════ -->
+<div id="main">
+
+  <div class="topbar">
+    <div class="topbar-title" id="topbar-label">Dashboard Global</div>
+    <div class="topbar-pills">
+      <div class="tp active" onclick="setView('medicion')">Medición</div>
+      <div class="tp" onclick="setView('intervencion')">Intervención</div>
+    </div>
+  </div>
+
+  <!-- ═══════ OVERVIEW ═══════ -->
+  <div class="page active" id="page-overview">
+    <div class="page-header">
+      <div>
+        <h2>Índice de<br><em>Vitalidad</em> Integrada</h2>
+        <p>5 dimensiones · biomarcadores de precisión · suplementación transversal · ciclos de 6 meses</p>
+      </div>
+      <div class="dim-tag-header" style="border-color:var(--gold);color:var(--gold)">IVI · Línea Base</div>
+    </div>
+
+    <div class="g5">
+      <div class="dim-pill" onclick="go('fisica')" style="border-top:3px solid var(--c-fisica)">
+        <div class="icon">💪</div>
+        <div class="name">Física</div>
+        <div class="score" style="color:var(--c-fisica)">—/100</div>
+        <div class="desc">Fuerza · Cardio · Cuerpo</div>
+      </div>
+      <div class="dim-pill" onclick="go('metabolica')" style="border-top:3px solid var(--c-metabolica)">
+        <div class="icon">⚡</div>
+        <div class="name">Metabólica</div>
+        <div class="score" style="color:var(--c-metabolica)">—/100</div>
+        <div class="desc">Glucosa · Hormonas · Mitoc.</div>
+      </div>
+      <div class="dim-pill" onclick="go('mental')" style="border-top:3px solid var(--c-mental)">
+        <div class="icon">🧠</div>
+        <div class="name">Mental</div>
+        <div class="score" style="color:var(--c-mental)">—/100</div>
+        <div class="desc">Cognitivo · Neurológico</div>
+      </div>
+      <div class="dim-pill" onclick="go('emocional')" style="border-top:3px solid var(--c-emocional)">
+        <div class="icon">❤️</div>
+        <div class="name">Emocional</div>
+        <div class="score" style="color:var(--c-emocional)">—/100</div>
+        <div class="desc">Regulación · Resiliencia</div>
+      </div>
+      <div class="dim-pill" onclick="go('espiritual')" style="border-top:3px solid var(--c-espiritual)">
+        <div class="icon">✨</div>
+        <div class="name">Espiritual</div>
+        <div class="score" style="color:var(--c-espiritual)">—/100</div>
+        <div class="desc">Propósito · Presencia</div>
+      </div>
+    </div>
+
+    <!-- Supp preview on overview -->
+    <div class="hbox">
+      <strong>Suplementación integrada:</strong> cada suplemento actúa en múltiples dimensiones simultáneamente. La creatina no es "para músculos" — impacta física, metabólica, mental y emocional. Explora la sección <a href="#" onclick="go('supp-matrix');return false" style="color:var(--gold)">Matriz de Impacto →</a>
+    </div>
+
+    <div class="g2">
+      <div class="card">
+        <div class="card-label">Puntuación del IVI</div>
+        <h3>¿Cómo se calcula?</h3>
+        <p>Score compuesto 0–100, promedio ponderado de las 5 dimensiones. Ajustable según tus objetivos.</p>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:10px">
+          <div style="padding:8px 12px;background:var(--surface2);border:1px solid var(--border);display:flex;justify-content:space-between;font-size:12px"><span>Física</span><span style="color:var(--c-fisica);font-family:'DM Mono',monospace">20%</span></div>
+          <div style="padding:8px 12px;background:var(--surface2);border:1px solid var(--border);display:flex;justify-content:space-between;font-size:12px"><span>Metabólica</span><span style="color:var(--c-metabolica);font-family:'DM Mono',monospace">25%</span></div>
+          <div style="padding:8px 12px;background:var(--surface2);border:1px solid var(--border);display:flex;justify-content:space-between;font-size:12px"><span>Mental</span><span style="color:var(--c-mental);font-family:'DM Mono',monospace">20%</span></div>
+          <div style="padding:8px 12px;background:var(--surface2);border:1px solid var(--border);display:flex;justify-content:space-between;font-size:12px"><span>Emocional</span><span style="color:var(--c-emocional);font-family:'DM Mono',monospace">20%</span></div>
+          <div style="padding:8px 12px;background:var(--surface2);border:1px solid var(--border);display:flex;justify-content:space-between;font-size:12px;grid-column:span 2"><span>Espiritual</span><span style="color:var(--c-espiritual);font-family:'DM Mono',monospace">15%</span></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-label">Tecnología de Monitoreo</div>
+        <h3>Wearables &amp; Apps</h3>
+        <ul class="mlist">
+          <li><div class="dot" style="background:var(--gold)"></div><span class="name">Whoop 4.0 / Oura Ring 4</span><span class="range">HRV · Sueño</span></li>
+          <li><div class="dot" style="background:var(--c-metabolica)"></div><span class="name">CGM (Levels / Nutrisense)</span><span class="range">Glucosa 24h</span></li>
+          <li><div class="dot" style="background:var(--c-mental)"></div><span class="name">InsideTracker / Function Health</span><span class="range">Panel lab</span></li>
+          <li><div class="dot" style="background:var(--c-espiritual)"></div><span class="name">Eight Sleep</span><span class="range">Temperatura</span></li>
+          <li><div class="dot" style="background:var(--c-supp)"></div><span class="name">Muse 2 / Neurosity Crown</span><span class="range">EEG portátil</span></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="srule">Comparativa semestral</div>
+
+    <div class="card gfull">
+      <div class="card-label">Tracker de Progreso</div>
+      <h3 style="margin-bottom:16px">IVI por Dimensión · Mes 0 → Mes 6</h3>
+      <div class="tracker-row hdr"><span>Dimensión</span><span>Progreso</span><span>Mes 0</span><span>Mes 6</span></div>
+      <div class="tracker-row"><span>Salud Física</span><div class="bar-bg"><div class="bar-fg" style="width:0%;background:var(--c-fisica)"></div></div><span class="tv" style="color:var(--c-fisica)">—</span><span class="tv" style="color:var(--c-fisica)">—</span></div>
+      <div class="tracker-row"><span>Salud Metabólica</span><div class="bar-bg"><div class="bar-fg" style="width:0%;background:var(--c-metabolica)"></div></div><span class="tv" style="color:var(--c-metabolica)">—</span><span class="tv" style="color:var(--c-metabolica)">—</span></div>
+      <div class="tracker-row"><span>Salud Mental</span><div class="bar-bg"><div class="bar-fg" style="width:0%;background:var(--c-mental)"></div></div><span class="tv" style="color:var(--c-mental)">—</span><span class="tv" style="color:var(--c-mental)">—</span></div>
+      <div class="tracker-row"><span>Salud Emocional</span><div class="bar-bg"><div class="bar-fg" style="width:0%;background:var(--c-emocional)"></div></div><span class="tv" style="color:var(--c-emocional)">—</span><span class="tv" style="color:var(--c-emocional)">—</span></div>
+      <div class="tracker-row"><span>Salud Espiritual</span><div class="bar-bg"><div class="bar-fg" style="width:0%;background:var(--c-espiritual)"></div></div><span class="tv" style="color:var(--c-espiritual)">—</span><span class="tv" style="color:var(--c-espiritual)">—</span></div>
+    </div>
+  </div>
+
+  <!-- ═══════ PROTOCOLO ═══════ -->
+  <div class="page" id="page-protocolo">
+    <div class="page-header">
+      <div><h2>Protocolo &amp;<br><em>Cronograma</em></h2><p>Secuencia de evaluaciones · Equipo profesional · Rutina diaria de medición</p></div>
+    </div>
+    <div class="timeline">
+      <div class="tl"><div class="tl-time">MES 0 · Basal</div><div class="tl-title">Evaluación Total</div><div class="tl-body">Panel completo lab<br>DEXA Scan<br>VO₂ Max CPET<br>Tests psicológicos<br>CGM 14 días<br>Microbioma</div></div>
+      <div class="tl"><div class="tl-time">MES 1</div><div class="tl-title">Check-in Rápido</div><div class="tl-body">Peso + InBody<br>HRV promedio<br>Glucosa ayunas<br>Energía 1-10<br>PANAS semanal</div></div>
+      <div class="tl"><div class="tl-time">MES 2-3</div><div class="tl-title">Revisión Media</div><div class="tl-body">Panel metabólico<br>Cortisol matutino<br>CBS cognitivo<br>DASS-21<br>Ajuste protocolos</div></div>
+      <div class="tl"><div class="tl-time">MES 4-5</div><div class="tl-title">Continuidad</div><div class="tl-body">Métricas wearables<br>Composición corporal<br>Tests rendimiento<br>Escalas emocionales</div></div>
+      <div class="tl"><div class="tl-time">MES 6 · Revisión</div><div class="tl-title">Evaluación Total</div><div class="tl-body">Panel repetido<br>DEXA Scan<br>Todos los tests<br>Comparativa vs M0<br>Nuevo protocolo</div></div>
+    </div>
+    <div class="g2">
+      <div class="card">
+        <div class="card-label">Equipo Multidisciplinario</div>
+        <h3>Tu Red de Especialistas</h3>
+        <div class="steps">
+          <div class="step"><strong>Médico de Longevidad / Funcional</strong><span>Director del protocolo. Interpreta panel completo, ajusta biomarcadores.</span></div>
+          <div class="step"><strong>Endocrinólogo avanzado</strong><span>Eje hormonal, metabólico, cortisol, resistencia a insulina.</span></div>
+          <div class="step"><strong>Nutricionista de precisión</strong><span>Alimentación basada en microbioma, genómica nutricional y CGM.</span></div>
+          <div class="step"><strong>Psicólogo / Psicoterapeuta</strong><span>Evaluación emocional, trauma, regulación, IFS o ACT.</span></div>
+          <div class="step"><strong>Coach de rendimiento</strong><span>Periodización según HRV y objetivos funcionales.</span></div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-label">Rutina de Medición Diaria</div>
+        <h3>5 min / mañana</h3>
+        <div class="steps">
+          <div class="step"><strong>Al despertar</strong><span>HRV + recovery score (Whoop/Oura). Glucosa CGM. Temperatura.</span></div>
+          <div class="step"><strong>Mañana</strong><span>Journaling: energía 1-10, emoción, 3 gratitudes. Meditación 20 min.</span></div>
+          <div class="step"><strong>Mediodía</strong><span>Respuesta glucémica CGM. Foco y productividad 1-10.</span></div>
+          <div class="step"><strong>Noche</strong><span>PANAS abreviado. Preparar temperatura Eight Sleep.</span></div>
+          <div class="step"><strong>Semanal (30 min)</strong><span>Revisión métricas. Peso + medidas. Ajuste intervenciones.</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════ FÍSICA ═══════ -->
+  <div class="page" id="page-fisica">
+    <div class="page-header">
+      <div><h2 style="color:var(--c-fisica)">Salud <em>Física</em></h2><p>Composición corporal · Rendimiento funcional · Capacidad cardiovascular · Longevidad estructural</p></div>
+      <div class="dim-tag-header" style="border-color:var(--c-fisica);color:var(--c-fisica)">Dimensión 1</div>
+    </div>
+    <div class="hbox" style="border-color:var(--c-fisica)"><strong>Suplementos clave para esta dimensión:</strong> Creatina (fuerza +14%), Omega-3 (recuperación, DOMS), Vitamina D3 (fuerza muscular + densidad ósea), Proteína Whey (síntesis muscular). <a href="#" onclick="go('supp-lista');return false" style="color:var(--gold)">Ver suplementos →</a></div>
+    <div class="g2">
+      <div class="card" style="background:var(--c-fisica-bg);border-color:rgba(52,211,153,.15)">
+        <div class="card-label">Composición Corporal</div>
+        <h3>Evaluaciones Prioritarias</h3>
+        <ul class="mlist">
+          <li><div class="dot" style="background:var(--c-fisica)"></div><span class="name">DEXA Scan — masa muscular/grasa/ósea</span><span class="range">Cada 6M</span></li>
+          <li><div class="dot" style="background:var(--c-fisica)"></div><span class="name">InBody 770 — agua intra/extracelular</span><span class="range">Mensual</span></li>
+          <li><div class="dot" style="background:var(--muted)"></div><span class="name">% Grasa visceral (VAT)</span><span class="range">&lt; 100 cm²</span></li>
+          <li><div class="dot" style="background:var(--muted)"></div><span class="name">Índice músculo esquelético (SMI)</span><span class="range">&gt; 7.0 kg/m²</span></li>
+          <li><div class="dot" style="background:var(--muted)"></div><span class="name">Densidad ósea (T-Score)</span><span class="range">&gt; -1.0</span></li>
+        </ul>
+      </div>
+      <div class="card" style="background:var(--c-fisica-bg);border-color:rgba(52,211,153,.15)">
+        <div class="card-label">Rendimiento Funcional</div>
+        <h3>Tests de Capacidad</h3>
+        <ul class="mlist">
+          <li><div class="dot" style="background:var(--c-fisica)"></div><span class="name">VO₂ Max (CPET laboratorio)</span><span class="range">&gt; 45 ml/kg/min</span></li>
+          <li><div class="dot" style="background:var(--c-fisica)"></div><span class="name">Grip Strength (dinamómetro)</span><span class="range">&gt; 48 kg</span></li>
+          <li><div class="dot" style="background:var(--muted)"></div><span class="name">Dead Hang Time</span><span class="range">&gt; 60 seg</span></li>
+          <li><div class="dot" style="background:var(--muted)"></div><span class="name">Standing Broad Jump</span><span class="range">&gt; 200 cm</span></li>
+          <li><div class="dot" style="background:var(--muted)"></div><span class="name">Sit &amp; Rise Test (SRT)</span><span class="range">10/10</span></li>
+        </ul>
+      </div>
+    </div>
+    <div class="g3">
+      <div class="card"><div class="card-label">Biomarcadores Séricos</div><h3>Panel Muscular &amp; Óseo</h3><ul class="mlist"><li><div class="dot" style="background:var(--c-fisica)"></div><span class="name">CPK (Creatina Quinasa)</span><span class="range">&lt; 200 U/L</span></li><li><div class="dot" style="background:var(--muted)"></div><span class="name">Vitamina D3 (25-OH)</span><span class="range">50–80 ng/ml</span></li><li><div class="dot" style="background:var(--muted)"></div><span class="name">P1NP (formación ósea)</span><span class="range">Basal</span></li><li><div class="dot" style="background:var(--muted)"></div><span class="name">β-CTX (resorción ósea)</span><span class="range">Basal</span></li></ul></div>
+      <div class="card"><div class="card-label">Cardiovascular</div><h3>Salud del Corazón</h3><ul class="mlist"><li><div class="dot" style="background:var(--c-fisica)"></div><span class="name">HRV (rMSSD diario)</span><span class="range">&gt; 50 ms</span></li><li><div class="dot" style="background:var(--muted)"></div><span class="name">FC en reposo</span><span class="range">&lt; 60 bpm</span></li><li><div class="dot" style="background:var(--muted)"></div><span class="name">Presión arterial</span><span class="range">&lt; 120/80</span></li><li><div class="dot" style="background:var(--muted)"></div><span class="name">Score de Calcio Coronario</span><span class="range">= 0</span></li></ul></div>
+      <div class="card"><div class="card-label">Tendencias 2025</div><h3>Precisión Deportiva</h3><ul class="mlist"><li><div class="dot" style="background:var(--gold)"></div><span class="name">Genómica deportiva (ACTN3, ACE)</span><span class="range">Una vez</span></li><li><div class="dot" style="background:var(--gold)"></div><span class="name">Mioquinas (IL-6, irisin, BDNF)</span><span class="range">Cada 6M</span></li><li><div class="dot" style="background:var(--gold)"></div><span class="name">sEMG electromiografía</span><span class="range">Puntual</span></li><li><div class="dot" style="background:var(--gold)"></div><span class="name">Lactato umbral</span><span class="range">Cada 6M</span></li></ul><div class="tags"><div class="tag hi">Longevidad</div><div class="tag hi">Precision Sport</div></div></div>
+    </div>
+  </div>
+
+  <!-- ═══════ METABÓLICA ═══════ -->
+  <div class="page" id="page-metabolica">
+    <div class="page-header">
+      <div><h2 style="color:var(--c-metabolica)">Salud <em>Metabólica</em></h2><p>Glucosa · Hormonas · Mitocondrias · Inflamación · Microbioma · Envejecimiento celular</p></div>
+      <div class="dim-tag-header" style="border-color:var(--c-metabolica);color:var(--c-metabolica)">Dimensión 2</div>
+    </div>
+    <div class="hbox" style="border-color:var(--c-metabolica)"><strong>Suplementos clave:</strong> Omega-3 (↓ ApoB, triglicéridos), Vitamina D3 (sensibilidad insulina, testosterona), Ashwagandha (↓ cortisol crónico, ↑ testosterona 15–20%), NMN (función mitocondrial, NAD+), Magnesio (cofactor de ATP sintasa). <a href="#" onclick="go('supp-lista');return false" style="color:var(--gold)">Ver suplementos →</a></div>
+    <div class="g2">
+      <div class="card" style="background:var(--c-metabolica-bg);border-color:rgba(34,211,238,.15)">
+        <div class="card-label">Glucosa &amp; Resistencia Insulínica</div><h3>Panel Metabólico Avanzado</h3>
+        <ul class="mlist"><li><div class="dot" style="background:var(--c-metabolica)"></div><span class="name">Glucosa en ayunas</span><span class="range">70–85 mg/dl</span></li><li><div class="dot" style="background:var(--c-metabolica)"></div><span class="name">HbA1c</span><span class="range">&lt; 5.3%</span></li><li><div class="dot" style="background:var(--c-metabolica)"></div><span class="name">Insulina en ayunas</span><span class="range">&lt; 5 uIU/ml</span></li><li><div class="dot" style="background:var(--muted)"></div><span class="name">HOMA-IR</span><span class="range">&lt; 1.0</span></li><li><div class="dot" style="background:var(--muted)"></div><span class="name">CGM — Time in Range</span><span class="range">&gt; 90%</span></li></ul>
+      </div>
+      <div class="card" style="background:var(--c-metabolica-bg);border-color:rgba(34,211,238,.15)">
+        <div class="card-label">Panel Lipídico NMR</div><h3>Riesgo Cardiovascular Real</h3>
+        <ul class="mlist"><li><div class="dot" style="background:var(--c-metabolica)"></div><span class="name">ApoB</span><span class="range">&lt; 60 mg/dl</span></li><li><div class="dot" style="background:var(--c-metabolica)"></div><span class="name">Lp(a)</span><span class="range">&lt; 30 mg/dl</span></li><li><div class="dot" style="background:var(--muted)"></div><span class="name">LDL-P (partículas)</span><span class="range">&lt; 1000</span></li><li><div class="dot" style="background:var(--muted)"></div><span class="name">Triglicéridos</span><span class="range">&lt; 70 mg/dl</span></li><li><div class="dot" style="background:var(--muted)"></div><span class="name">Ratio Trig/HDL</span><span class="range">&lt; 1.0</span></li></ul>
+      </div>
+    </div>
+    <div class="g3">
+      <div class="card"><div class="card-label">Eje Hormonal</div><h3>Hormonas Clave</h3><ul class="mlist"><li><div class="dot" style="background:var(--c-metabolica)"></div><span class="name">Testosterona Total &amp; Libre</span><span class="range">600–1000 ng/dl</span></li><li><div class="dot" style="background:var(--muted)"></div><span class="name">DHEA-S</span><span class="range">200–400 ug/dl</span></li><li><div class="dot" style="background:var(--muted)"></div><span class="name">IGF-1</span><span class="range">150–250 ng/ml</span></li><li><div class="dot" style="background:var(--muted)"></div><span class="name">Cortisol matutino</span><span class="range">15–25 ug/dl</span></li><li><div class="dot" style="background:var(--muted)"></div><span class="name">TSH / T4L / T3L</span><span class="range">0.5–2.0</span></li></ul></div>
+      <div class="card"><div class="card-label">Inflamación &amp; Longevidad</div><h3>Biomarcadores Moleculares</h3><ul class="mlist"><li><div class="dot" style="background:var(--c-metabolica)"></div><span class="name">hsCRP</span><span class="range">&lt; 0.5 mg/L</span></li><li><div class="dot" style="background:var(--muted)"></div><span class="name">IL-6</span><span class="range">&lt; 1.8 pg/ml</span></li><li><div class="dot" style="background:var(--muted)"></div><span class="name">Homocisteína</span><span class="range">&lt; 7 umol/L</span></li><li><div class="dot" style="background:var(--muted)"></div><span class="name">Edad biológica (reloj Horvath)</span><span class="range">&lt; Edad real</span></li><li><div class="dot" style="background:var(--muted)"></div><span class="name">Omega-3 Index</span><span class="range">&gt; 8%</span></li></ul></div>
+      <div class="card"><div class="card-label">Frontera 2025</div><h3>Mitocondrias &amp; Microbioma</h3><ul class="mlist"><li><div class="dot" style="background:var(--gold)"></div><span class="name">Secuenciación microbioma (Viome)</span><span class="range">Anual</span></li><li><div class="dot" style="background:var(--gold)"></div><span class="name">NAD+ / NADH ratio</span><span class="range">Lab esp.</span></li><li><div class="dot" style="background:var(--gold)"></div><span class="name">8-OHdG (daño oxidativo ADN)</span><span class="range">&lt; 8 ng/mgCr</span></li><li><div class="dot" style="background:var(--gold)"></div><span class="name">GlycanAge (inflamación crónica)</span><span class="range">Anual</span></li></ul><div class="tags"><div class="tag hi">Longevidad</div><div class="tag hi">Mitocondrias</div></div></div>
+    </div>
+  </div>
+
+  <!-- ═══════ MENTAL ═══════ -->
+  <div class="page" id="page-mental">
+    <div class="page-header">
+      <div><h2 style="color:var(--c-mental)">Salud <em>Mental</em></h2><p>Neurología funcional · Cognición · Sueño · Neuroinflamación · Bienestar psicológico</p></div>
+      <div class="dim-tag-header" style="border-color:var(--c-mental);color:var(--c-mental)">Dimensión 3</div>
+    </div>
+    <div class="hbox" style="border-color:var(--c-mental)"><strong>Suplementos clave:</strong> Lion's Mane (↑ NGF, neuroplasticidad), Magnesio L-Treonato (único que cruza barrera hematoencefálica, ↑ densidad sináptica), Omega-3 DHA (30% del cerebro seco), Creatina (energía neuronal). <a href="#" onclick="go('supp-lista');return false" style="color:var(--gold)">Ver suplementos →</a></div>
+    <div class="g2">
+      <div class="card" style="background:var(--c-mental-bg);border-color:rgba(129,140,248,.15)"><div class="card-label">Evaluación Cognitiva</div><h3>Tests Neuropsicológicos</h3><ul class="mlist"><li><div class="dot" style="background:var(--c-mental)"></div><span class="name">Cambridge Brain Sciences (CBS)</span><span class="range">Cada 6M</span></li><li><div class="dot" style="background:var(--c-mental)"></div><span class="name">Cognifit — batería completa</span><span class="range">Cada 6M</span></li><li><div class="dot" style="background:var(--muted)"></div><span class="name">Velocidad de procesamiento</span><span class="range">P &gt; 50</span></li><li><div class="dot" style="background:var(--muted)"></div><span class="name">Memoria de trabajo (N-back)</span><span class="range">P &gt; 50</span></li><li><div class="dot" style="background:var(--muted)"></div><span class="name">Función ejecutiva (TMT-B)</span><span class="range">&lt; 90 seg</span></li></ul></div>
+      <div class="card" style="background:var(--c-mental-bg);border-color:rgba(129,140,248,.15)"><div class="card-label">Arquitectura del Sueño</div><h3>Recuperación Neural</h3><ul class="mlist"><li><div class="dot" style="background:var(--c-mental)"></div><span class="name">Sueño profundo (SWS)</span><span class="range">&gt; 20%</span></li><li><div class="dot" style="background:var(--c-mental)"></div><span class="name">Sueño REM</span><span class="range">&gt; 20%</span></li><li><div class="dot" style="background:var(--muted)"></div><span class="name">Latencia al sueño</span><span class="range">&lt; 20 min</span></li><li><div class="dot" style="background:var(--muted)"></div><span class="name">Eficiencia del sueño</span><span class="range">&gt; 85%</span></li><li><div class="dot" style="background:var(--muted)"></div><span class="name">AHI (apnea)</span><span class="range">&lt; 5</span></li></ul></div>
+    </div>
+    <div class="g3">
+      <div class="card"><div class="card-label">Biomarcadores Neurológicos</div><h3>Panel Cerebral</h3><ul class="mlist"><li><div class="dot" style="background:var(--c-mental)"></div><span class="name">BDNF</span><span class="range">&gt; 900 pg/ml</span></li><li><div class="dot" style="background:var(--muted)"></div><span class="name">GFAP (neuroinflamación)</span><span class="range">&lt; 200 pg/ml</span></li><li><div class="dot" style="background:var(--muted)"></div><span class="name">NfL (daño axonal)</span><span class="range">Según edad</span></li><li><div class="dot" style="background:var(--muted)"></div><span class="name">ApoE4 (riesgo Alzheimer)</span><span class="range">Una vez</span></li></ul></div>
+      <div class="card"><div class="card-label">Nutrición Neurológica</div><h3>Cofactores Cerebrales</h3><ul class="mlist"><li><div class="dot" style="background:var(--c-mental)"></div><span class="name">Magnesio eritrocitario</span><span class="range">5.2–6.5</span></li><li><div class="dot" style="background:var(--muted)"></div><span class="name">B12 activa (holoTC)</span><span class="range">&gt; 50 pmol/L</span></li><li><div class="dot" style="background:var(--muted)"></div><span class="name">Folato</span><span class="range">&gt; 15 ng/ml</span></li><li><div class="dot" style="background:var(--muted)"></div><span class="name">Zinc sérico</span><span class="range">80–120 ug/dl</span></li></ul></div>
+      <div class="card"><div class="card-label">Neurotecnología 2025</div><h3>Herramientas</h3><ul class="mlist"><li><div class="dot" style="background:var(--gold)"></div><span class="name">EEG portátil (Muse 2)</span><span class="range">Diario</span></li><li><div class="dot" style="background:var(--gold)"></div><span class="name">qEEG cuantitativo</span><span class="range">Anual</span></li><li><div class="dot" style="background:var(--gold)"></div><span class="name">Neurofeedback adaptativo</span><span class="range">Semanal</span></li><li><div class="dot" style="background:var(--gold)"></div><span class="name">HBOT cognitivo</span><span class="range">Protocolo</span></li></ul><div class="tags"><div class="tag hi">Neuroplasticidad</div></div></div>
+    </div>
+  </div>
+
+  <!-- ═══════ EMOCIONAL ═══════ -->
+  <div class="page" id="page-emocional">
+    <div class="page-header">
+      <div><h2 style="color:var(--c-emocional)">Salud <em>Emocional</em></h2><p>Regulación · Bienestar subjetivo · Relaciones · Resiliencia · Inteligencia emocional</p></div>
+      <div class="dim-tag-header" style="border-color:var(--c-emocional);color:var(--c-emocional)">Dimensión 4</div>
+    </div>
+    <div class="hbox" style="border-color:var(--c-emocional)"><strong>Suplementos clave:</strong> Ashwagandha (↓ DASS-21 ansiedad, ↓ cortisol), Omega-3 EPA &gt;1.5g/día (antidepresivo nivel A, Cochrane), Creatina (metaanálisis 2021: reduce síntomas depresivos), Vitamina D3 (síntesis serotonina). <a href="#" onclick="go('supp-lista');return false" style="color:var(--gold)">Ver suplementos →</a></div>
+    <div class="g2">
+      <div class="card" style="background:var(--c-emocional-bg);border-color:rgba(251,113,133,.15)"><div class="card-label">Escalas Psicométricas</div><h3>Evaluación Cada 6 Meses</h3><ul class="mlist"><li><div class="dot" style="background:var(--c-emocional)"></div><span class="name">DASS-21 (Depresión/Ansiedad/Estrés)</span><span class="range">Cada 6M</span></li><li><div class="dot" style="background:var(--c-emocional)"></div><span class="name">PANAS (Afecto Positivo/Negativo)</span><span class="range">Mensual</span></li><li><div class="dot" style="background:var(--muted)"></div><span class="name">SWLS (Satisfacción con la Vida)</span><span class="range">&gt; 26/35</span></li><li><div class="dot" style="background:var(--muted)"></div><span class="name">PERMA Profiler (Seligman)</span><span class="range">&gt; 7/10</span></li><li><div class="dot" style="background:var(--muted)"></div><span class="name">Connor-Davidson Resilience Scale</span><span class="range">&gt; 32/40</span></li></ul></div>
+      <div class="card" style="background:var(--c-emocional-bg);border-color:rgba(251,113,133,.15)"><div class="card-label">Biomarcadores de Estrés</div><h3>Fisiología del Estrés</h3><ul class="mlist"><li><div class="dot" style="background:var(--c-emocional)"></div><span class="name">Cortisol salival (curva diurna)</span><span class="range">Patrón normal</span></li><li><div class="dot" style="background:var(--c-emocional)"></div><span class="name">Cortisol urinario 24h</span><span class="range">20–90 ug/día</span></li><li><div class="dot" style="background:var(--muted)"></div><span class="name">DHEA-S / Cortisol ratio</span><span class="range">&gt; 5</span></li><li><div class="dot" style="background:var(--muted)"></div><span class="name">Serotonina sérica</span><span class="range">101–283 ng/ml</span></li><li><div class="dot" style="background:var(--muted)"></div><span class="name">HRV coherencia (HeartMath)</span><span class="range">Alto</span></li></ul></div>
+    </div>
+    <div class="g3">
+      <div class="card"><div class="card-label">Capital Social</div><h3>Vínculos &amp; Relaciones</h3><ul class="mlist"><li><div class="dot" style="background:var(--c-emocional)"></div><span class="name">Índice de soledad (UCLA-3)</span><span class="range">&lt; 5</span></li><li><div class="dot" style="background:var(--muted)"></div><span class="name">Calidad relacional (RQI)</span><span class="range">&gt; 70%</span></li><li><div class="dot" style="background:var(--muted)"></div><span class="name">Horas conexión social/sem</span><span class="range">&gt; 10h</span></li></ul></div>
+      <div class="card"><div class="card-label">Regulación Emocional</div><h3>Biofeedback</h3><ul class="mlist"><li><div class="dot" style="background:var(--c-emocional)"></div><span class="name">HeartMath (coherencia)</span><span class="range">Alto</span></li><li><div class="dot" style="background:var(--muted)"></div><span class="name">GSR (respuesta galvánica)</span><span class="range">Emwave Pro</span></li><li><div class="dot" style="background:var(--muted)"></div><span class="name">Meditación (min/día)</span><span class="range">&gt; 20 min</span></li></ul></div>
+      <div class="card"><div class="card-label">Tendencias 2025</div><h3>Con Evidencia</h3><ul class="mlist"><li><div class="dot" style="background:var(--gold)"></div><span class="name">IFS / ACT terapia</span><span class="range"></span></li><li><div class="dot" style="background:var(--gold)"></div><span class="name">Psilocibina asistida</span><span class="range"></span></li><li><div class="dot" style="background:var(--gold)"></div><span class="name">EMDR para trauma</span><span class="range"></span></li><li><div class="dot" style="background:var(--gold)"></div><span class="name">Social prescribing</span><span class="range"></span></li></ul></div>
+    </div>
+  </div>
+
+  <!-- ═══════ ESPIRITUAL ═══════ -->
+  <div class="page" id="page-espiritual">
+    <div class="page-header">
+      <div><h2 style="color:var(--c-espiritual)">Salud <em>Espiritual</em></h2><p>Propósito · Valores · Trascendencia · Mindfulness · Coherencia de vida</p></div>
+      <div class="dim-tag-header" style="border-color:var(--c-espiritual);color:var(--c-espiritual)">Dimensión 5</div>
+    </div>
+    <div class="hbox" style="border-color:var(--c-espiritual)"><strong>Suplementos clave:</strong> Magnesio (profundiza estados meditativos, reduce ruido mental), Lion's Mane (mejora calidad meditativa, reduce reactividad emocional), Ashwagandha (facilita estados de calma profunda). El bienestar espiritual tiene correlatos fisiológicos medibles. <a href="#" onclick="go('supp-lista');return false" style="color:var(--gold)">Ver suplementos →</a></div>
+    <div class="g2">
+      <div class="card" style="background:var(--c-espiritual-bg);border-color:rgba(251,146,60,.15)"><div class="card-label">Bienestar Existencial</div><h3>Propósito &amp; Sentido</h3><ul class="mlist"><li><div class="dot" style="background:var(--c-espiritual)"></div><span class="name">PIL (Purpose in Life Test)</span><span class="range">&gt; 92/140</span></li><li><div class="dot" style="background:var(--c-espiritual)"></div><span class="name">MLQ (Meaning in Life Q.)</span><span class="range">&gt; 24/35</span></li><li><div class="dot" style="background:var(--muted)"></div><span class="name">VIA Character Strengths</span><span class="range">Uso top-5</span></li><li><div class="dot" style="background:var(--muted)"></div><span class="name">FACIT-Sp (bienestar espiritual)</span><span class="range">&gt; 32/48</span></li><li><div class="dot" style="background:var(--muted)"></div><span class="name">Coherencia vida-valores (0-10)</span><span class="range">&gt; 8/10</span></li></ul></div>
+      <div class="card" style="background:var(--c-espiritual-bg);border-color:rgba(251,146,60,.15)"><div class="card-label">Mindfulness &amp; Presencia</div><h3>Conciencia Plena</h3><ul class="mlist"><li><div class="dot" style="background:var(--c-espiritual)"></div><span class="name">FFMQ (Mindfulness Facets)</span><span class="range">&gt; 120/195</span></li><li><div class="dot" style="background:var(--c-espiritual)"></div><span class="name">Minutos meditación/día</span><span class="range">&gt; 20 min</span></li><li><div class="dot" style="background:var(--muted)"></div><span class="name">Momentos de flujo/semana</span><span class="range">&gt; 3</span></li><li><div class="dot" style="background:var(--muted)"></div><span class="name">Tiempo en naturaleza/sem</span><span class="range">&gt; 2h</span></li><li><div class="dot" style="background:var(--muted)"></div><span class="name">Mind-wandering (EMA)</span><span class="range">&lt; 40%</span></li></ul></div>
+    </div>
+    <div class="g3">
+      <div class="card"><div class="card-label">Biología de la Espiritualidad</div><h3>Correlatos Fisiológicos</h3><ul class="mlist"><li><div class="dot" style="background:var(--c-espiritual)"></div><span class="name">Ondas gamma EEG (meditadores)</span><span class="range">Muse/qEEG</span></li><li><div class="dot" style="background:var(--muted)"></div><span class="name">HRV alta durante meditación</span><span class="range">&gt; 50 ms</span></li><li><div class="dot" style="background:var(--muted)"></div><span class="name">IL-6 baja (meditación sostenida)</span><span class="range">Efecto doc.</span></li></ul></div>
+      <div class="card"><div class="card-label">Gratitud &amp; Conexión</div><h3>Prácticas Medibles</h3><ul class="mlist"><li><div class="dot" style="background:var(--c-espiritual)"></div><span class="name">Diario gratitud (frec.)</span><span class="range">&gt; 5x/sem</span></li><li><div class="dot" style="background:var(--muted)"></div><span class="name">Actos generosidad/sem</span><span class="range">&gt; 3</span></li><li><div class="dot" style="background:var(--muted)"></div><span class="name">Experiencias AWE</span><span class="range">Semanales</span></li></ul></div>
+      <div class="card"><div class="card-label">Prácticas 2025</div><h3>Con Evidencia</h3><ul class="mlist"><li><div class="dot" style="background:var(--gold)"></div><span class="name">Retiros silencio (vipassana)</span><span class="range"></span></li><li><div class="dot" style="background:var(--gold)"></div><span class="name">Ikigai Map</span><span class="range"></span></li><li><div class="dot" style="background:var(--gold)"></div><span class="name">AWE walk (Stanford protocol)</span><span class="range"></span></li></ul><div class="tags"><div class="tag hi">Longevidad</div></div></div>
+    </div>
+  </div>
+
+  <!-- ═══════ SUPP: PRINCIPIOS ═══════ -->
+  <div class="page" id="page-supp-intro">
+    <div class="page-header">
+      <div><h2>Suplementos como<br><em>Moduladores</em> Transversales</h2><p>No pertenecen a una sola dimensión — actúan en cascada sobre múltiples sistemas simultáneamente.</p></div>
+      <div class="dim-tag-header" style="border-color:var(--c-supp);color:var(--c-supp)">Suplementación</div>
+    </div>
+    <div class="hbox"><strong>Principio fundamental:</strong> Un suplemento se evalúa por su <strong>impacto multidimensional</strong>. La creatina no es "para músculos" — es un donador de fosfato de alta energía que beneficia cualquier célula con alta demanda energética: músculo, cerebro, corazón, mitocondrias. Elige moléculas con <strong>mayor retorno transversal</strong>, dosifica según biomarcadores y mide el impacto en cada dimensión del modelo.</div>
+    <div class="g3">
+      <div class="card">
+        <div class="card-label">Jerarquía de Prioridades</div>
+        <h3>El orden importa</h3>
+        <div class="steps">
+          <div class="step"><strong>Sueño 8h optimizado</strong><span>Sin esto, ningún suplemento tiene retorno real.</span></div>
+          <div class="step"><strong>Alimentación densa</strong><span>Alta densidad nutricional. Base de todo.</span></div>
+          <div class="step"><strong>Entrenamiento consistente</strong><span>El estímulo que activa las vías que los suplementos potencian.</span></div>
+          <div class="step"><strong>Manejo del estrés</strong><span>El cortisol crónico anula el anabolismo.</span></div>
+          <div class="step"><strong>Suplementos</strong><span>Ahora sí — con biomarcadores y medición.</span></div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-label">Implementación por Fases</div>
+        <h3>Uno a la vez</h3>
+        <div class="steps">
+          <div class="step"><strong>Mes 0–2: Núcleo Esencial</strong><span>Creatina + D3/K2 + Omega-3 + Magnesio. Establece línea base.</span></div>
+          <div class="step"><strong>Mes 3–4: Optimización</strong><span>Agrega Ashwagandha + Mg L-Treonato. Mide cortisol, sueño, HRV.</span></div>
+          <div class="step"><strong>Mes 5–6: Neurocognitivo</strong><span>Incorpora Lion's Mane. Evalúa cognición y estado anímico.</span></div>
+          <div class="step"><strong>Año 2+: Longevidad</strong><span>NMN + CoQ10. Solo si hay recursos y medición de NAD+ basal.</span></div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-label">Regla del n=1</div>
+        <h3>Tú eres el ensayo clínico</h3>
+        <p>Ningún estudio poblacional te dice exactamente cómo responderás tú. El protocolo de medición te convierte en tu propio investigador.</p>
+        <ul class="mlist" style="margin-top:12px">
+          <li><div class="dot" style="background:var(--gold)"></div><span class="name">Cambia 1 variable cada 6–8 semanas</span></li>
+          <li><div class="dot" style="background:var(--gold)"></div><span class="name">Documenta biomarcadores antes/después</span></li>
+          <li><div class="dot" style="background:var(--gold)"></div><span class="name">Si no mides, no sabes si funciona</span></li>
+          <li><div class="dot" style="background:var(--gold)"></div><span class="name">Calidad &gt; cantidad de suplementos</span></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════ SUPP: LISTA ═══════ -->
+  <div class="page" id="page-supp-lista">
+    <div class="page-header">
+      <div><h2>Suplementos <em>Clave</em></h2><p>7 compuestos con mayor evidencia y retorno transversal. Haz clic en cada uno para expandir.</p></div>
+      <div class="dim-tag-header" style="border-color:var(--c-supp);color:var(--c-supp)">Evidencia 2025</div>
+    </div>
+
+    <!-- CREATINA -->
+    <div class="sc">
+      <div class="sc-head" onclick="toggleSC(this)">
+        <div class="sc-num" style="background:var(--c-fisica)">1</div>
+        <div class="sc-info"><div class="sc-name">Creatina Monohidrato</div><div class="sc-tag">El suplemento más estudiado · Impacto en 4/5 dimensiones</div></div>
+        <div class="sc-meta"><div class="ev-badge">Evidencia A</div><div class="pri-pill">Núcleo Esencial</div><div class="tarr">▾</div></div>
+      </div>
+      <div class="sc-dims">
+        <div class="sdim" style="background:var(--c-fisica-bg);color:var(--c-fisica)">💪 Física</div>
+        <div class="sdim" style="background:var(--c-metabolica-bg);color:var(--c-metabolica)">⚡ Metabólica</div>
+        <div class="sdim" style="background:var(--c-mental-bg);color:var(--c-mental)">🧠 Mental</div>
+        <div class="sdim" style="background:var(--c-emocional-bg);color:var(--c-emocional)">❤️ Emocional</div>
+      </div>
+      <div class="sc-body">
+        <div class="dose-box">
+          <div class="dose-cell"><div class="dose-lbl">Dosis diaria</div><div class="dose-val">3–5g</div><div class="dose-sub">Sin fase de carga necesaria</div></div>
+          <div class="dose-cell"><div class="dose-lbl">Timing</div><div class="dose-val">Flexible</div><div class="dose-sub">Post-entreno o cualquier momento</div></div>
+          <div class="dose-cell"><div class="dose-lbl">Forma</div><div class="dose-val">Monohidrato</div><div class="dose-sub">Creapure® certificado · No hay forma superior</div></div>
+        </div>
+        <div class="sc-grid">
+          <div class="ib"><h4>Mecanismo molecular</h4><p>Dona fosfato al ADP para regenerar ATP en milisegundos. Aumenta fosfocreatina intramuscular (+20%) y cerebral (+10%). Activa mTOR, inhibe miostatina. Aumenta disponibilidad energética neuronal directamente.</p></div>
+          <div class="ib"><h4>Impacto por dimensión</h4><ul><li><strong>Física:</strong> +8–14% fuerza, +12% potencia, mejor recuperación</li><li><strong>Metabólica:</strong> Mejora sensibilidad insulina, protege mitocondrias</li><li><strong>Mental:</strong> Mejora memoria de trabajo, reduce fatiga cognitiva</li><li><strong>Emocional:</strong> Reduce síntomas depresivos (metaanálisis 2021)</li></ul></div>
+          <div class="ib"><h4>Biomarcadores a medir</h4>
+            <div class="mrow"><span class="mn">Fuerza 1RM</span><span class="mr">↑ 8–14%</span><span class="mf">Mes 0 vs 6</span></div>
+            <div class="mrow"><span class="mn">Glucosa ayunas</span><span class="mr">↓ leve</span><span class="mf">Mensual</span></div>
+            <div class="mrow"><span class="mn">N-back (memoria)</span><span class="mr">↑ puntos</span><span class="mf">Cada 6M</span></div>
+            <div class="mrow"><span class="mn">DASS-21 depresión</span><span class="mr">↓ score</span><span class="mf">Cada 6M</span></div>
+          </div>
+        </div>
+        <div class="ib"><h4>Sinergias</h4><div class="syn-list"><div class="syn-pill s">+ Proteína whey</div><div class="syn-pill s">+ Entrenamiento fuerza</div><div class="syn-pill">+ Vitamina D3</div><div class="syn-pill">+ Magnesio</div><div class="syn-pill">+ Beta-alanina</div></div></div>
+        <div class="warn">Puede elevar creatinina sérica levemente — no confundir con daño renal. Informar al médico. Contraindicado en enfermedad renal preexistente.</div>
+      </div>
+    </div>
+
+    <!-- MAGNESIO -->
+    <div class="sc">
+      <div class="sc-head" onclick="toggleSC(this)">
+        <div class="sc-num" style="background:var(--c-mental)">2</div>
+        <div class="sc-info"><div class="sc-name">Magnesio L-Treonato / Glicinato</div><div class="sc-tag">Cofactor en 300+ reacciones · El único que cruza la barrera hematoencefálica</div></div>
+        <div class="sc-meta"><div class="ev-badge">Evidencia A</div><div class="pri-pill">Núcleo Esencial</div><div class="tarr">▾</div></div>
+      </div>
+      <div class="sc-dims">
+        <div class="sdim" style="background:var(--c-metabolica-bg);color:var(--c-metabolica)">⚡ Metabólica</div>
+        <div class="sdim" style="background:var(--c-mental-bg);color:var(--c-mental)">🧠 Mental</div>
+        <div class="sdim" style="background:var(--c-emocional-bg);color:var(--c-emocional)">❤️ Emocional</div>
+        <div class="sdim" style="background:var(--c-espiritual-bg);color:var(--c-espiritual)">✨ Espiritual</div>
+      </div>
+      <div class="sc-body">
+        <div class="dose-box">
+          <div class="dose-cell"><div class="dose-lbl">L-Treonato</div><div class="dose-val">1.5–2g</div><div class="dose-sub">Cruza barrera hematoencefálica (Magtein®)</div></div>
+          <div class="dose-cell"><div class="dose-lbl">Glicinato</div><div class="dose-val">200–400mg</div><div class="dose-sub">Sueño y músculo. Excelente absorción.</div></div>
+          <div class="dose-cell"><div class="dose-lbl">Timing</div><div class="dose-val">Noche</div><div class="dose-sub">30–60 min antes de dormir</div></div>
+        </div>
+        <div class="sc-grid">
+          <div class="ib"><h4>Mecanismo</h4><p>Regula canales NMDA (memoria), cofactor de ATP sintasa, modula eje HPA (estrés-cortisol), precursor de melatonina y GABA. El L-Treonato aumenta Mg en LCR e incrementa densidad sináptica.</p></div>
+          <div class="ib"><h4>Impacto por dimensión</h4><ul><li><strong>Metabólica:</strong> ↑ sensibilidad insulina, regula presión arterial</li><li><strong>Mental:</strong> ↑ plasticidad sináptica, memoria, reduce brain fog</li><li><strong>Emocional:</strong> ↓ ansiedad, regula cortisol, mejora sueño profundo</li><li><strong>Espiritual:</strong> Profundiza calidad meditativa, reduce ruido mental</li></ul></div>
+          <div class="ib"><h4>Biomarcadores</h4>
+            <div class="mrow"><span class="mn">Mg eritrocitario</span><span class="mr">5.2–6.5 mg/dL</span><span class="mf">Cada 6M</span></div>
+            <div class="mrow"><span class="mn">Sueño profundo SWS</span><span class="mr">↑ &gt;20%</span><span class="mf">Continuo</span></div>
+            <div class="mrow"><span class="mn">HRV nocturno</span><span class="mr">↑ tendencia</span><span class="mf">Continuo</span></div>
+            <div class="mrow"><span class="mn">Cortisol matutino</span><span class="mr">↓ si alto</span><span class="mf">Cada 6M</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- OMEGA-3 -->
+    <div class="sc">
+      <div class="sc-head" onclick="toggleSC(this)">
+        <div class="sc-num" style="background:var(--c-metabolica)">3</div>
+        <div class="sc-info"><div class="sc-name">Omega-3 (EPA + DHA)</div><div class="sc-tag">Antiinflamatorio sistémico · Reduce ApoB · Antidepresivo natural con evidencia A</div></div>
+        <div class="sc-meta"><div class="ev-badge">Evidencia A</div><div class="pri-pill">Núcleo Esencial</div><div class="tarr">▾</div></div>
+      </div>
+      <div class="sc-dims">
+        <div class="sdim" style="background:var(--c-fisica-bg);color:var(--c-fisica)">💪 Física</div>
+        <div class="sdim" style="background:var(--c-metabolica-bg);color:var(--c-metabolica)">⚡ Metabólica</div>
+        <div class="sdim" style="background:var(--c-mental-bg);color:var(--c-mental)">🧠 Mental</div>
+        <div class="sdim" style="background:var(--c-emocional-bg);color:var(--c-emocional)">❤️ Emocional</div>
+      </div>
+      <div class="sc-body">
+        <div class="dose-box">
+          <div class="dose-cell"><div class="dose-lbl">EPA+DHA total</div><div class="dose-val">2–4g/día</div><div class="dose-sub">Mínimo 1.5g EPA para efecto antiinflamatorio</div></div>
+          <div class="dose-cell"><div class="dose-lbl">Ratio ideal</div><div class="dose-val">2:1 EPA:DHA</div><div class="dose-sub">Para estado de ánimo. Nordic Naturals.</div></div>
+          <div class="dose-cell"><div class="dose-lbl">Forma</div><div class="dose-val">Triglicérido</div><div class="dose-sub">TG &gt; etil éster. IFOS 5 estrellas. Refrigerar.</div></div>
+        </div>
+        <div class="sc-grid">
+          <div class="ib"><h4>Mecanismo</h4><p>EPA/DHA se incorporan a membranas celulares mejorando fluidez y señalización. Producen resolvinas y protectinas. DHA es el 30% del cerebro seco. EPA &gt;1.5g/día: evidencia antidepresiva nivel A (Cochrane).</p></div>
+          <div class="ib"><h4>Impacto por dimensión</h4><ul><li><strong>Física:</strong> ↓ DOMS, ↑ síntesis proteica, protege articulaciones</li><li><strong>Metabólica:</strong> ↓ triglicéridos 20–40%, ↓ ApoB, ↓ hsCRP</li><li><strong>Mental:</strong> Neuroplasticidad, prevención neurodegenerativa, +BDNF</li><li><strong>Emocional:</strong> ↓ depresión (EPA &gt;1.5g, metaanálisis Cochrane)</li></ul></div>
+          <div class="ib"><h4>Biomarcadores</h4>
+            <div class="mrow"><span class="mn">Omega-3 Index</span><span class="mr">&gt; 8%</span><span class="mf">Cada 6M</span></div>
+            <div class="mrow"><span class="mn">Triglicéridos</span><span class="mr">&lt; 70 mg/dl</span><span class="mf">Cada 6M</span></div>
+            <div class="mrow"><span class="mn">hsCRP</span><span class="mr">&lt; 0.5 mg/L</span><span class="mf">Cada 6M</span></div>
+            <div class="mrow"><span class="mn">ApoB</span><span class="mr">&lt; 60 mg/dl</span><span class="mf">Cada 6M</span></div>
+          </div>
+        </div>
+        <div class="warn">Dosis &gt;3g pueden aumentar riesgo de sangrado. Consultar con anticoagulantes. Refrigerar siempre — el aceite rancio es contraproducente.</div>
+      </div>
+    </div>
+
+    <!-- VITAMINA D3 -->
+    <div class="sc">
+      <div class="sc-head" onclick="toggleSC(this)">
+        <div class="sc-num" style="background:var(--c-espiritual)">4</div>
+        <div class="sc-info"><div class="sc-name">Vitamina D3 + K2 (MK-7)</div><div class="sc-tag">Hormona esteroide sistémica · Regula &gt;2000 genes · 5/5 dimensiones</div></div>
+        <div class="sc-meta"><div class="ev-badge">Evidencia A</div><div class="pri-pill">Núcleo Esencial</div><div class="tarr">▾</div></div>
+      </div>
+      <div class="sc-dims">
+        <div class="sdim" style="background:var(--c-fisica-bg);color:var(--c-fisica)">💪 Física</div>
+        <div class="sdim" style="background:var(--c-metabolica-bg);color:var(--c-metabolica)">⚡ Metabólica</div>
+        <div class="sdim" style="background:var(--c-mental-bg);color:var(--c-mental)">🧠 Mental</div>
+        <div class="sdim" style="background:var(--c-emocional-bg);color:var(--c-emocional)">❤️ Emocional</div>
+        <div class="sdim" style="background:var(--c-espiritual-bg);color:var(--c-espiritual)">✨ Espiritual</div>
+      </div>
+      <div class="sc-body">
+        <div class="dose-box">
+          <div class="dose-cell"><div class="dose-lbl">D3</div><div class="dose-val">4000–8000 UI</div><div class="dose-sub">Ajustar según nivel sérico</div></div>
+          <div class="dose-cell"><div class="dose-lbl">K2 MK-7</div><div class="dose-val">180–360 mcg</div><div class="dose-sub">Dirige calcio al hueso, no arterias</div></div>
+          <div class="dose-cell"><div class="dose-lbl">Objetivo</div><div class="dose-val">60–80 ng/ml</div><div class="dose-sub">25-OH-D3 sérico. No solo "normal".</div></div>
+        </div>
+        <div class="sc-grid">
+          <div class="ib"><h4>Mecanismo</h4><p>El receptor VDR está en casi todas las células. Regula inmunidad, síntesis de testosterona, expresión del gen de serotonina, densidad ósea, inflamación y función mitocondrial. K2 activa osteocalcina y Matrix GLA Protein.</p></div>
+          <div class="ib"><h4>Impacto por dimensión</h4><ul><li><strong>Física:</strong> +fuerza muscular, +densidad ósea</li><li><strong>Metabólica:</strong> ↑ sensibilidad insulina, ↑ testosterona</li><li><strong>Mental:</strong> Neuroprotección, ↓ riesgo Alzheimer</li><li><strong>Emocional:</strong> ↑ síntesis serotonina, depresión estacional</li><li><strong>Espiritual:</strong> ↓ fatiga crónica que bloquea presencia</li></ul></div>
+          <div class="ib"><h4>Biomarcadores</h4>
+            <div class="mrow"><span class="mn">25-OH-D3</span><span class="mr">60–80 ng/ml</span><span class="mf">Cada 3M</span></div>
+            <div class="mrow"><span class="mn">Calcio sérico</span><span class="mr">8.5–10.2 mg/dl</span><span class="mf">Cada 6M</span></div>
+            <div class="mrow"><span class="mn">PTH parathormona</span><span class="mr">15–65 pg/ml</span><span class="mf">Cada 6M</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ASHWAGANDHA -->
+    <div class="sc">
+      <div class="sc-head" onclick="toggleSC(this)">
+        <div class="sc-num" style="background:var(--c-emocional)">5</div>
+        <div class="sc-info"><div class="sc-name">Ashwagandha KSM-66</div><div class="sc-tag">Adaptógeno con mayor evidencia · Regula eje HPA · ↑ Testosterona natural 15–20%</div></div>
+        <div class="sc-meta"><div class="ev-badge ev-b">Evidencia B+</div><div class="pri-pill">Alta Prioridad</div><div class="tarr">▾</div></div>
+      </div>
+      <div class="sc-dims">
+        <div class="sdim" style="background:var(--c-metabolica-bg);color:var(--c-metabolica)">⚡ Metabólica</div>
+        <div class="sdim" style="background:var(--c-mental-bg);color:var(--c-mental)">🧠 Mental</div>
+        <div class="sdim" style="background:var(--c-emocional-bg);color:var(--c-emocional)">❤️ Emocional</div>
+        <div class="sdim" style="background:var(--c-espiritual-bg);color:var(--c-espiritual)">✨ Espiritual</div>
+      </div>
+      <div class="sc-body">
+        <div class="dose-box">
+          <div class="dose-cell"><div class="dose-lbl">KSM-66</div><div class="dose-val">600mg/día</div><div class="dose-sub">Ciclar 8 sem ON / 2 sem OFF</div></div>
+          <div class="dose-cell"><div class="dose-lbl">Timing</div><div class="dose-val">Tarde/Noche</div><div class="dose-sub">Con comida. Divide en 2 tomas de 300mg.</div></div>
+          <div class="dose-cell"><div class="dose-lbl">Efecto</div><div class="dose-val">4–8 semanas</div><div class="dose-sub">Acumulativo. Medir a semana 8.</div></div>
+        </div>
+        <div class="sc-grid">
+          <div class="ib"><h4>Mecanismo</h4><p>Withanólidos inhiben NF-κB (inflamación), modulan receptores GABA-A (ansiolítico), reducen cortisol via eje HPA, estimulan LH lo que eleva testosterona en hombres 15–20%.</p></div>
+          <div class="ib"><h4>Impacto por dimensión</h4><ul><li><strong>Metabólica:</strong> ↑ Testosterona 15–20%, ↓ cortisol crónico</li><li><strong>Mental:</strong> ↑ memoria y atención, ↓ brain fog</li><li><strong>Emocional:</strong> ↓ ansiedad DASS-21, ↓ estrés PSS-14</li><li><strong>Espiritual:</strong> Facilita estados meditativos profundos</li></ul></div>
+          <div class="ib"><h4>Biomarcadores</h4>
+            <div class="mrow"><span class="mn">Cortisol matutino</span><span class="mr">↓ 15–25%</span><span class="mf">Semana 8</span></div>
+            <div class="mrow"><span class="mn">Testosterona total</span><span class="mr">↑ 15–20%</span><span class="mf">Semana 8</span></div>
+            <div class="mrow"><span class="mn">PSS-14 estrés</span><span class="mr">↓ score</span><span class="mf">Semana 4 y 8</span></div>
+            <div class="mrow"><span class="mn">HRV nocturno</span><span class="mr">↑ tendencia</span><span class="mf">Continuo</span></div>
+          </div>
+        </div>
+        <div class="warn">Contraindicado en enfermedades autoinmunes activas, tiroides hiperactiva, embarazo. Verificar TSH antes.</div>
+      </div>
+    </div>
+
+    <!-- NMN -->
+    <div class="sc">
+      <div class="sc-head" onclick="toggleSC(this)">
+        <div class="sc-num" style="background:#2d5a9e">6</div>
+        <div class="sc-info"><div class="sc-name">NMN + Resveratrol</div><div class="sc-tag">Precursores de NAD+ · Activa sirtuinas · Repara ADN · Anti-envejecimiento</div></div>
+        <div class="sc-meta"><div class="ev-badge ev-b">Evidencia B</div><div class="pri-pill">Longevidad</div><div class="tarr">▾</div></div>
+      </div>
+      <div class="sc-dims">
+        <div class="sdim" style="background:var(--c-metabolica-bg);color:var(--c-metabolica)">⚡ Metabólica</div>
+        <div class="sdim" style="background:var(--c-fisica-bg);color:var(--c-fisica)">💪 Física</div>
+        <div class="sdim" style="background:var(--c-mental-bg);color:var(--c-mental)">🧠 Mental</div>
+      </div>
+      <div class="sc-body">
+        <div class="dose-box">
+          <div class="dose-cell"><div class="dose-lbl">NMN</div><div class="dose-val">500–1000mg</div><div class="dose-sub">Mañana en ayunas. Sublingual o cápsula.</div></div>
+          <div class="dose-cell"><div class="dose-lbl">Resveratrol</div><div class="dose-val">250–500mg</div><div class="dose-sub">Con grasa. Activa SIRT1 en sinergia con NMN.</div></div>
+          <div class="dose-cell"><div class="dose-lbl">Medición</div><div class="dose-val">NAD+ sangre</div><div class="dose-sub">Baseline + 3 meses. Laboratorio especializado.</div></div>
+        </div>
+        <div class="sc-grid">
+          <div class="ib"><h4>Mecanismo</h4><p>NAD+ cae ~50% entre los 40–60 años. Es cofactor de sirtuinas (SIRT1-7) que reparan ADN, regulan metabolismo mitocondrial y controlan inflamación. NAMPT convierte NMN a NAD+.</p></div>
+          <div class="ib"><h4>Impacto</h4><ul><li><strong>Metabólica:</strong> ↑ función mitocondrial, ↑ sensibilidad insulina</li><li><strong>Física:</strong> ↑ resistencia, ↑ recuperación muscular</li><li><strong>Mental:</strong> Neuroprotección, claridad cognitiva</li><li><strong>Longevidad:</strong> Activa PARP1 (reparación ADN), ↓ edad epigenética</li></ul></div>
+          <div class="ib"><h4>Biomarcadores</h4>
+            <div class="mrow"><span class="mn">NAD+ en sangre entera</span><span class="mr">↑ 40–90%</span><span class="mf">Semana 8</span></div>
+            <div class="mrow"><span class="mn">Edad biológica (Horvath)</span><span class="mr">↓ objetivo</span><span class="mf">Anual</span></div>
+            <div class="mrow"><span class="mn">Energía subjetiva 1-10</span><span class="mr">↑</span><span class="mf">Semanal</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- LION'S MANE -->
+    <div class="sc">
+      <div class="sc-head" onclick="toggleSC(this)">
+        <div class="sc-num" style="background:var(--c-mental)">7</div>
+        <div class="sc-info"><div class="sc-name">Lion's Mane (Hericium erinaceus)</div><div class="sc-tag">El único que estimula NGF · Neuroplasticidad real y medible</div></div>
+        <div class="sc-meta"><div class="ev-badge ev-b">Evidencia B+</div><div class="pri-pill">Neurológico</div><div class="tarr">▾</div></div>
+      </div>
+      <div class="sc-dims">
+        <div class="sdim" style="background:var(--c-mental-bg);color:var(--c-mental)">🧠 Mental</div>
+        <div class="sdim" style="background:var(--c-emocional-bg);color:var(--c-emocional)">❤️ Emocional</div>
+        <div class="sdim" style="background:var(--c-espiritual-bg);color:var(--c-espiritual)">✨ Espiritual</div>
+      </div>
+      <div class="sc-body">
+        <div class="dose-box">
+          <div class="dose-cell"><div class="dose-lbl">Dosis</div><div class="dose-val">1000–2000mg</div><div class="dose-sub">Extracto 8:1. Doble extracción agua+alcohol.</div></div>
+          <div class="dose-cell"><div class="dose-lbl">Timing</div><div class="dose-val">Mañana</div><div class="dose-sub">Con o sin comida. Efecto acumulativo.</div></div>
+          <div class="dose-cell"><div class="dose-lbl">Duración</div><div class="dose-val">8–12 semanas</div><div class="dose-sub">Efecto notable a partir de semana 4.</div></div>
+        </div>
+        <div class="sc-grid">
+          <div class="ib"><h4>Mecanismo</h4><p>Hericerinas y erinacinas estimulan NGF (Nerve Growth Factor) y BDNF. Promueve mielinización, mejora conductividad nerviosa. Efectos ansiolíticos en ensayos clínicos.</p></div>
+          <div class="ib"><h4>Impacto</h4><ul><li><strong>Mental:</strong> ↑ memoria, velocidad procesamiento, ↓ MCI</li><li><strong>Emocional:</strong> ↓ ansiedad y depresión leve (ensayo 2019)</li><li><strong>Espiritual:</strong> ↑ calidad meditativa, ↓ reactividad emocional</li></ul></div>
+          <div class="ib"><h4>Biomarcadores</h4>
+            <div class="mrow"><span class="mn">BDNF sérico</span><span class="mr">↑ tendencia</span><span class="mf">Semana 8</span></div>
+            <div class="mrow"><span class="mn">Cognifit / CBS</span><span class="mr">↑ puntuación</span><span class="mf">Cada 6M</span></div>
+            <div class="mrow"><span class="mn">DASS-21 ansiedad</span><span class="mr">↓ score</span><span class="mf">Semana 8</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════ SUPP: MATRIX ═══════ -->
+  <div class="page" id="page-supp-matrix">
+    <div class="page-header">
+      <div><h2>Matriz de <em>Impacto</em></h2><p>Cómo cada suplemento afecta las 5 dimensiones holísticas. Usa esto para priorizar según tus objetivos.</p></div>
+    </div>
+    <div class="mat-wrap">
+      <table class="mat">
+        <thead>
+          <tr>
+            <th>Suplemento</th>
+            <th style="color:var(--c-fisica)">💪 Física</th>
+            <th style="color:var(--c-metabolica)">⚡ Metabólica</th>
+            <th style="color:var(--c-mental)">🧠 Mental</th>
+            <th style="color:var(--c-emocional)">❤️ Emocional</th>
+            <th style="color:var(--c-espiritual)">✨ Espiritual</th>
+            <th>Evidencia</th>
+            <th>Prioridad</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>Creatina</td><td><span style="color:var(--c-fisica);font-family:'DM Mono',monospace;font-size:12px">●●●●●</span></td><td><span style="color:var(--c-metabolica);font-family:'DM Mono',monospace;font-size:12px">●●●○○</span></td><td><span style="color:var(--c-mental);font-family:'DM Mono',monospace;font-size:12px">●●●○○</span></td><td><span style="color:var(--c-emocional);font-family:'DM Mono',monospace;font-size:12px">●●○○○</span></td><td><span style="color:var(--muted);font-family:'DM Mono',monospace;font-size:12px">○○○○○</span></td><td><div class="ev-badge" style="display:inline-block">A</div></td><td><div class="pri-pill" style="display:inline-block">Núcleo</div></td></tr>
+          <tr><td>Magnesio L-Treonato</td><td><span style="color:var(--c-fisica);font-family:'DM Mono',monospace;font-size:12px">●●○○○</span></td><td><span style="color:var(--c-metabolica);font-family:'DM Mono',monospace;font-size:12px">●●●○○</span></td><td><span style="color:var(--c-mental);font-family:'DM Mono',monospace;font-size:12px">●●●●○</span></td><td><span style="color:var(--c-emocional);font-family:'DM Mono',monospace;font-size:12px">●●●●○</span></td><td><span style="color:var(--c-espiritual);font-family:'DM Mono',monospace;font-size:12px">●●●○○</span></td><td><div class="ev-badge" style="display:inline-block">A</div></td><td><div class="pri-pill" style="display:inline-block">Núcleo</div></td></tr>
+          <tr><td>Omega-3 EPA/DHA</td><td><span style="color:var(--c-fisica);font-family:'DM Mono',monospace;font-size:12px">●●●○○</span></td><td><span style="color:var(--c-metabolica);font-family:'DM Mono',monospace;font-size:12px">●●●●○</span></td><td><span style="color:var(--c-mental);font-family:'DM Mono',monospace;font-size:12px">●●●●○</span></td><td><span style="color:var(--c-emocional);font-family:'DM Mono',monospace;font-size:12px">●●●●○</span></td><td><span style="color:var(--muted);font-family:'DM Mono',monospace;font-size:12px">●○○○○</span></td><td><div class="ev-badge" style="display:inline-block">A</div></td><td><div class="pri-pill" style="display:inline-block">Núcleo</div></td></tr>
+          <tr><td>Vitamina D3 + K2</td><td><span style="color:var(--c-fisica);font-family:'DM Mono',monospace;font-size:12px">●●●●○</span></td><td><span style="color:var(--c-metabolica);font-family:'DM Mono',monospace;font-size:12px">●●●●○</span></td><td><span style="color:var(--c-mental);font-family:'DM Mono',monospace;font-size:12px">●●●○○</span></td><td><span style="color:var(--c-emocional);font-family:'DM Mono',monospace;font-size:12px">●●●○○</span></td><td><span style="color:var(--c-espiritual);font-family:'DM Mono',monospace;font-size:12px">●●○○○</span></td><td><div class="ev-badge" style="display:inline-block">A</div></td><td><div class="pri-pill" style="display:inline-block">Núcleo</div></td></tr>
+          <tr><td>Ashwagandha KSM-66</td><td><span style="color:var(--c-fisica);font-family:'DM Mono',monospace;font-size:12px">●●○○○</span></td><td><span style="color:var(--c-metabolica);font-family:'DM Mono',monospace;font-size:12px">●●●●○</span></td><td><span style="color:var(--c-mental);font-family:'DM Mono',monospace;font-size:12px">●●●○○</span></td><td><span style="color:var(--c-emocional);font-family:'DM Mono',monospace;font-size:12px">●●●●●</span></td><td><span style="color:var(--c-espiritual);font-family:'DM Mono',monospace;font-size:12px">●●●○○</span></td><td><div class="ev-badge ev-b" style="display:inline-block">B+</div></td><td><div class="pri-pill" style="display:inline-block">Alta</div></td></tr>
+          <tr><td>NMN + Resveratrol</td><td><span style="color:var(--c-fisica);font-family:'DM Mono',monospace;font-size:12px">●●●○○</span></td><td><span style="color:var(--c-metabolica);font-family:'DM Mono',monospace;font-size:12px">●●●●●</span></td><td><span style="color:var(--c-mental);font-family:'DM Mono',monospace;font-size:12px">●●●○○</span></td><td><span style="color:var(--muted);font-family:'DM Mono',monospace;font-size:12px">●○○○○</span></td><td><span style="color:var(--muted);font-family:'DM Mono',monospace;font-size:12px">○○○○○</span></td><td><div class="ev-badge ev-b" style="display:inline-block">B</div></td><td><div class="pri-pill" style="display:inline-block">Longevidad</div></td></tr>
+          <tr><td>Lion's Mane</td><td><span style="color:var(--muted);font-family:'DM Mono',monospace;font-size:12px">○○○○○</span></td><td><span style="color:var(--muted);font-family:'DM Mono',monospace;font-size:12px">●○○○○</span></td><td><span style="color:var(--c-mental);font-family:'DM Mono',monospace;font-size:12px">●●●●●</span></td><td><span style="color:var(--c-emocional);font-family:'DM Mono',monospace;font-size:12px">●●●○○</span></td><td><span style="color:var(--c-espiritual);font-family:'DM Mono',monospace;font-size:12px">●●●○○</span></td><td><div class="ev-badge ev-b" style="display:inline-block">B+</div></td><td><div class="pri-pill" style="display:inline-block">Neurológico</div></td></tr>
+          <tr><td>CoQ10 Ubiquinol</td><td><span style="color:var(--c-fisica);font-family:'DM Mono',monospace;font-size:12px">●●●○○</span></td><td><span style="color:var(--c-metabolica);font-family:'DM Mono',monospace;font-size:12px">●●●●○</span></td><td><span style="color:var(--c-mental);font-family:'DM Mono',monospace;font-size:12px">●●○○○</span></td><td><span style="color:var(--muted);font-family:'DM Mono',monospace;font-size:12px">●○○○○</span></td><td><span style="color:var(--muted);font-family:'DM Mono',monospace;font-size:12px">○○○○○</span></td><td><div class="ev-badge ev-b" style="display:inline-block">B</div></td><td><div class="pri-pill" style="display:inline-block">+40 años</div></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p style="font-family:'DM Mono',monospace;font-size:10px;color:var(--muted);margin-top:8px">●●●●● muy alto · ●●●○○ moderado · ●○○○○ leve · ○○○○○ sin impacto significativo</p>
+  </div>
+
+  <!-- ═══════ SUPP: TIMING ═══════ -->
+  <div class="page" id="page-supp-timing">
+    <div class="page-header">
+      <div><h2>Protocolo <em>Horario</em></h2><p>Timing óptimo para maximizar sinergia, absorción y efectos. Coordina con tu rutina de medición diaria.</p></div>
+    </div>
+    <div class="timing-table">
+      <div class="timing-row">
+        <div class="t-lbl">06:00–07:00<br>Despertar</div>
+        <div class="t-content"><div class="tp2 core">D3 + K2 (con grasa)</div><div class="tp2 core">NMN 500mg (ayunas)</div><div class="tp2">Omega-3 1–2g</div><div class="tp2">B12 metilcobalamina</div><div class="tp2">→ HRV + glucosa CGM</div></div>
+      </div>
+      <div class="timing-row">
+        <div class="t-lbl">08:00–10:00<br>Desayuno</div>
+        <div class="t-content"><div class="tp2 core">Lion's Mane 1000mg</div><div class="tp2">Zinc 15mg</div><div class="tp2">CoQ10 Ubiquinol (con grasa)</div><div class="tp2">Resveratrol (con grasa)</div></div>
+      </div>
+      <div class="timing-row">
+        <div class="t-lbl">Pre-entreno<br>–30 min</div>
+        <div class="t-content"><div class="tp2 core">Creatina 5g</div><div class="tp2">Beta-alanina 3.2g</div><div class="tp2">Cafeína 100–200mg (opcional)</div></div>
+      </div>
+      <div class="timing-row">
+        <div class="t-lbl">Post-entreno<br>0–60 min</div>
+        <div class="t-content"><div class="tp2 core">Proteína Whey 30–40g</div><div class="tp2">Omega-3 segunda dosis</div></div>
+      </div>
+      <div class="timing-row">
+        <div class="t-lbl">Tarde<br>16:00–18:00</div>
+        <div class="t-content"><div class="tp2 core">Ashwagandha KSM-66 300mg</div><div class="tp2">L-Teanina 200mg (si estrés)</div></div>
+      </div>
+      <div class="timing-row">
+        <div class="t-lbl">Noche<br>21:00</div>
+        <div class="t-content"><div class="tp2 core">Mg L-Treonato 2 caps</div><div class="tp2 core">Mg Glicinato 200mg</div><div class="tp2">Ashwagandha 300mg (2ª dosis)</div><div class="tp2">Apigenina 50mg</div><div class="tp2">L-Teanina 100mg</div></div>
+      </div>
+    </div>
+    <div class="hbox"><strong>Regla de oro:</strong> Alimentación primero. El orden de prioridad es: Sueño → Alimentación → Entrenamiento → Estrés → Suplementos. La creatina en alguien que duerme 5 horas tiene retorno mínimo.</div>
+  </div>
+
+  <!-- ═══════ SUPP: STACK ═══════ -->
+  <div class="page" id="page-supp-stack">
+    <div class="page-header">
+      <div><h2>Stack &amp; <em>Costos</em></h2><p>Tres niveles de inversión. Implementa por fases — calidad sobre cantidad.</p></div>
+    </div>
+
+    <div class="srule">Nivel 1 · Núcleo Esencial ~$80–120 USD/mes</div>
+    <div class="budget-row hdr"><span>Suplemento</span><span>Marca recomendada</span><span>Costo/mes</span><span>Nivel</span></div>
+    <div class="budget-row"><span><strong>Creatina Monohidrato</strong></span><span style="color:var(--muted);font-size:12px">Creapure® / Thorne</span><span class="bp">$15–25</span><span><div class="bt bt-core">Núcleo</div></span></div>
+    <div class="budget-row"><span><strong>Vitamina D3 5000UI + K2</strong></span><span style="color:var(--muted);font-size:12px">Thorne / Life Extension</span><span class="bp">$15–20</span><span><div class="bt bt-core">Núcleo</div></span></div>
+    <div class="budget-row"><span><strong>Omega-3 EPA/DHA 2g</strong></span><span style="color:var(--muted);font-size:12px">Nordic Naturals / Carlson</span><span class="bp">$25–35</span><span><div class="bt bt-core">Núcleo</div></span></div>
+    <div class="budget-row"><span><strong>Magnesio Glicinato 400mg</strong></span><span style="color:var(--muted);font-size:12px">Pure Encapsulations</span><span class="bp">$15–20</span><span><div class="bt bt-core">Núcleo</div></span></div>
+
+    <div class="srule" style="margin-top:24px">Nivel 2 · Optimización +$100–150 USD/mes</div>
+    <div class="budget-row hdr"><span>Suplemento</span><span>Marca recomendada</span><span>Costo/mes</span><span>Nivel</span></div>
+    <div class="budget-row"><span><strong>Magnesio L-Treonato</strong></span><span style="color:var(--muted);font-size:12px">Magtein® / Life Extension</span><span class="bp">$40–55</span><span><div class="bt bt-opt">Optim.</div></span></div>
+    <div class="budget-row"><span><strong>Ashwagandha KSM-66</strong></span><span style="color:var(--muted);font-size:12px">Ixoreal / Jarrow KSM-66</span><span class="bp">$20–30</span><span><div class="bt bt-opt">Optim.</div></span></div>
+    <div class="budget-row"><span><strong>Lion's Mane extracto 8:1</strong></span><span style="color:var(--muted);font-size:12px">Real Mushrooms / Host Defense</span><span class="bp">$30–45</span><span><div class="bt bt-opt">Optim.</div></span></div>
+    <div class="budget-row"><span><strong>Proteína Whey aislada</strong></span><span style="color:var(--muted);font-size:12px">Thorne / Momentous</span><span class="bp">$50–70</span><span><div class="bt bt-opt">Optim.</div></span></div>
+
+    <div class="srule" style="margin-top:24px">Nivel 3 · Longevidad Avanzada +$200–350 USD/mes</div>
+    <div class="budget-row hdr"><span>Suplemento</span><span>Marca recomendada</span><span>Costo/mes</span><span>Nivel</span></div>
+    <div class="budget-row"><span><strong>NMN 500–1000mg</strong></span><span style="color:var(--muted);font-size:12px">Renue By Science</span><span class="bp">$60–120</span><span><div class="bt bt-adv">Longev.</div></span></div>
+    <div class="budget-row"><span><strong>Resveratrol trans 500mg</strong></span><span style="color:var(--muted);font-size:12px">Renue By Science / Thorne</span><span class="bp">$30–50</span><span><div class="bt bt-adv">Longev.</div></span></div>
+    <div class="budget-row"><span><strong>CoQ10 Ubiquinol 200mg</strong></span><span style="color:var(--muted);font-size:12px">Jarrow Formulas / Qunol</span><span class="bp">$40–60</span><span><div class="bt bt-adv">Longev.</div></span></div>
+    <div class="budget-row"><span><strong>Apigenina 50mg</strong></span><span style="color:var(--muted);font-size:12px">Huberman's rec / Thorne</span><span class="bp">$20–30</span><span><div class="bt bt-adv">Longev.</div></span></div>
+  </div>
+
+</div><!-- /main -->
+
+<script>
+const labels = {
+  'overview':     'Dashboard Global',
+  'protocolo':    'Protocolo & Cronograma',
+  'fisica':       'Salud Física',
+  'metabolica':   'Salud Metabólica',
+  'mental':       'Salud Mental & Cognitiva',
+  'emocional':    'Salud Emocional',
+  'espiritual':   'Salud Espiritual',
+  'supp-intro':   'Suplementación · Principios',
+  'supp-lista':   'Suplementos Clave',
+  'supp-matrix':  'Matriz de Impacto',
+  'supp-timing':  'Protocolo Horario',
+  'supp-stack':   'Stack & Costos'
+};
+
+function go(id) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  document.getElementById('page-' + id).classList.add('active');
+  document.getElementById('topbar-label').textContent = labels[id] || id;
+  // highlight nav item
+  document.querySelectorAll('.nav-item').forEach(n => {
+    if (n.getAttribute('onclick') && n.getAttribute('onclick').includes("'" + id + "'")) {
+      n.classList.add('active');
+    }
+  });
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function setView(v) {
+  document.querySelectorAll('.tp').forEach(t => t.classList.remove('active'));
+  event.target.classList.add('active');
+}
+
+function toggleSC(head) {
+  const body = head.closest('.sc').querySelector('.sc-body');
+  const arr  = head.querySelector('.tarr');
+  const isOpen = body.classList.contains('open');
+  document.querySelectorAll('.sc-body').forEach(b => b.classList.remove('open'));
+  document.querySelectorAll('.tarr').forEach(a => a.classList.remove('open'));
+  if (!isOpen) { body.classList.add('open'); arr.classList.add('open'); }
+}
+</script>
+</body>
+</html>

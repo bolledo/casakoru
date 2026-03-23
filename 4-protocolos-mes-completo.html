@@ -1,0 +1,966 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>4 Protocolos — Un Mes Completo</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #f7f4ef;
+  --ink: #1a1a1f;
+  --surface: #ffffff;
+  --surface2: #f0ece5;
+  --border: rgba(26,26,31,0.1);
+
+  --attia:   #1a6b5a;
+  --attia-l: rgba(26,107,90,0.1);
+  --attia-m: rgba(26,107,90,0.2);
+
+  --ifm:   #2d4a8a;
+  --ifm-l: rgba(45,74,138,0.1);
+  --ifm-m: rgba(45,74,138,0.2);
+
+  --sinclair:   #7a3a8a;
+  --sinclair-l: rgba(122,58,138,0.1);
+  --sinclair-m: rgba(122,58,138,0.2);
+
+  --vita:   #c4622a;
+  --vita-l: rgba(196,98,42,0.1);
+  --vita-m: rgba(196,98,42,0.2);
+
+  --muted: #888;
+  --faint: #e8e4dd;
+}
+
+* { margin:0; padding:0; box-sizing:border-box; }
+
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: 'IBM Plex Sans', sans-serif;
+  font-size: 15px;
+  line-height: 1.6;
+}
+
+/* ── HEADER ── */
+.site-header {
+  background: var(--ink);
+  color: var(--bg);
+  padding: 52px 60px 44px;
+}
+.sh-eyebrow {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: rgba(247,244,239,0.4);
+  margin-bottom: 14px;
+}
+.sh-title {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(2rem, 4vw, 3.6rem);
+  font-weight: 400;
+  line-height: 1.1;
+  margin-bottom: 16px;
+}
+.sh-title em { font-style: italic; color: rgba(247,244,239,0.55); }
+.sh-desc {
+  font-size: 0.9rem;
+  color: rgba(247,244,239,0.5);
+  max-width: 580px;
+  line-height: 1.7;
+}
+
+/* ── PROTOCOL SELECTOR ── */
+.proto-rail {
+  display: flex;
+  background: var(--ink);
+  border-top: 1px solid rgba(255,255,255,0.08);
+  overflow-x: auto;
+  padding: 0 60px;
+  gap: 0;
+}
+.proto-btn {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  padding: 16px 22px;
+  cursor: pointer;
+  border: none;
+  background: none;
+  border-bottom: 3px solid transparent;
+  transition: all 0.2s;
+  white-space: nowrap;
+  min-width: 140px;
+}
+.proto-btn:hover .pb-name { color: rgba(247,244,239,0.85); }
+.pb-score {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 2px;
+  color: rgba(247,244,239,0.35);
+}
+.pb-name {
+  font-family: 'Playfair Display', serif;
+  font-size: 1rem;
+  color: rgba(247,244,239,0.5);
+  font-weight: 400;
+  transition: color 0.2s;
+}
+.pb-tag {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 8px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: rgba(247,244,239,0.25);
+}
+.proto-btn[data-p="attia"].sel { border-bottom-color: var(--attia); }
+.proto-btn[data-p="attia"].sel .pb-name { color: var(--attia); }
+.proto-btn[data-p="attia"].sel .pb-score { color: var(--attia); opacity:.7; }
+.proto-btn[data-p="ifm"].sel { border-bottom-color: var(--ifm); }
+.proto-btn[data-p="ifm"].sel .pb-name { color: #6b8fdd; }
+.proto-btn[data-p="ifm"].sel .pb-score { color: #6b8fdd; opacity:.7; }
+.proto-btn[data-p="sinclair"].sel { border-bottom-color: var(--sinclair); }
+.proto-btn[data-p="sinclair"].sel .pb-name { color: #c07ad0; }
+.proto-btn[data-p="sinclair"].sel .pb-score { color: #c07ad0; opacity:.7; }
+.proto-btn[data-p="vita"].sel { border-bottom-color: var(--vita); }
+.proto-btn[data-p="vita"].sel .pb-name { color: #e88a55; }
+.proto-btn[data-p="vita"].sel .pb-score { color: #e88a55; opacity:.7; }
+
+/* ── PERSPECTIVE TABS ── */
+.persp-strip {
+  background: var(--surface2);
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  gap: 0;
+  padding: 0 60px;
+}
+.persp-tab {
+  padding: 12px 20px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  cursor: pointer;
+  border: none;
+  background: none;
+  color: var(--muted);
+  border-bottom: 2px solid transparent;
+  margin-bottom: -1px;
+  transition: all 0.2s;
+}
+.persp-tab:hover { color: var(--ink); }
+.persp-tab.sel { color: var(--ink); border-bottom-color: var(--ink); }
+
+/* ── MAIN ── */
+.main {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 52px 60px 100px;
+}
+
+/* ── PATIENT INTRO ── */
+.patient-band {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 32px;
+  align-items: start;
+  margin-bottom: 40px;
+  padding-bottom: 36px;
+  border-bottom: 1px solid var(--border);
+}
+.pb-name-big {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.9rem;
+  font-weight: 400;
+  margin-bottom: 4px;
+}
+.pb-context {
+  font-size: 0.85rem;
+  color: var(--muted);
+  line-height: 1.6;
+  max-width: 520px;
+}
+.metrics-row {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.mbox {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  padding: 14px 18px;
+  min-width: 110px;
+}
+.mbox-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 8px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 5px;
+}
+.mbox-val {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.7rem;
+  line-height: 1;
+}
+.mbox-sub {
+  font-size: 0.72rem;
+  color: var(--muted);
+  margin-top: 3px;
+}
+
+/* ── WEEK ── */
+.week {
+  margin-bottom: 32px;
+}
+.week-header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 8px;
+}
+.week-num {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  padding: 5px 12px;
+  border-radius: 2px;
+  white-space: nowrap;
+}
+.week-theme {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.1rem;
+  font-style: italic;
+  color: var(--muted);
+}
+.week-line {
+  flex: 1;
+  height: 1px;
+  background: var(--border);
+}
+
+/* ── DAY ROW ── */
+.day-row {
+  display: grid;
+  grid-template-columns: 64px 1fr;
+  border: 1px solid var(--border);
+  border-bottom: none;
+  background: var(--surface);
+  transition: background 0.15s;
+}
+.day-row:last-child { border-bottom: 1px solid var(--border); }
+.day-row:hover { background: #fdfbf8; }
+.day-num-col {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 12px 6px;
+  gap: 2px;
+  border-right: 1px solid var(--border);
+}
+.dn-n {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.6rem;
+  line-height: 1;
+}
+.dn-d {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 8px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.day-body { padding: 13px 18px; }
+.day-title-txt {
+  font-size: 0.9rem;
+  font-weight: 500;
+  margin-bottom: 4px;
+}
+.day-desc-txt {
+  font-size: 0.82rem;
+  color: #555;
+  line-height: 1.6;
+}
+.day-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  margin-top: 8px;
+}
+.dtag {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 8px;
+  letter-spacing: 1px;
+  padding: 2px 8px;
+  border-radius: 2px;
+}
+.dtag-proto { border: 1px solid; }
+.dtag-n { background: var(--faint); color: var(--muted); border: 1px solid var(--border); }
+.dtag-gap { background: rgba(220,60,60,0.08); color: #cc4444; border: 1px solid rgba(220,60,60,0.2); }
+.dtag-plus { background: rgba(40,160,80,0.08); color: #1a8040; border: 1px solid rgba(40,160,80,0.2); }
+
+/* ── OPS SECTION ── */
+.ops-intro {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 32px;
+  align-items: start;
+  margin-bottom: 40px;
+  padding-bottom: 36px;
+  border-bottom: 1px solid var(--border);
+}
+.ops-metrics {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-width: 200px;
+}
+.ops-mrow {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 20px;
+  padding: 10px 14px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+}
+.ops-ml {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 1px;
+  color: var(--muted);
+  text-transform: uppercase;
+}
+.ops-mv {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.3rem;
+  font-weight: 700;
+}
+
+/* ── OPS TIMELINE ── */
+.ops-timeline { position: relative; padding-left: 28px; }
+.ops-timeline::before {
+  content: '';
+  position: absolute;
+  left: 5px; top: 8px; bottom: 8px;
+  width: 1px;
+  background: var(--border);
+}
+.ops-event {
+  position: relative;
+  margin-bottom: 12px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  padding: 16px 18px;
+}
+.ops-event::before {
+  content: '';
+  position: absolute;
+  left: -31px; top: 20px;
+  width: 9px; height: 9px;
+  border-radius: 50%;
+  background: var(--surface);
+  border: 2px solid var(--border);
+}
+.ops-when {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 4px;
+}
+.ops-what {
+  font-size: 0.9rem;
+  font-weight: 500;
+  margin-bottom: 3px;
+}
+.ops-who {
+  font-size: 0.8rem;
+  color: #555;
+  line-height: 1.6;
+}
+.load-pill {
+  display: inline-block;
+  margin-top: 8px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 8px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  padding: 2px 8px;
+  border-radius: 2px;
+}
+.load-hi  { background: rgba(200,60,60,0.08); color: #bb3333; border: 1px solid rgba(200,60,60,0.2); }
+.load-md  { background: rgba(200,150,0,0.08); color: #aa7700; border: 1px solid rgba(200,150,0,0.2); }
+.load-lo  { background: rgba(40,140,80,0.08); color: #1a7040; border: 1px solid rgba(40,140,80,0.2); }
+
+/* ── ECON TABLE ── */
+.econ-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  margin-top: 44px;
+}
+.econ-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  padding: 24px;
+}
+.econ-head {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  margin-bottom: 16px;
+}
+.econ-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  padding: 7px 0;
+  border-bottom: 1px solid var(--faint);
+  gap: 16px;
+}
+.econ-row:last-of-type { border-bottom: none; }
+.econ-item { font-size: 0.82rem; color: var(--muted); }
+.econ-val  { font-size: 0.88rem; font-weight: 500; white-space: nowrap; }
+.econ-total {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-top: 14px;
+  padding-top: 14px;
+  border-top: 1px solid var(--border);
+}
+.econ-tl {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.econ-tv {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.9rem;
+  font-weight: 400;
+}
+
+/* ── INSIGHT BOX ── */
+.insight-box {
+  margin-top: 44px;
+  padding: 24px 28px;
+  border-left: 3px solid;
+  background: var(--surface);
+}
+.ib-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  margin-bottom: 10px;
+}
+.ib-text {
+  font-size: 0.9rem;
+  line-height: 1.75;
+  color: #444;
+}
+.ib-text strong { color: var(--ink); font-weight: 500; }
+
+/* ── PANEL SHOW/HIDE ── */
+.panel { display: none; }
+.panel.on { display: block; }
+
+/* ── COLOR UTILS per proto ── */
+.c-attia    { color: var(--attia); }
+.c-ifm      { color: var(--ifm); }
+.c-sinclair { color: var(--sinclair); }
+.c-vita     { color: var(--vita); }
+.bg-attia    { background: var(--attia-l); }
+.bg-ifm      { background: var(--ifm-l); }
+.bg-sinclair { background: var(--sinclair-l); }
+.bg-vita     { background: var(--vita-l); }
+.bdr-attia    { border-color: var(--attia) !important; }
+.bdr-ifm      { border-color: var(--ifm) !important; }
+.bdr-sinclair { border-color: var(--sinclair) !important; }
+.bdr-vita     { border-color: var(--vita) !important; }
+.wk-attia    { background: var(--attia-m); color: var(--attia); }
+.wk-ifm      { background: var(--ifm-m);   color: var(--ifm); }
+.wk-sinclair { background: var(--sinclair-m); color: var(--sinclair); }
+.wk-vita     { background: var(--vita-m);  color: var(--vita); }
+.dn-attia    { color: var(--attia); }
+.dn-ifm      { color: var(--ifm); }
+.dn-sinclair { color: var(--sinclair); }
+.dn-vita     { color: var(--vita); }
+.dot-event-attia::before    { background: var(--attia) !important; border-color: var(--attia) !important; box-shadow: 0 0 6px rgba(26,107,90,.5); }
+.dot-event-ifm::before      { background: var(--ifm) !important;   border-color: var(--ifm) !important;   box-shadow: 0 0 6px rgba(45,74,138,.5); }
+.dot-event-sinclair::before { background: var(--sinclair) !important; border-color: var(--sinclair) !important; box-shadow: 0 0 6px rgba(122,58,138,.5); }
+.dot-event-vita::before     { background: var(--vita) !important;  border-color: var(--vita) !important;  box-shadow: 0 0 6px rgba(196,98,42,.5); }
+
+@media (max-width: 900px) {
+  .site-header, .proto-rail, .persp-strip, .main { padding-left: 20px; padding-right: 20px; }
+  .patient-band, .ops-intro { grid-template-columns: 1fr; }
+  .econ-grid { grid-template-columns: 1fr; }
+  .metrics-row { gap: 8px; }
+}
+</style>
+</head>
+<body>
+
+<div class="site-header">
+  <div class="sh-eyebrow">Koru Elite Performance · Benchmarking Clínico</div>
+  <div class="sh-title">4 Protocolos, <em>un mes</em> completo</div>
+  <div class="sh-desc">Perspectiva dual — paciente y centro — para los tres mejores protocolos internacionales y el mejor latinoamericano. Selecciona protocolo y perspectiva.</div>
+</div>
+
+<div class="proto-rail">
+  <button class="proto-btn sel" data-p="attia" onclick="setProto('attia',this)">
+    <span class="pb-score">9.2 / 10</span>
+    <span class="pb-name">Peter Attia</span>
+    <span class="pb-tag">EE.UU. · Medicina 3.0</span>
+  </button>
+  <button class="proto-btn" data-p="ifm" onclick="setProto('ifm',this)">
+    <span class="pb-score">8.6 / 10</span>
+    <span class="pb-name">IFM — GOTOIT</span>
+    <span class="pb-tag">EE.UU. · Medicina Funcional</span>
+  </button>
+  <button class="proto-btn" data-p="sinclair" onclick="setProto('sinclair',this)">
+    <span class="pb-score">8.5 / 10</span>
+    <span class="pb-name">David Sinclair</span>
+    <span class="pb-tag">Harvard · Epigenética</span>
+  </button>
+  <button class="proto-btn" data-p="vita" onclick="setProto('vita',this)">
+    <span class="pb-score">7.0 / 10</span>
+    <span class="pb-name">Instituto Vita</span>
+    <span class="pb-tag">Brasil · Mejor LATAM</span>
+  </button>
+</div>
+
+<div class="persp-strip">
+  <button class="persp-tab sel" onclick="setPersp('pac',this)">👤 Paciente</button>
+  <button class="persp-tab" onclick="setPersp('cen',this)">🏥 Centro</button>
+</div>
+
+<div class="main">
+
+<!-- ════ ATTIA · PACIENTE ════ -->
+<div id="attia-pac" class="panel on">
+  <div class="patient-band">
+    <div>
+      <div class="pb-name-big">Carlos M., 48 — CEO <span style="font-family:'IBM Plex Mono';font-size:.7rem;color:var(--attia)">Early Medical Inc. · San Francisco</span></div>
+      <div class="pb-context">Ejecutivo de tecnología. Sin patología activa, pero con edad biológica 6 años mayor a la cronológica. ApoB elevado, pobre calidad de sueño y VO₂ max en percentil 22 para su edad. Objetivo: revertir envejecimiento biológico en 2 años.</div>
+    </div>
+    <div class="metrics-row">
+      <div class="mbox"><div class="mbox-label">Edad Bio</div><div class="mbox-val c-attia">54</div><div class="mbox-sub">vs 48 cronológica</div></div>
+      <div class="mbox"><div class="mbox-label">VO₂ Max</div><div class="mbox-val c-attia">38</div><div class="mbox-sub">ml/kg/min · P22</div></div>
+      <div class="mbox"><div class="mbox-label">ApoB</div><div class="mbox-val c-attia">108</div><div class="mbox-sub">mg/dL · obj &lt;60</div></div>
+      <div class="mbox"><div class="mbox-label">hsCRP</div><div class="mbox-val c-attia">3.2</div><div class="mbox-sub">mg/L · inf crónica</div></div>
+    </div>
+  </div>
+
+  <div class="week">
+    <div class="week-header"><span class="week-num wk-attia">Semana 1</span><span class="week-theme">Diagnóstico total — 6 horas en clínica</span><span class="week-line"></span></div>
+    <div class="day-row"><div class="day-num-col"><div class="dn-n dn-attia">01</div><div class="dn-d">Lun</div></div><div class="day-body"><div class="day-title-txt">Intake Day · Laboratorio + Historia Clínica Profunda</div><div class="day-desc-txt">Extracción de 28 biomarcadores en ayunas (7am): lípidos avanzados, glucosa, insulina, HbA1c, hormonal completo, inflamación, micronutrientes. Historia clínica de 90 min con el médico. Revisión de estudios previos. Identificación de los "4 jinetes" de riesgo personales.</div><div class="day-tags"><span class="dtag dtag-proto bdr-attia c-attia">28 biomarcadores</span><span class="dtag dtag-proto bdr-attia c-attia">Historia 90 min</span><span class="dtag dtag-n">Ayuno 12h previo</span></div></div></div>
+    <div class="day-row"><div class="day-num-col"><div class="dn-n dn-attia">02</div><div class="dn-d">Mar</div></div><div class="day-body"><div class="day-title-txt">DEXA + VO₂ Max + Fuerza + Instalación CGM</div><div class="day-desc-txt">DEXA scan completo (masa ósea, grasa visceral, masa muscular segmentada). Test de VO₂ máximo con analizador de gases. Evaluación de potencia (deadlift, grip strength, farmer carry). Enfermera instala CGM FreeStyle Pro en brazo.</div><div class="day-tags"><span class="dtag dtag-proto bdr-attia c-attia">DEXA</span><span class="dtag dtag-proto bdr-attia c-attia">VO₂ Max</span><span class="dtag dtag-proto bdr-attia c-attia">CGM activo</span><span class="dtag dtag-n">3.5 horas total</span></div></div></div>
+    <div class="day-row"><div class="day-num-col"><div class="dn-n dn-attia">03</div><div class="dn-d">Mié</div></div><div class="day-body"><div class="day-title-txt">Evaluación de Sueño + Cognitiva + Oura Ring</div><div class="day-desc-txt">WatchPAT (estudio sueño ambulatorio en casa la noche anterior). Batería cognitiva CNS Vital Signs (memoria, atención, velocidad de procesamiento). Entrega y configuración de Oura Ring. Primera sesión psicoeducativa sobre arquitectura del sueño.</div><div class="day-tags"><span class="dtag dtag-proto bdr-attia c-attia">Oura Ring activo</span><span class="dtag dtag-proto bdr-attia c-attia">HRV continuo</span><span class="dtag dtag-n">Cognitivo</span></div></div></div>
+    <div class="day-row"><div class="day-num-col"><div class="dn-n dn-attia">05</div><div class="dn-d">Vie</div></div><div class="day-body"><div class="day-title-txt">Devolución: Plan de 90 días + Dashboard Personal</div><div class="day-desc-txt">Reunión de 2 horas. Dashboard personalizado con benchmarks de edad y percentiles. 3 objetivos primarios del trimestre. Protocolo escrito: zonas de entrenamiento exactas, proteína 2.2g/kg, ventana de alimentación, stack de suplementos (creatina, vitamina D3/K2, omega-3, magnesio glicinato).</div><div class="day-tags"><span class="dtag dtag-proto bdr-attia c-attia">Dashboard entregado</span><span class="dtag dtag-plus">Plan 90 días</span><span class="dtag dtag-proto bdr-attia c-attia">Stack 6 suplementos</span></div></div></div>
+  </div>
+
+  <div class="week">
+    <div class="week-header"><span class="week-num wk-attia">Semana 2</span><span class="week-theme">Implementación y primeros datos</span><span class="week-line"></span></div>
+    <div class="day-row"><div class="day-num-col"><div class="dn-n dn-attia">08</div><div class="dn-d">Lun</div></div><div class="day-body"><div class="day-title-txt">Primera sesión de Zona 2 calibrada</div><div class="day-desc-txt">45 minutos en cicloergómetro con FC &lt;145 bpm (zona 2 prescrita). Coach calibra ritmo aeróbico. Carlos siente que "es demasiado fácil" — normal al inicio. Datos de Oura del primer fin de semana: sueño promedio 5h 50min, HRV 44ms.</div><div class="day-tags"><span class="dtag dtag-proto bdr-attia c-attia">Zona 2 · 45 min</span><span class="dtag dtag-n">FC &lt;145 bpm</span></div></div></div>
+    <div class="day-row"><div class="day-num-col"><div class="dn-n dn-attia">09</div><div class="dn-d">Mar</div></div><div class="day-body"><div class="day-title-txt">Fuerza (upper) + Consulta Nutricionista</div><div class="day-desc-txt">Primera sesión de resistencia progresiva (press, remo, curl). Reunión con nutricionista: carlos consume 85g proteína/día vs objetivo 160g. Plan de transición con shakes de caseína antes de dormir y huevos + salmón en desayuno. Ventana alimentaria: 12pm–8pm.</div><div class="day-tags"><span class="dtag dtag-proto bdr-attia c-attia">Fuerza upper</span><span class="dtag dtag-proto bdr-attia c-attia">Nutrición ajustada</span></div></div></div>
+    <div class="day-row"><div class="day-num-col"><div class="dn-n dn-attia">11</div><div class="dn-d">Jue</div></div><div class="day-body"><div class="day-title-txt">Telemedicina 20 min — Primer ajuste CGM</div><div class="day-desc-txt">Médico revisa CGM en vivo. Pico post-almuerzo: 194 mg/dL (arroz blanco + jugo). Acción inmediata: eliminar carbohidratos simples al mediodía, añadir berberina 500mg con comidas principales. Carlos ya nota diferencia: "después de comer no me da sueño los días que hice lo del protocolo".</div><div class="day-tags"><span class="dtag dtag-proto bdr-attia c-attia">CGM pico → 194</span><span class="dtag dtag-proto bdr-attia c-attia">Berberina añadida</span><span class="dtag dtag-n">Ajuste en 48h</span></div></div></div>
+    <div class="day-row"><div class="day-num-col"><div class="dn-n dn-attia">13</div><div class="dn-d">Sáb</div></div><div class="day-body"><div class="day-title-txt">Protocolo de Sauna + Cold Plunge</div><div class="day-desc-txt">20 min sauna 82°C → 3 min cold plunge 14°C × 3 rondas. Primera experiencia. Tolerancia moderada. Post-protocolo: HRV subió a 58ms (vs baseline 44ms). Carlos reporta "la mente más clara que en meses". App registra el evento y médico lo ve en dashboard.</div><div class="day-tags"><span class="dtag dtag-proto bdr-attia c-attia">Hormesis térmica</span><span class="dtag dtag-plus">HRV +32%</span></div></div></div>
+  </div>
+
+  <div class="week">
+    <div class="week-header"><span class="week-num wk-attia">Semana 3</span><span class="week-theme">Ritmo establecido — datos mejoran</span><span class="week-line"></span></div>
+    <div class="day-row"><div class="day-num-col"><div class="dn-n dn-attia">15</div><div class="dn-d">Lun</div></div><div class="day-body"><div class="day-title-txt">Zona 2 ×3 semana consolidado · HRV en alza</div><div class="day-desc-txt">Semana completa: 3 sesiones zona 2 (135 min totales), 2 sesiones fuerza, 1 sauna+frío. HRV promedio semanal: 52ms (↑18% vs baseline). Oura detecta mejor eficiencia de sueño (79% → 84%). Informe automático enviado al médico por API.</div><div class="day-tags"><span class="dtag dtag-proto bdr-attia c-attia">HRV 52ms ↑18%</span><span class="dtag dtag-plus">Sueño 84% efic.</span><span class="dtag dtag-n">Adherencia 87%</span></div></div></div>
+    <div class="day-row"><div class="day-num-col"><div class="dn-n dn-attia">17</div><div class="dn-d">Mié</div></div><div class="day-body"><div class="day-title-txt">Fisioterapia DNS — Core profundo</div><div class="day-desc-txt">Evaluación de patrones de movimiento (FMS). Dolor lumbar crónico de Carlos: activación insuficiente de multífidos y transverso. Protocolo 3x/semana de DNS (Dead Bug, Breathing Coordination, Bear). Prescripción de ejercicios en app con video.</div><div class="day-tags"><span class="dtag dtag-proto bdr-attia c-attia">Fisio DNS</span><span class="dtag dtag-n">Lumbar crónico</span></div></div></div>
+    <div class="day-row"><div class="day-num-col"><div class="dn-n dn-attia">19</div><div class="dn-d">Vie</div></div><div class="day-body"><div class="day-title-txt">Check-in conductual — Estrés semana de directorio</div><div class="day-desc-txt">30 min con coach ejecutivo. Semana de directorio = sueño acortado, saltó 2 sesiones de ejercicio. Plan: "ancla mínima" — incluso en semanas de caos, 20 min caminata + 22:30 en cama. HRV del directorio bajó a 38ms. Médico ajusta melatonina de liberación extendida 0.5mg.</div><div class="day-tags"><span class="dtag dtag-proto bdr-attia c-attia">Coaching 30 min</span><span class="dtag dtag-n">Ancla mínima</span><span class="dtag dtag-n">Melatonina +</span></div></div></div>
+    <div class="day-row"><div class="day-num-col"><div class="dn-n dn-attia">22</div><div class="dn-d">Dom</div></div><div class="day-body"><div class="day-title-txt">Análisis CGM 2 semanas — Tendencia positiva</div><div class="day-desc-txt">Glucosa ayunas: 98 → 91 mg/dL. Picos post-almuerzo: 194 → 148 mg/dL. MAGE (variabilidad glucémica) cayó 24%. App genera notificación positiva con comparación gráfica. Carlos comparte screenshot en WhatsApp con su esposa: "algo está pasando aquí".</div><div class="day-tags"><span class="dtag dtag-plus">Glucosa -7 mg/dL</span><span class="dtag dtag-plus">Picos -24%</span></div></div></div>
+  </div>
+
+  <div class="week">
+    <div class="week-header"><span class="week-num wk-attia">Semana 4</span><span class="week-theme">Evaluación, ajuste y reporte</span><span class="week-line"></span></div>
+    <div class="day-row"><div class="day-num-col"><div class="dn-n dn-attia">26</div><div class="dn-d">Lun</div></div><div class="day-body"><div class="day-title-txt">Laboratorio de seguimiento mes 1 (12 marcadores)</div><div class="day-desc-txt">Panel reducido: glucosa, insulina, hsCRP, ApoB, testosterona total/libre, cortisol AM, ferritina, TSH, vitamina D. No DEXA hasta mes 3. Resultados en 48h directamente al dashboard del médico.</div><div class="day-tags"><span class="dtag dtag-proto bdr-attia c-attia">12 biomarcadores</span><span class="dtag dtag-n">Ciclo trimestral DEXA</span></div></div></div>
+    <div class="day-row"><div class="day-num-col"><div class="dn-n dn-attia">28</div><div class="dn-d">Mié</div></div><div class="day-body"><div class="day-title-txt">Consulta médica mensual — 60 minutos</div><div class="day-desc-txt">Revisión integral: lab + CGM + HRV + sueño + adherencia. hsCRP: 3.2 → 2.4 mg/L (↓25%). ApoB sin cambios (esperado — requiere 3 meses). Se inicia rosuvastatina 5mg + CoQ10 100mg. Protocolo de fuerza ajustado a 3x/semana lower body. Próxima evaluación DEXA en mes 3.</div><div class="day-tags"><span class="dtag dtag-plus">hsCRP ↓25%</span><span class="dtag dtag-proto bdr-attia c-attia">Estatina iniciada</span><span class="dtag dtag-proto bdr-attia c-attia">Protocolo ajustado</span></div></div></div>
+    <div class="day-row"><div class="day-num-col"><div class="dn-n dn-attia">30</div><div class="dn-d">Vie</div></div><div class="day-body"><div class="day-title-txt">Reporte mensual entregado — 12 páginas con score</div><div class="day-desc-txt">Documento: tendencias de cada biomarcador graficadas, adherencia por categoría (82%), comparación con percentiles de edad, puntos destacados del CGM, proyección a mes 3. Score de Vitalidad Integrada del mes: 68/100. Objetivo mes 2: 74/100.</div><div class="day-tags"><span class="dtag dtag-proto bdr-attia c-attia">Score 68 → obj 74</span><span class="dtag dtag-n">Reporte 12 págs</span></div></div></div>
+  </div>
+
+  <div class="insight-box bdr-attia" style="border-left-color:var(--attia)">
+    <div class="ib-label c-attia">Insight del mes — Attia</div>
+    <div class="ib-text">Carlos empieza a sentirse diferente desde la semana 2, pero los datos lo confirman en la semana 3. <strong>El CGM es la herramienta de adherencia más poderosa:</strong> ver sus picos de glucosa en tiempo real cambia sus decisiones de comida sin necesidad de fuerza de voluntad. La densidad de contacto (7 touchpoints en el mes) crea una sensación de "acompañamiento constante" que justifica el precio premium. La dificultad principal para el paciente: la carga inicial de 4 días de diagnóstico requiere flexibilidad de agenda ejecutiva.</div>
+  </div>
+</div>
+
+<!-- ════ ATTIA · CENTRO ════ -->
+<div id="attia-cen" class="panel">
+  <div class="ops-intro">
+    <div>
+      <div class="pb-name-big">Early Medical Inc. — Operaciones Mes 1</div>
+      <div class="pb-context">Modelo de práctica boutique de ultra-alta intensidad. 35 pacientes por médico. Equipo multidisciplinario de 5 personas por paciente. Tecnología integrada (EMR propio + API con wearables). Revenue principal: retainer anual + fee de onboarding.</div>
+    </div>
+    <div class="ops-metrics">
+      <div class="ops-mrow"><span class="ops-ml">Pacientes/médico</span><span class="ops-mv c-attia">35</span></div>
+      <div class="ops-mrow"><span class="ops-ml">Retainer anual</span><span class="ops-mv c-attia">$25K</span></div>
+      <div class="ops-mrow"><span class="ops-ml">Horas equipo mes 1</span><span class="ops-mv c-attia">22 h</span></div>
+      <div class="ops-mrow"><span class="ops-ml">Equipo por paciente</span><span class="ops-mv c-attia">5</span></div>
+    </div>
+  </div>
+
+  <div class="ops-timeline">
+    <div class="ops-event dot-event-attia"><div class="ops-when">Semana 1 · Días 1–3</div><div class="ops-what">Onboarding diagnóstico exhaustivo</div><div class="ops-who">Médico (4h) + lab externo coordinado + coordinadora de caso (1.5h). Activación de EMR. Integración automática de resultados de lab al dashboard. Asignación del equipo completo (coach, nutricionista, fisio, data analyst).</div><span class="load-pill load-hi">Carga alta</span></div>
+    <div class="ops-event dot-event-attia"><div class="ops-when">Semana 1 · Día 5</div><div class="ops-what">Team Huddle de caso — 30 min</div><div class="ops-who">Médico + coach + nutricionista revisan hallazgos en sistema compartido. Distribución de responsabilidades por dominio. Alertas configuradas en el sistema (CGM >180, HRV <40, sueño <6h x3 consecutivos).</div><span class="load-pill load-md">Carga media</span></div>
+    <div class="ops-event dot-event-attia"><div class="ops-when">Semanas 2–3 · Continuo</div><div class="ops-what">Monitoreo pasivo automatizado</div><div class="ops-who">Data analyst revisa dashboards cada 2 días (45 min/semana para 10 pacientes). Sistema de alertas automáticas. Médico recibe notificaciones solo cuando hay trigger. Sin contacto activo = carga mínima con visibilidad total.</div><span class="load-pill load-lo">Carga baja</span></div>
+    <div class="ops-event dot-event-attia"><div class="ops-when">Semana 2 · Día 11</div><div class="ops-what">Telemedicina de ajuste CGM — 20 min</div><div class="ops-who">Médico (25 min con prep). Nota clínica en EMR. Prescripción de berberina documentada. Farmacia notificada. Facturado como "teleconsulta de seguimiento" incluida en retainer.</div><span class="load-pill load-lo">Carga baja</span></div>
+    <div class="ops-event dot-event-attia"><div class="ops-when">Semana 3 · Viernes</div><div class="ops-what">Check-in conductual — coach ejecutivo</div><div class="ops-who">Coach (30 min). Registra barreras y adherencia en sistema. Alertas de semana de directorio escaladas al médico → ajuste melatonina. Sin reunión médica necesaria: coach maneja el primer nivel de intervención.</div><span class="load-pill load-lo">Carga baja</span></div>
+    <div class="ops-event dot-event-attia"><div class="ops-when">Semana 4 · Día 28</div><div class="ops-what">Consulta médica mensual — 60 min</div><div class="ops-who">Médico (90 min con preparación). Dashboard integrado precompilado por data analyst (30 min previos). Ajuste de protocolo documentado. Prescripción nueva coordinada. Todo auditable en EMR.</div><span class="load-pill load-hi">Carga alta</span></div>
+    <div class="ops-event dot-event-attia"><div class="ops-when">Semana 4 · Día 30</div><div class="ops-what">Reporte mensual — generación semi-automatizada</div><div class="ops-who">Data analyst (2h): template automático completa el 70% del reporte con gráficas de tendencias. Médico revisa y personaliza narrativa (20 min). Envío por portal seguro. Actualización del score IVI y proyección mes 2.</div><span class="load-pill load-md">Carga media</span></div>
+  </div>
+
+  <div class="econ-grid">
+    <div class="econ-card">
+      <div class="econ-head c-attia">Ingresos — Carlos M. · Mes 1</div>
+      <div class="econ-row"><span class="econ-item">Retainer anual prorrateado (mes 1)</span><span class="econ-val c-attia">$2,083</span></div>
+      <div class="econ-row"><span class="econ-item">Fee de onboarding diagnóstico (único)</span><span class="econ-val c-attia">$4,500</span></div>
+      <div class="econ-row"><span class="econ-item">Laboratorio extendido (pass-through +30%)</span><span class="econ-val c-attia">$1,800</span></div>
+      <div class="econ-row"><span class="econ-item">Procedimientos: DEXA + VO₂ max</span><span class="econ-val c-attia">$650</span></div>
+      <div class="econ-total"><span class="econ-tl">Total mes 1</span><span class="econ-tv c-attia">$9,033</span></div>
+    </div>
+    <div class="econ-card">
+      <div class="econ-head c-attia">Horas equipo · Mes 1</div>
+      <div class="econ-row"><span class="econ-item">Médico principal</span><span class="econ-val c-attia">9.5 h</span></div>
+      <div class="econ-row"><span class="econ-item">Coach ejecutivo</span><span class="econ-val c-attia">3.5 h</span></div>
+      <div class="econ-row"><span class="econ-item">Nutricionista funcional</span><span class="econ-val c-attia">2.0 h</span></div>
+      <div class="econ-row"><span class="econ-item">Fisioterapeuta DNS</span><span class="econ-val c-attia">2.0 h</span></div>
+      <div class="econ-row"><span class="econ-item">Data analyst / coordinador</span><span class="econ-val c-attia">5.0 h</span></div>
+      <div class="econ-total"><span class="econ-tl">Total horas</span><span class="econ-tv c-attia">22 h</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- ════ IFM · PACIENTE ════ -->
+<div id="ifm-pac" class="panel">
+  <div class="patient-band">
+    <div>
+      <div class="pb-name-big">Sandra L., 44 — Directora Financiera <span style="font-family:'IBM Plex Mono';font-size:.7rem;color:var(--ifm)">Centro IFM · Chicago</span></div>
+      <div class="pb-context">CFO de empresa Fortune 500. Fatiga crónica, niebla mental, síndrome de intestino irritable y aumento de peso progresivo a pesar de "comer bien". Diagnóstico convencional: "todo normal". Llega frustrada con la medicina tradicional.</div>
+    </div>
+    <div class="metrics-row">
+      <div class="mbox"><div class="mbox-label">Fatiga (VAS)</div><div class="mbox-val c-ifm">7.8</div><div class="mbox-sub">/10 · crónica 3 años</div></div>
+      <div class="mbox"><div class="mbox-label">hsCRP</div><div class="mbox-val c-ifm">4.6</div><div class="mbox-sub">mg/L · inflamación</div></div>
+      <div class="mbox"><div class="mbox-label">Cortisol AM</div><div class="mbox-val c-ifm">28</div><div class="mbox-sub">µg/dL · elevado</div></div>
+      <div class="mbox"><div class="mbox-label">Ferritina</div><div class="mbox-val c-ifm">11</div><div class="mbox-sub">ng/mL · muy baja</div></div>
+    </div>
+  </div>
+
+  <div class="week">
+    <div class="week-header"><span class="week-num wk-ifm">Semana 1</span><span class="week-theme">Mapeo sistémico GOTOIT — los 7 nodos</span><span class="week-line"></span></div>
+    <div class="day-row"><div class="day-num-col"><div class="dn-n dn-ifm">01</div><div class="dn-d">Lun</div></div><div class="day-body"><div class="day-title-txt">IFM Intake Questionnaire + Historia Funcional Profunda</div><div class="day-desc-txt">Sandra completa el IFMIQ (cuestionario de 80 preguntas sobre 7 sistemas). Consulta inicial de 90 min: médico traza la línea de tiempo de vida (Timeline Tool) identificando el inicio de cada síntoma y sus antecedentes. Identifica: infección por Helicobacter pylori no tratada a los 32 años como trigger inicial de la cascada.</div><div class="day-tags"><span class="dtag dtag-proto bdr-ifm c-ifm">IFMIQ 80 preguntas</span><span class="dtag dtag-proto bdr-ifm c-ifm">Timeline Tool</span><span class="dtag dtag-n">Trigger identificado</span></div></div></div>
+    <div class="day-row"><div class="day-num-col"><div class="dn-n dn-ifm">02</div><div class="dn-d">Mar</div></div><div class="day-body"><div class="day-title-txt">Panel diagnóstico orientado a sistemas</div><div class="day-desc-txt">Laboratorio extenso (35 marcadores) con foco en: permeabilidad intestinal (zonulina, LPS), inflamación sistémica (IL-6, TNF-α), estado hormonal completo (cortisol x4 en saliva, DHEA, estradiol, progesterona), micronutrientes (B12, D, zinc, magnesio intracelular), función tiroidea avanzada (T3 libre, reverse T3).</div><div class="day-tags"><span class="dtag dtag-proto bdr-ifm c-ifm">Zonulina · Permeabilidad</span><span class="dtag dtag-proto bdr-ifm c-ifm">Cortisol ×4 saliva</span><span class="dtag dtag-n">35 marcadores</span></div></div></div>
+    <div class="day-row"><div class="day-num-col"><div class="dn-n dn-ifm">04</div><div class="dn-d">Jue</div></div><div class="day-body"><div class="day-title-txt">Test de microbioma intestinal (GI-MAP)</div><div class="day-desc-txt">Kit de heces enviado a laboratorio especializado (Diagnostic Solutions). GI-MAP: detección de patógenos, disbiosis, calprotectina, SIgA, elastasa pancreática. Resultados en 10 días. Sandra recibe instrucciones claras del proceso. Sin ayuno requerido.</div><div class="day-tags"><span class="dtag dtag-proto bdr-ifm c-ifm">GI-MAP</span><span class="dtag dtag-n">Resultados 10 días</span></div></div></div>
+    <div class="day-row"><div class="day-num-col"><div class="dn-n dn-ifm">05</div><div class="dn-d">Vie</div></div><div class="day-body"><div class="day-title-txt">Devolución parcial + Plan de inicio inmediato</div><div class="day-desc-txt">Resultados disponibles: ferritina 11 (crítico), cortisol AM 28 (elevado crónico), T3 libre baja-normal, zonulina elevada. Diagnóstico funcional preliminar: eje intestino-cerebro disfuncional + HPA desregulado + carencia de hierro. Se inicia protocolo de suelo (reparación intestinal) inmediatamente: L-glutamina 5g, zinc carnosina, Saccharomyces boulardii.</div><div class="day-tags"><span class="dtag dtag-plus">Diagnóstico raíz identificado</span><span class="dtag dtag-proto bdr-ifm c-ifm">Protocolo 5R iniciado</span></div></div></div>
+  </div>
+
+  <div class="week">
+    <div class="week-header"><span class="week-num wk-ifm">Semana 2</span><span class="week-theme">Protocolo 5R — Remove, Replace, Reinoculate</span><span class="week-line"></span></div>
+    <div class="day-row"><div class="day-num-col"><div class="dn-n dn-ifm">08</div><div class="dn-d">Lun</div></div><div class="day-body"><div class="day-title-txt">Consulta con nutricionista funcional — Dieta de eliminación</div><div class="day-desc-txt">Protocolo de eliminación de 4 semanas: gluten, lácteos, maíz, soja, huevos (potenciales triggers inflamatorios). No es una dieta restrictiva sino de detección. Plan de comidas completo. Sandra aprende a leer etiquetas y cocinar sin los alérgenos comunes. Manual de 20 páginas entregado.</div><div class="day-tags"><span class="dtag dtag-proto bdr-ifm c-ifm">Eliminación 4 sem</span><span class="dtag dtag-proto bdr-ifm c-ifm">REMOVE (paso 1/5R)</span></div></div></div>
+    <div class="day-row"><div class="day-num-col"><div class="dn-n dn-ifm">10</div><div class="dn-d">Mié</div></div><div class="day-body"><div class="day-title-txt">Infusión IV de micronutrientes (sesión 1/4)</div><div class="day-desc-txt">Cóctel Myers IV: vitamina C 7.5g + B-complex + magnesio + glutatión. Ferritina baja requiere hierro IV (Venofer) — Sandra reacciona bien. Primera sesión 60 min en sillón reclinable con música. Reporta "claridad mental" al salir. Protocolo: 4 sesiones en el mes.</div><div class="day-tags"><span class="dtag dtag-proto bdr-ifm c-ifm">IV Myers</span><span class="dtag dtag-proto bdr-ifm c-ifm">Hierro IV</span><span class="dtag dtag-n">Sesión 1/4</span></div></div></div>
+    <div class="day-row"><div class="day-num-col"><div class="dn-n dn-ifm">12</div><div class="dn-d">Vie</div></div><div class="day-body"><div class="day-title-txt">Sesión de manejo de estrés + regulación HPA</div><div class="day-desc-txt">Trabajo con psicóloga funcional: técnicas de regulación del sistema nervioso autónomo (coherencia cardíaca, breathing box, NSDR). Sandra identifica que "revisa correos laborales antes de dormir" como disruptor principal del cortisol nocturno. Protocolo: hygiene digital 90 min antes de dormir.</div><div class="day-tags"><span class="dtag dtag-proto bdr-ifm c-ifm">HPA regulation</span><span class="dtag dtag-n">Digital hygiene</span></div></div></div>
+    <div class="day-row"><div class="day-num-col"><div class="dn-n dn-ifm">14</div><div class="dn-d">Dom</div></div><div class="day-body"><div class="day-title-txt">Día 7 sin gluten — Sandra reporta: "¿podría ser placebo?"</div><div class="day-desc-txt">Fatiga visual (VAS): 7.8 → 6.2. Distensión abdominal: casi desaparecida. Sandra duda si es real. El médico anticipa esto en su comunicación: "la mejoría en intestino puede sentirse en 5–10 días. Lo que sientes es real". Mensaje de texto del médico con gráfica de zonulina esperada.</div><div class="day-tags"><span class="dtag dtag-plus">Fatiga ↓ 6.2/10</span><span class="dtag dtag-plus">Distensión ↓</span></div></div></div>
+  </div>
+
+  <div class="week">
+    <div class="week-header"><span class="week-num wk-ifm">Semana 3</span><span class="week-theme">GI-MAP resultado + Reinoculación microbioma</span><span class="week-line"></span></div>
+    <div class="day-row"><div class="day-num-col"><div class="dn-n dn-ifm">18</div><div class="dn-d">Lun</div></div><div class="day-body"><div class="day-title-txt">Retorno: Resultados GI-MAP</div><div class="day-desc-txt">Hallazgos: Blastocystis hominis positivo (parásito), calprotectina elevada (326 µg/g → inflamación activa), SIgA baja (inmunidad intestinal deprimida), disbiosis moderada. Plan: añadir berberina 500mg ×3 para Blastocystis, continuidad con probióticos multi-cepas. Médico valida el origen de los síntomas de años.</div><div class="day-tags"><span class="dtag dtag-proto bdr-ifm c-ifm">Blastocystis identificado</span><span class="dtag dtag-proto bdr-ifm c-ifm">REMOVE parásito</span><span class="dtag dtag-n">Origen confirmado</span></div></div></div>
+    <div class="day-row"><div class="day-num-col"><div class="dn-n dn-ifm">20</div><div class="dn-d">Mié</div></div><div class="day-body"><div class="day-title-txt">IV sesión 3 + Ajuste suplementación avanzada</div><div class="day-desc-txt">IV Myers + refuerzo de glutatión. Añaden NAC 1.2g/día para soporte detox hepático (nodo de biotransformación IFM). Sandra ya toma 8 suplementos distintos con horarios precisos. App del centro envía recordatorios con horario optimizado según absorción.</div><div class="day-tags"><span class="dtag dtag-proto bdr-ifm c-ifm">IV sesión 3/4</span><span class="dtag dtag-n">8 suplementos</span><span class="dtag dtag-n">App recordatorios</span></div></div></div>
+    <div class="day-row"><div class="day-num-col"><div class="dn-n dn-ifm">22</div><div class="dn-d">Vie</div></div><div class="day-body"><div class="day-title-txt">Ejercicio funcional prescrito — inicio gradual</div><div class="day-desc-txt">Dado el cortisol elevado, no se prescribe ejercicio de alta intensidad. Protocolo inicial: yoga restaurativo 3x/semana + caminatas matutinas 30 min. Sin entrenamiento de fuerza hasta mes 2. Sandra acepta con alivio: "pensé que me iban a decir que tenía que ir al gimnasio".</div><div class="day-tags"><span class="dtag dtag-proto bdr-ifm c-ifm">Yoga restaurativo</span><span class="dtag dtag-n">Sin HIIT hasta mes 2</span></div></div></div>
+  </div>
+
+  <div class="week">
+    <div class="week-header"><span class="week-num wk-ifm">Semana 4</span><span class="week-theme">Cierre, reintroducción y planificación</span><span class="week-line"></span></div>
+    <div class="day-row"><div class="day-num-col"><div class="dn-n dn-ifm">27</div><div class="dn-d">Lun</div></div><div class="day-body"><div class="day-title-txt">Laboratorio de seguimiento mes 1</div><div class="day-desc-txt">Panel focalizado: hsCRP, zonulina, ferritina, cortisol AM, hemograma completo. No todo el panel inicial (costo). Resultados: ferritina 11 → 22 ng/mL (hierro IV funcionando), hsCRP 4.6 → 3.8 mg/L. Zonulina sin cambio aún (requiere 6–8 semanas de 5R).</div><div class="day-tags"><span class="dtag dtag-plus">Ferritina ↑ +100%</span><span class="dtag dtag-plus">hsCRP ↓ 17%</span><span class="dtag dtag-n">Zonulina = 6-8 sem</span></div></div></div>
+    <div class="day-row"><div class="day-num-col"><div class="dn-n dn-ifm">29</div><div class="dn-d">Mié</div></div><div class="day-body"><div class="day-title-txt">Consulta médica mensual — 60 min + IV sesión 4</div><div class="day-desc-txt">Revisión integral de los 7 nodos GOTOIT. Sandra reporta: fatiga 5.8/10 (vs 7.8 inicial), "la primera vez en 3 años que me levanto sin sentirme como trapo". Médico introduce fase REINOCULATE: probiótico avanzado de 12 cepas + alimentos fermentados. Reintroducción de huevos ecológicos próxima semana para test de tolerancia.</div><div class="day-tags"><span class="dtag dtag-plus">Fatiga 5.8 (↓26%)</span><span class="dtag dtag-proto bdr-ifm c-ifm">REINOCULATE iniciado</span></div></div></div>
+    <div class="day-row"><div class="day-num-col"><div class="dn-n dn-ifm">30</div><div class="dn-d">Jue</div></div><div class="day-body"><div class="day-title-txt">Reporte mensual + Mapa de sistemas actualizado</div><div class="day-desc-txt">8 páginas: mapa de los 7 nodos con estado actual (verde/amarillo/rojo), tendencias de biomarcadores, avance en cada paso del 5R, síntomas subjetivos graficados, plan mes 2. Sandra enmarca el mapa de sistemas en su oficina: "esto es lo que me pasó, finalmente tiene sentido".</div><div class="day-tags"><span class="dtag dtag-proto bdr-ifm c-ifm">Mapa GOTOIT</span><span class="dtag dtag-n">Reporte 8 págs</span></div></div></div>
+  </div>
+
+  <div class="insight-box" style="border-left-color:var(--ifm)">
+    <div class="ib-label c-ifm">Insight del mes — IFM</div>
+    <div class="ib-text">IFM trabaja con pacientes que llegaron frustrados con la medicina convencional. <strong>El diagnóstico raíz (Blastocystis no detectado durante años) es el momento de mayor impacto emocional del mes</strong> — justifica el costo y genera lealtad profunda. La carga de suplementos (8 comprimidos/día) y la dieta de eliminación son la mayor barrera de adherencia. El protocolo 5R es sistemático pero lento: los resultados reales de intestino se ven en mes 2–3. Sin CGM ni wearables continuos, la subjetividad del paciente es la principal fuente de datos entre consultas.</div>
+  </div>
+</div>
+
+<!-- ════ IFM · CENTRO ════ -->
+<div id="ifm-cen" class="panel">
+  <div class="ops-intro">
+    <div>
+      <div class="pb-name-big">Centro IFM Certificado — Operaciones Mes 1</div>
+      <div class="pb-context">Práctica multidisciplinaria con médico IFM-certificado, nutricionista funcional, psicóloga y enfermera de infusiones IV. Modelo híbrido: consultas presenciales + telemedicina. Revenue diversificado: consultas, IV therapy, suplementos, laboratorio.</div>
+    </div>
+    <div class="ops-metrics">
+      <div class="ops-mrow"><span class="ops-ml">Pacientes/médico</span><span class="ops-mv c-ifm">60</span></div>
+      <div class="ops-mrow"><span class="ops-ml">Ticket anual</span><span class="ops-mv c-ifm">$12–18K</span></div>
+      <div class="ops-mrow"><span class="ops-ml">Horas equipo mes 1</span><span class="ops-mv c-ifm">18 h</span></div>
+      <div class="ops-mrow"><span class="ops-ml">Equipo por paciente</span><span class="ops-mv c-ifm">3–4</span></div>
+    </div>
+  </div>
+
+  <div class="ops-timeline">
+    <div class="ops-event dot-event-ifm"><div class="ops-when">Semana 1 · Días 1–2</div><div class="ops-what">Diagnóstico sistémico — IFMIQ + lab</div><div class="ops-who">Médico (3.5h) + coordinadora (1h). Lab externo (LabCorp / DUTCH test para cortisol). Resultados en EMR. Diagrama de matriz GOTOIT completado por médico antes de la devolución.</div><span class="load-pill load-hi">Carga alta</span></div>
+    <div class="ops-event dot-event-ifm"><div class="ops-when">Semana 1 · Día 5</div><div class="ops-what">Devolución y activación del protocolo 5R</div><div class="ops-who">Médico (75 min). Nutricionista (60 min separados). Sin reunión conjunta de equipo. Coordinación por WhatsApp interno. Farmacia de suplementos del centro genera pedido automático con la prescripción.</div><span class="load-pill load-hi">Carga alta</span></div>
+    <div class="ops-event dot-event-ifm"><div class="ops-when">Semana 2 · 4 sesiones IV</div><div class="ops-what">IV therapy — motor de revenue recurrente</div><div class="ops-who">Enfermera (60 min/sesión × 4 = 4h totales). Alta rentabilidad: costo marginal ~$40, precio cobrado $180–220 por sesión. Permite tiempo con el paciente sin médico. Enfermera detecta cambios de estado y escala.</div><span class="load-pill load-md">Carga media</span></div>
+    <div class="ops-event dot-event-ifm"><div class="ops-when">Semanas 2–3 · Sin sistema activo</div><div class="ops-what">Seguimiento reactivo — sin monitoreo continuo</div><div class="ops-who">Sin wearables ni CGM. Contacto iniciado por paciente (email/portal). Sin alertas automáticas. Gap operacional: si Sandra empeora entre sesiones, el centro no lo sabe hasta la próxima consulta. Riesgo de pérdida silenciosa.</div><span class="load-pill load-lo">Gap operacional</span></div>
+    <div class="ops-event dot-event-ifm"><div class="ops-when">Semana 3 · Día 18</div><div class="ops-what">Devolución GI-MAP — consulta crítica</div><div class="ops-who">Médico (60 min). Mayor impacto emocional del mes. Coordinación con nutricionista para ajuste de dieta. Prescripción de berberina contra Blastocystis documentada. Tiempo total médico: 90 min con prep.</div><span class="load-pill load-hi">Carga alta</span></div>
+    <div class="ops-event dot-event-ifm"><div class="ops-when">Semana 4 · Día 29–30</div><div class="ops-what">Cierre mensual + reporte</div><div class="ops-who">Médico (90 min consulta + 45 min reporte). Reporte generado manualmente: mapa GOTOIT, biomarcadores, plan mes 2. Sin automatización. Alta calidad percibida por el paciente pero alta carga para el médico.</div><span class="load-pill load-hi">Carga alta</span></div>
+  </div>
+
+  <div class="econ-grid">
+    <div class="econ-card">
+      <div class="econ-head c-ifm">Ingresos — Sandra L. · Mes 1</div>
+      <div class="econ-row"><span class="econ-item">Consultas médicas (4 × $350)</span><span class="econ-val c-ifm">$1,400</span></div>
+      <div class="econ-row"><span class="econ-item">IV therapy (4 sesiones)</span><span class="econ-val c-ifm">$760</span></div>
+      <div class="econ-row"><span class="econ-item">Laboratorio especializado</span><span class="econ-val c-ifm">$1,200</span></div>
+      <div class="econ-row"><span class="econ-item">Suplementos (margen 40%)</span><span class="econ-val c-ifm">$320</span></div>
+      <div class="econ-row"><span class="econ-item">Consultas nutricionista (2 × $150)</span><span class="econ-val c-ifm">$300</span></div>
+      <div class="econ-total"><span class="econ-tl">Total mes 1</span><span class="econ-tv c-ifm">$3,980</span></div>
+    </div>
+    <div class="econ-card">
+      <div class="econ-head c-ifm">Horas equipo · Mes 1</div>
+      <div class="econ-row"><span class="econ-item">Médico principal</span><span class="econ-val c-ifm">8.5 h</span></div>
+      <div class="econ-row"><span class="econ-item">Nutricionista funcional</span><span class="econ-val c-ifm">3.0 h</span></div>
+      <div class="econ-row"><span class="econ-item">Enfermera IV</span><span class="econ-val c-ifm">4.0 h</span></div>
+      <div class="econ-row"><span class="econ-item">Psicóloga / coach</span><span class="econ-val c-ifm">2.0 h</span></div>
+      <div class="econ-row"><span class="econ-item">Coordinadora</span><span class="econ-val c-ifm">1.5 h</span></div>
+      <div class="econ-total"><span class="econ-tl">Total horas</span><span class="econ-tv c-ifm">19 h</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- ════ SINCLAIR · PACIENTE ════ -->
+<div id="sinclair-pac" class="panel">
+  <div class="patient-band">
+    <div>
+      <div class="pb-name-big">James T., 52 — Inversor / VC <span style="font-family:'IBM Plex Mono';font-size:.7rem;color:var(--sinclair)">Longevity Clinic Boston · Protocolo Sinclair</span></div>
+      <div class="pb-context">Partner en firma de VC de biotech. Alta exposición a la investigación de longevidad. Motivado por datos y ciencia. Quiere aplicar los mismos principios que financia. Objetivo: reducir edad biológica 5 años en 18 meses. Acepta intervenciones de frontera.</div>
+    </div>
+    <div class="metrics-row">
+      <div class="mbox"><div class="mbox-label">Edad Epigenética</div><div class="mbox-val c-sinclair">58</div><div class="mbox-sub">Horvath Clock · +6 años</div></div>
+      <div class="mbox"><div class="mbox-label">NAD+ sérico</div><div class="mbox-val c-sinclair">21</div><div class="mbox-sub">µM · muy bajo</div></div>
+      <div class="mbox"><div class="mbox-label">IGF-1</div><div class="mbox-val c-sinclair">142</div><div class="mbox-sub">ng/mL · elevado</div></div>
+      <div class="mbox"><div class="mbox-label">% Grasa Visceral</div><div class="mbox-val c-sinclair">14</div><div class="mbox-sub">% · rango de riesgo</div></div>
+    </div>
+  </div>
+
+  <div class="week">
+    <div class="week-header"><span class="week-num wk-sinclair">Semana 1</span><span class="week-theme">Diagnóstico epigenético y molecular</span><span class="week-line"></span></div>
+    <div class="day-row"><div class="day-num-col"><div class="dn-n dn-sinclair">01</div><div class="dn-d">Lun</div></div><div class="day-body"><div class="day-title-txt">Panel de biomarcadores de envejecimiento molecular</div><div class="day-desc-txt">Extracción de sangre para: reloj epigenético (Horvath/GrimAge via TruMe), NAD+ sérico, telómeros (qPCR), sirtuinas (SIRT1/3 expresión), marcadores de senescencia (p16, p21), insulina en ayunas, IGF-1, IGFBP-3. Panel de 22 marcadores especializados. Costo elevado, justificado para este perfil de paciente.</div><div class="day-tags"><span class="dtag dtag-proto bdr-sinclair c-sinclair">Reloj epigenético</span><span class="dtag dtag-proto bdr-sinclair c-sinclair">NAD+ sérico</span><span class="dtag dtag-proto bdr-sinclair c-sinclair">Telómeros</span></div></div></div>
+    <div class="day-row"><div class="day-num-col"><div class="dn-n dn-sinclair">02</div><div class="dn-d">Mar</div></div><div class="day-body"><div class="day-title-txt">Genómica de longevidad (SNPs críticos)</div><div class="day-desc-txt">Panel genómico enfocado en longevidad: FOXO3, APOE, MTHFR, COMT, NAT2 (acetilador de metformina), variantes de sirtuinas, polimorfismos de mTOR. James tiene FOXO3 variante protectora (buena noticia) y APOE ε3/ε3 (neutro para Alzheimer). Informe de implicaciones prácticas entregado en 2 semanas.</div><div class="day-tags"><span class="dtag dtag-proto bdr-sinclair c-sinclair">FOXO3 protector</span><span class="dtag dtag-proto bdr-sinclair c-sinclair">APOE ε3/ε3</span><span class="dtag dtag-n">Resultados 2 sem</span></div></div></div>
+    <div class="day-row"><div class="day-num-col"><div class="dn-n dn-sinclair">04</div><div class="dn-d">Jue</div></div><div class="day-body"><div class="day-title-txt">Consulta médica inicial — Lectura científica profunda</div><div class="day-desc-txt">90 min. El médico adopta tono científico (James lo prefiere). Revisión de evidencia detrás de cada intervención propuesta. Discusión de metformina vs berberina (James ya conoce el debate). Decisión compartida: metformina 500mg por el NAT2 activador. NMN 1g/día vs NR debatido y decidido.</div><div class="day-tags"><span class="dtag dtag-proto bdr-sinclair c-sinclair">Metformina 500mg</span><span class="dtag dtag-proto bdr-sinclair c-sinclair">NMN 1g/día</span><span class="dtag dtag-n">Decisión compartida</span></div></div></div>
+    <div class="day-row"><div class="day-num-col"><div class="dn-n dn-sinclair">05</div><div class="dn-d">Vie</div></div><div class="day-body"><div class="day-title-txt">Inicio del stack de suplementos de longevidad</div><div class="day-desc-txt">Protocolo prescrito (basado en Sinclair personal + evidencia): NMN 1g AM, Resveratrol 1g con grasa, Metformina 500mg con cena, Quercetin 500mg, Fisetin 100mg (ciclos), Berberina 500mg, Omega-3 4g, CoQ10 200mg, Vitamina D3 5000IU + K2. James dice: "esto se parece a mi stack pero más ordenado".</div><div class="day-tags"><span class="dtag dtag-proto bdr-sinclair c-sinclair">NMN + Resveratrol</span><span class="dtag dtag-proto bdr-sinclair c-sinclair">Stack 9 agentes</span></div></div></div>
+  </div>
+
+  <div class="week">
+    <div class="week-header"><span class="week-num wk-sinclair">Semana 2</span><span class="week-theme">Activación de vías de longevidad</span><span class="week-line"></span></div>
+    <div class="day-row"><div class="day-num-col"><div class="dn-n dn-sinclair">08</div><div class="dn-d">Lun</div></div><div class="day-body"><div class="day-title-txt">Protocolo de restricción calórica intermitente</div><div class="day-desc-txt">Ayuno 16:8 establecido. Primera semana: IGF-1 elevado requiere reducción calórica moderada (-15%). Médico explica mecanismo mTOR/AMPK: "cada hora en ayunas activa AMPK, cada comida activa mTOR". James configura app de CGM para monitorear respuesta glucémica al romper el ayuno.</div><div class="day-tags"><span class="dtag dtag-proto bdr-sinclair c-sinclair">Ayuno 16:8</span><span class="dtag dtag-proto bdr-sinclair c-sinclair">AMPK activación</span><span class="dtag dtag-n">-15% calorías</span></div></div></div>
+    <div class="day-row"><div class="day-num-col"><div class="dn-n dn-sinclair">10</div><div class="dn-d">Mié</div></div><div class="day-body"><div class="day-title-txt">Sesión de exercicio — énfasis en activación AMPK</div><div class="day-desc-txt">Combinación: zona 2 (activa AMPK) + sprints cortos (activa AMPK + hormona de crecimiento). 45 min zona 2 + 6 sprints de 20 seg. Sin levantar pesas en días de metformina (potencial bloqueo de síntesis proteica postejercicio). James ajusta su rutina preexistente.</div><div class="day-tags"><span class="dtag dtag-proto bdr-sinclair c-sinclair">AMPK dual</span><span class="dtag dtag-n">Sin fuerza + metformina</span></div></div></div>
+    <div class="day-row"><div class="day-num-col"><div class="dn-n dn-sinclair">13</div><div class="dn-d">Sáb</div></div><div class="day-body"><div class="day-title-txt">Primera sesión de crioterapia de cuerpo completo</div><div class="day-desc-txt">3 minutos en cámara criogénica (-110°C). Protocolos de Sinclair incluyen estrés hormético por frío para activar sirtuinas y mitocondrias. James lo combina con sauna infrarrojo posterior. HRV post: 72ms (baseline 48ms). "Es como resetear el sistema nervioso".</div><div class="day-tags"><span class="dtag dtag-proto bdr-sinclair c-sinclair">Crioterapia -110°C</span><span class="dtag dtag-plus">HRV 72ms ↑50%</span></div></div></div>
+  </div>
+
+  <div class="week">
+    <div class="week-header"><span class="week-num wk-sinclair">Semana 3</span><span class="week-theme">Resultados genómicos + Senolíticos cíclicos</span><span class="week-line"></span></div>
+    <div class="day-row"><div class="day-num-col"><div class="dn-n dn-sinclair">18</div><div class="dn-d">Lun</div></div><div class="day-body"><div class="day-title-txt">Retorno: Resultados genómicos + ajuste personalizado</div><div class="day-desc-txt">FOXO3 variante rs2802292 (long life variant) confirma resiliencia innata. NAT2 rapid acetylator → metformina bien metabolizada. Médico ajusta: subir a metformina 1000mg/día. Añadir Rapamycin 1mg/semana (protocolo Attia-Kaeberlein: dosis bajas intermitentes). James: "llevo años esperando tener indicación para rapamicina". Consentimiento informado detallado.</div><div class="day-tags"><span class="dtag dtag-proto bdr-sinclair c-sinclair">Rapamycin 1mg/sem</span><span class="dtag dtag-proto bdr-sinclair c-sinclair">Metformina ↑1g</span><span class="dtag dtag-n">Off-label protocolo</span></div></div></div>
+    <div class="day-row"><div class="day-num-col"><div class="dn-n dn-sinclair">20</div><div class="dn-d">Mié</div></div><div class="day-body"><div class="day-title-txt">Protocolo senolítico — Dasatinib + Quercetin (ciclo único)</div><div class="day-desc-txt">Primer ciclo D+Q: Dasatinib 100mg + Quercetin 1000mg por 2 días consecutivos. Objetivo: eliminación de células senescentes acumuladas. James monitorea: fatiga leve día 1 (esperado). Sin efectos adversos significativos. Próximo ciclo: mes 2. Biomarcadores de senescencia (p16) se medirán en mes 3.</div><div class="day-tags"><span class="dtag dtag-proto bdr-sinclair c-sinclair">Senolítico D+Q</span><span class="dtag dtag-proto bdr-sinclair c-sinclair">Ciclo único mes 1</span><span class="dtag dtag-n">Off-label · consentido</span></div></div></div>
+    <div class="day-row"><div class="day-num-col"><div class="dn-n dn-sinclair">22</div><div class="dn-d">Vie</div></div><div class="day-body"><div class="day-title-txt">Seguimiento NMN — Nivel NAD+ esperado en mes 2</div><div class="day-desc-txt">Sin resultado de NAD+ este mes (será medido a los 60 días de suplementación). James reporta subjetivamente: "más claridad mental, menos fatiga post-cena". Médico advierte: "parte puede ser expectativa, pero la literatura apoya el efecto en 6–8 semanas". Próxima medición: día 60.</div><div class="day-tags"><span class="dtag dtag-proto bdr-sinclair c-sinclair">NMN día 18</span><span class="dtag dtag-n">NAD+ medir día 60</span></div></div></div>
+  </div>
+
+  <div class="week">
+    <div class="week-header"><span class="week-num wk-sinclair">Semana 4</span><span class="week-theme">Evaluación parcial y proyección molecular</span><span class="week-line"></span></div>
+    <div class="day-row"><div class="day-num-col"><div class="dn-n dn-sinclair">26</div><div class="dn-d">Lun</div></div><div class="day-body"><div class="day-title-txt">Laboratorio de seguimiento mensual — marcadores rápidos</div><div class="day-desc-txt">Panel: glucosa, insulina, hsCRP, IGF-1, testosterona, panel metabolomics básico (GlyA, GlycA). IGF-1: 142 → 128 ng/mL (respuesta a ayuno + metformina). Glucosa ayunas: 95 → 87 mg/dL. Los marcadores epigenéticos (reloj de edad) se remiden en mes 6.</div><div class="day-tags"><span class="dtag dtag-plus">IGF-1 ↓10%</span><span class="dtag dtag-plus">Glucosa ↓8 mg/dL</span></div></div></div>
+    <div class="day-row"><div class="day-num-col"><div class="dn-n dn-sinclair">28</div><div class="dn-d">Mié</div></div><div class="day-body"><div class="day-title-txt">Consulta mensual — 75 minutos (más larga, más científica)</div><div class="day-desc-txt">Revisión molecular profunda. Ajuste de timing de metformina (mover a post-cena para menor interferencia con ejercicio). Discusión de evidencia actualizada de rapamicina en primates. James trae 3 papers nuevos para discutir. Médico ajusta creatina 5g/día (neuroprotección + músculo). Protocolo es co-creado con el paciente.</div><div class="day-tags"><span class="dtag dtag-proto bdr-sinclair c-sinclair">Metformina reajustada</span><span class="dtag dtag-proto bdr-sinclair c-sinclair">Creatina añadida</span><span class="dtag dtag-n">Co-creación</span></div></div></div>
+    <div class="day-row"><div class="day-num-col"><div class="dn-n dn-sinclair">30</div><div class="dn-d">Vie</div></div><div class="day-body"><div class="day-title-txt">Reporte mensual — Narrativa molecular + proyección</div><div class="day-desc-txt">10 páginas con lenguaje técnico (James lo prefiere): estado de cada vía molecular (mTOR, AMPK, SIRT, senescencia), stack actual con evidencia de cada agente, proyección de NAD+ y reloj epigenético en meses 3 y 6. James lo comparte con 3 colegas de VC: "esto es lo que debería existir para todos los ejecutivos de biotech".</div><div class="day-tags"><span class="dtag dtag-proto bdr-sinclair c-sinclair">Reporte molecular</span><span class="dtag dtag-plus">Referidos: 3 prospectos</span></div></div></div>
+  </div>
+
+  <div class="insight-box" style="border-left-color:var(--sinclair)">
+    <div class="ib-label c-sinclair">Insight del mes — Sinclair</div>
+    <div class="ib-text">El protocolo Sinclair atrae a un perfil de paciente muy específico: <strong>el "científico-paciente"</strong> que investiga antes de consultar y quiere co-crear su protocolo. La rapamicina y el ciclo senolítico (D+Q) son intervenciones de frontera que ningún otro protocolo prescribe en mes 1 — son el diferenciador radical. La mayor debilidad: los outcomes moleculares (reloj epigenético, NAD+) se miden en meses 3 y 6, haciendo difícil mostrar resultados rápidos. <strong>La narrativa científica tiene que compensar la espera de datos</strong>. Sin componente de coaching conductual formal ni sistema de adherencia entre consultas.</div>
+  </div>
+</div>
+
+<!-- ════ SINCLAIR · CENTRO ════ -->
+<div id="sinclair-cen" class="panel">
+  <div class="ops-intro">
+    <div>
+      <div class="pb-name-big">Longevity Clinic (Sinclair-Style) — Operaciones Mes 1</div>
+      <div class="pb-context">Clínica de medicina de longevidad de frontera. Médico con fellowship en investigación de envejecimiento. Capacidad reducida (20–25 pacientes/médico). Alta barrera de entrada. Revenue concentrado en diagnóstico molecular y farmacología off-label supervisada.</div>
+    </div>
+    <div class="ops-metrics">
+      <div class="ops-mrow"><span class="ops-ml">Pacientes/médico</span><span class="ops-mv c-sinclair">25</span></div>
+      <div class="ops-mrow"><span class="ops-ml">Ticket anual</span><span class="ops-mv c-sinclair">$30–45K</span></div>
+      <div class="ops-mrow"><span class="ops-ml">Horas equipo mes 1</span><span class="ops-mv c-sinclair">16 h</span></div>
+      <div class="ops-mrow"><span class="ops-ml">Equipo por paciente</span><span class="ops-mv c-sinclair">2–3</span></div>
+    </div>
+  </div>
+
+  <div class="ops-timeline">
+    <div class="ops-event dot-event-sinclair"><div class="ops-when">Semana 1 · Días 1–2</div><div class="ops-what">Diagnóstico molecular especializado</div><div class="ops-who">Médico (3h) + laboratorio especializado externo (TruMe, LabCorp special testing). Alto costo de laboratorio ($2,800–4,500). Sin coordinador de caso dedicado. El médico gestiona directamente los labs.</div><span class="load-pill load-hi">Carga alta</span></div>
+    <div class="ops-event dot-event-sinclair"><div class="ops-when">Semana 1 · Día 4–5</div><div class="ops-what">Consulta científica profunda + prescripción de frontera</div><div class="ops-who">Médico (90 min). Protocolos off-label requieren consentimiento informado extenso y documentación legal cuidadosa. Farmacia compounding para algunos agentes (Rapamycin, compuestos IV). Coordinación especializada.</div><span class="load-pill load-hi">Carga alta</span></div>
+    <div class="ops-event dot-event-sinclair"><div class="ops-when">Semanas 2–3 · Seguimiento molecular</div><div class="ops-what">Monitoreo reactivo — sin sistema continuo</div><div class="ops-who">Sin wearables integrados al sistema clínico (algunos pacientes los usan por cuenta propia). Contacto por email seguro. Sin alertas automáticas. La densidad del protocolo farmacológico (metformina + rapamicina) requiere mayor vigilancia médica pero sin infraestructura para ello.</div><span class="load-pill load-lo">Gap vigilancia</span></div>
+    <div class="ops-event dot-event-sinclair"><div class="ops-when">Semana 3 · Días 18 y 20</div><div class="ops-what">Devolución genómica + supervisión senolítico</div><div class="ops-who">Médico (120 min total). Supervisión del ciclo D+Q: checklist de efectos adversos, monitoreo de hemograma (riesgo mielosupresión con dasatinib). Llamada de seguimiento al día 3 post-ciclo.</div><span class="load-pill load-hi">Carga alta</span></div>
+    <div class="ops-event dot-event-sinclair"><div class="ops-when">Semana 4 · Cierre</div><div class="ops-what">Consulta mensual + reporte técnico</div><div class="ops-who">Médico (75 min + 90 min reporte). El reporte técnico tarda más que en otros protocolos por la profundidad molecular. Sin asistente de data. Médico genera el documento directamente. Bottleneck de escalabilidad evidente.</div><span class="load-pill load-hi">Carga alta</span></div>
+  </div>
+
+  <div class="econ-grid">
+    <div class="econ-card">
+      <div class="econ-head c-sinclair">Ingresos — James T. · Mes 1</div>
+      <div class="econ-row"><span class="econ-item">Consultas médicas (3 × $500)</span><span class="econ-val c-sinclair">$1,500</span></div>
+      <div class="econ-row"><span class="econ-item">Panel epigenético + molecular</span><span class="econ-val c-sinclair">$3,200</span></div>
+      <div class="econ-row"><span class="econ-item">Genómica longevidad</span><span class="econ-val c-sinclair">$1,400</span></div>
+      <div class="econ-row"><span class="econ-item">Medicamentos especiales (compounding)</span><span class="econ-val c-sinclair">$380</span></div>
+      <div class="econ-row"><span class="econ-item">Suplementos longevidad (margen)</span><span class="econ-val c-sinclair">$420</span></div>
+      <div class="econ-total"><span class="econ-tl">Total mes 1</span><span class="econ-tv c-sinclair">$6,900</span></div>
+    </div>
+    <div class="econ-card">
+      <div class="econ-head c-sinclair">Horas equipo · Mes 1</div>
+      <div class="econ-row"><span class="econ-item">Médico principal</span><span class="econ-val c-sinclair">11.0 h</span></div>
+      <div class="econ-row"><span class="econ-item">Coordinadora / farmacia</span><span class="econ-val c-sinclair">2.5 h</span></div>
+      <div class="econ-row"><span class="econ-item">Consultor legal (consentimientos)</span><span class="econ-val c-sinclair">1.5 h</span></div>
+      <div class="econ-row"><span class="econ-item">Coach / nutricionista</span><span class="econ-val c-sinclair">— (no incluido)</span></div>
+      <div class="econ-row"><span class="econ-item">Data analyst</span><span class="econ-val c-sinclair">— (no existe)</span></div>
+      <div class="econ-total"><span class="econ-tl">Total horas</span><span class="econ-tv c-sinclair">15 h</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- ════ VITA · PACIENTE ════ -->
+<div id="vita-pac" class="panel">
+  <div class="patient-band">
+    <div>
+      <div class="pb-name-big">Ricardo F., 51 — Empresário <span style="font-family:'IBM Plex Mono';font-size:.7rem;color:var(--vita)">Instituto Vita · São Paulo · Melhor LATAM</span></div>
+      <div class="pb-context">Dono de grupo de empresas de varejo. Alta carga de estresse executivo, síndrome metabólico incipiente, histórico familiar de AVC aos 60 anos. Primeira vez em medicina de longevidade. Motivado por "chegar aos 80 como CEO".</div>
+    </div>
+    <div class="metrics-row">
+      <div class="mbox"><div class="mbox-label">Idade Biológica</div><div class="mbox-val c-vita">58</div><div class="mbox-sub">vs 51 cronológica</div></div>
+      <div class="mbox"><div class="mbox-label">Telômeros</div><div class="mbox-val c-vita">6.8</div><div class="mbox-sub">kb · abaixo média</div></div>
+      <div class="mbox"><div class="mbox-label">Homocisteína</div><div class="mbox-val c-vita">14.2</div><div class="mbox-sub">µmol/L · obj &lt;9</div></div>
+      <div class="mbox"><div class="mbox-label">% Gordura Corp.</div><div class="mbox-val c-vita">28%</div><div class="mbox-sub">BIA avançada</div></div>
+    </div>
+  </div>
+
+  <div class="week">
+    <div class="week-header"><span class="week-num wk-vita">Semana 1</span><span class="week-theme">Diagnóstico genômico e molecular — o melhor de LATAM</span><span class="week-line"></span></div>
+    <div class="day-row"><div class="day-num-col"><div class="dn-n dn-vita">01</div><div class="dn-d">Seg</div></div><div class="day-body"><div class="day-title-txt">Coleta genômica + painel longevidade (40 marcadores)</div><div class="day-desc-txt">Painel de 40 biomarcadores incluindo: lipidômica avançada (partículas LDL-P, HDL-P, Lp(a)), metabolômica básica, hormônios completos, marcadores inflamatórios avançados. Kit genômico (SNPs longevidade, APOE, MTHFR, COMT). Telômeros por qPCR. Melhor painel diagnóstico disponível na América Latina.</div><div class="day-tags"><span class="dtag dtag-proto bdr-vita c-vita">Genômica SNPs</span><span class="dtag dtag-proto bdr-vita c-vita">Telômeros qPCR</span><span class="dtag dtag-proto bdr-vita c-vita">40 biomarcadores</span></div></div></div>
+    <div class="day-row"><div class="day-num-col"><div class="dn-n dn-vita">02</div><div class="dn-d">Ter</div></div><div class="day-body"><div class="day-title-txt">Composição corporal + Avaliação física</div><div class="day-desc-txt">InBody 770 (BIA 8 eletrodos): massa muscular segmentada, gordura visceral, hidratação intracelular. Sem DEXA (não é padrão no Brasil para longevidade — custo e acesso limitado). Sem teste de VO₂ max. Resultado na mesma hora. Nota: gap versus protocolo Attia evidente aqui.</div><div class="day-tags"><span class="dtag dtag-proto bdr-vita c-vita">InBody 770</span><span class="dtag dtag-gap">Sem DEXA</span><span class="dtag dtag-gap">Sem VO₂ Max</span></div></div></div>
+    <div class="day-row"><div class="day-num-col"><div class="dn-n dn-vita">03</div><div class="dn-d">Qua</div></div><div class="day-body"><div class="day-title-txt">Consulta médica — 60 min com especialista em longevidade</div><div class="day-desc-txt">Revisão do histórico, suplementação prescrita imediatamente: Vitamina D 10.000UI, ômega-3 4g, vitamina B12 injetável semanal, NAC 600mg, resveratrol 250mg. Histórico familiar de AVC → AAS 100mg prescrito (prevenção primária). Encaminhamento à nutricionista.</div><div class="day-tags"><span class="dtag dtag-proto bdr-vita c-vita">Suplementação imediata</span><span class="dtag dtag-proto bdr-vita c-vita">AAS 100mg</span></div></div></div>
+    <div class="day-row"><div class="day-num-col"><div class="dn-n dn-vita">05</div><div class="dn-d">Sex</div></div><div class="day-body"><div class="day-title-txt">Microbioma intestinal (GI sequencing 16S rRNA)</div><div class="day-desc-txt">Kit entregue. Análise por sequenciamento 16S. Resultado em 14 dias via laboratório parceiro (Fleury Genômica). Ricardo recebe instrução: "não tome probióticos até os resultados chegarem para não contaminar o baseline". Informação transmitida com clareza.</div><div class="day-tags"><span class="dtag dtag-proto bdr-vita c-vita">Microbioma 16S</span><span class="dtag dtag-n">Resultado 14 dias</span></div></div></div>
+  </div>
+
+  <div class="week">
+    <div class="week-header"><span class="week-num wk-vita">Semana 2</span><span class="week-theme">Resultados parciais + início de protocolo</span><span class="week-line"></span></div>
+    <div class="day-row"><div class="day-num-col"><div class="dn-n dn-vita">09</div><div class="dn-d">Seg</div></div><div class="day-body"><div class="day-title-txt">Retorno com biomarcadores — Achados críticos</div><div class="day-desc-txt">Homocisteína 14.2 µmol/L (risco cardiovascular elevado), PCR-us 4.1 mg/L, testosterona livre baixa para a idade. Médico prescreve: metilcobalamina + ácido fólico + B6 (para homocisteína), DHEA 25mg (testosterona), avaliação hormonal completa com endocrinologista parceiro.</div><div class="day-tags"><span class="dtag dtag-proto bdr-vita c-vita">Homocisteína tratada</span><span class="dtag dtag-proto bdr-vita c-vita">DHEA iniciada</span></div></div></div>
+    <div class="day-row"><div class="day-num-col"><div class="dn-n dn-vita">11</div><div class="dn-d">Qua</div></div><div class="day-body"><div class="day-title-txt">Consulta nutricionista funcional</div><div class="day-desc-txt">Dieta mediterrânea adaptada para metabolismo de Ricardo: redução de carbs simples, aumento de proteína para 1.8g/kg, janela alimentar 10h (16:8 gradual). Plano de refeições de 2 semanas entregue em PDF. Sem app de monitoramento ou CGM.</div><div class="day-tags"><span class="dtag dtag-proto bdr-vita c-vita">Dieta mediterrânea</span><span class="dtag dtag-gap">Sem CGM</span><span class="dtag dtag-n">PDF entregue</span></div></div></div>
+    <div class="day-row"><div class="day-num-col"><div class="dn-n dn-vita">13</div><div class="dn-d">Sex</div></div><div class="day-body"><div class="day-title-txt">Início de atividade física — orientação geral</div><div class="day-desc-txt">Encaminhamento a personal trainer parceiro. Protocolo: musculação 3x/semana. Sem prescrição de zonas de frequência cardíaca. Sem objetivo de VO₂ max. Sem rastreio de HRV. Ricardo começa mas não sabe se está treinando na intensidade correta.</div><div class="day-tags"><span class="dtag dtag-proto bdr-vita c-vita">Musculação ×3</span><span class="dtag dtag-gap">Sem zonas FC</span><span class="dtag dtag-gap">Sem HRV</span></div></div></div>
+    <div class="day-row"><div class="day-num-col"><div class="dn-n dn-vita">15</div><div class="dn-d">Dom</div></div><div class="day-body"><div class="day-title-txt">Silêncio operacional — sem contato programado</div><div class="day-desc-txt">Ricardo envia WhatsApp perguntando se pode tomar suplementos com café. Assistente responde em 3 horas: "sim, exceto ferro e zinco". Sem check-in proativo, sem monitoramento de adherencia. Ricardo esqueceu 2 dias de suplementação durante viagem de negócios. Ninguém sabe.</div><div class="day-tags"><span class="dtag dtag-gap">Sem follow-up ativo</span><span class="dtag dtag-gap">Adherencia não rastreada</span></div></div></div>
+  </div>
+
+  <div class="week">
+    <div class="week-header"><span class="week-num wk-vita">Semana 3</span><span class="week-theme">Genômica + Microbioma — diagnóstico de alto valor</span><span class="week-line"></span></div>
+    <div class="day-row"><div class="day-num-col"><div class="dn-n dn-vita">18</div><div class="dn-d">Seg</div></div><div class="day-body"><div class="day-title-txt">Resultado genômico — APOE ε3/ε4 (impacto emocional)</div><div class="day-desc-txt">APOE ε3/ε4: risco aumentado de Alzheimer e dislipidemia aterogênica. MTHFR C677T heterozigoto: menor eficiência de metilação. Ricardo fica emocionalmente impactado. Médico dedica 25 min extras de psicoeducação. Implicação prática imediata: L-methylfolate substituindo ácido fólico, monitorar homocisteína a cada 3 meses.</div><div class="day-tags"><span class="dtag dtag-proto bdr-vita c-vita">APOE ε3/ε4</span><span class="dtag dtag-proto bdr-vita c-vita">L-methylfolate</span><span class="dtag dtag-n">Impacto emocional gerenciado</span></div></div></div>
+    <div class="day-row"><div class="day-num-col"><div class="dn-n dn-vita">20</div><div class="dn-d">Qua</div></div><div class="day-body"><div class="day-title-txt">Resultado microbioma — Disbiose identificada</div><div class="day-desc-txt">Baixa diversidade, predomínio de Proteobacteria, disbiose leve. Nutricionista ajusta: probiótico específico 12 cepas, prebióticos (inulina 8g/dia), redução temporária de proteína animal. Consulta separada da médica — sem reunião conjunta de equipe. Coordenação por mensagem interna.</div><div class="day-tags"><span class="dtag dtag-proto bdr-vita c-vita">Disbiose tratada</span><span class="dtag dtag-proto bdr-vita c-vita">Probiótico 12 cepas</span></div></div></div>
+    <div class="day-row"><div class="day-num-col"><div class="dn-n dn-vita">22</div><div class="dn-d">Sex</div></div><div class="day-body"><div class="day-title-txt">Segundo gap semanal — sem touchpoint programado</div><div class="day-desc-txt">Segunda semana sem contato proativo. Ricardo viajou a Buenos Aires, seguiu o plano alimentar 60% do tempo. Treinou 2x em vez de 3x. Não há forma do centro saber. Adherencia real estimada: 65%. Sem wearables, sem app de tracking, sem check-in de coach.</div><div class="day-tags"><span class="dtag dtag-gap">Adherência real: ~65%</span><span class="dtag dtag-gap">Centro não sabe</span></div></div></div>
+  </div>
+
+  <div class="week">
+    <div class="week-header"><span class="week-num wk-vita">Semana 4</span><span class="week-theme">Encerramento — diagnóstico excelente, seguimento insuficiente</span><span class="week-line"></span></div>
+    <div class="day-row"><div class="day-num-col"><div class="dn-n dn-vita">27</div><div class="dn-d">Seg</div></div><div class="day-body"><div class="day-title-txt">Laboratório de seguimento mês 1</div><div class="day-desc-txt">Panel reducido: hsCRP, homocisteína, testosterona, hemograma. hsCRP: 4.1 → 3.6 mg/L (melhora parcial). Homocisteína: 14.2 → 11.8 µmol/L (descendo com metilcobalamina). Resultados chegam ao médico por portal do laboratório. Sem integração com prontuário eletrônico do centro.</div><div class="day-tags"><span class="dtag dtag-plus">Homocisteína ↓17%</span><span class="dtag dtag-plus">hsCRP ↓12%</span><span class="dtag dtag-gap">Sem integração lab-EMR</span></div></div></div>
+    <div class="day-row"><div class="day-num-col"><div class="dn-n dn-vita">29</div><div class="dn-d">Qua</div></div><div class="day-body"><div class="day-title-txt">Consulta de encerramento — 45 min</div><div class="day-desc-txt">Revisão dos resultados. Ricardo relata melhor energia e melhor digestão. Médico atualiza protocolo de suplementação. Sem dados objetivos contínuos para correlacionar sintomas com intervenções. Próxima consulta: daqui 2 meses. Gap operacional longo. Muitas coisas podem acontecer em 60 dias sem visibilidade.</div><div class="day-tags"><span class="dtag dtag-n">Próxima cita: 60 dias</span><span class="dtag dtag-gap">60 dias sem visibilidade</span></div></div></div>
+    <div class="day-row"><div class="day-num-col"><div class="dn-n dn-vita">30</div><div class="dn-d">Qui</div></div><div class="day-body"><div class="day-title-txt">Relatório mensal — 4 páginas, sem score de vitalidade</div><div class="day-desc-txt">Documento textual de 4 páginas: resumo de achados, lista atualizada de suplementos, orientações para próximo mês. Sem gráficos de tendência. Sem score composto. Sem comparação com percentis de idade. Sem projeção. Ricardo valoriza muito o diagnóstico genômico — "único no Brasil" — mas sente que falta acompanhamento contínuo.</div><div class="day-tags"><span class="dtag dtag-proto bdr-vita c-vita">Diagnóstico genômico único</span><span class="dtag dtag-gap">Sem score</span><span class="dtag dtag-gap">Sem tendências</span></div></div></div>
+  </div>
+
+  <div class="insight-box" style="border-left-color:var(--vita)">
+    <div class="ib-label c-vita">Insight del mes — Instituto Vita</div>
+    <div class="ib-text">Instituto Vita hace el mejor diagnóstico de LATAM — genómica, telómeros, microbioma — con calidad comparable al top internacional. <strong>El gap no está en el diagnóstico, está en todo lo que viene después</strong>: sin CGM, sin wearables integrados, sin coach entre consultas, sin sistema de alertas, sin score de outcome, con 60 días de silencio entre citas. El paciente recibe información de altísimo valor en semanas 1–3 y luego queda solo con una lista de suplementos. <strong>Aquí es exactamente donde Koru Elite Performance puede capturar el mercado LATAM: tomando el estándar diagnóstico de Vita y añadiendo la arquitectura operacional de Attia.</strong></div>
+  </div>
+</div>
+
+<!-- ════ VITA · CENTRO ════ -->
+<div id="vita-cen" class="panel">
+  <div class="ops-intro">
+    <div>
+      <div class="pb-name-big">Instituto Vita Brasil — Operações Internas Mês 1</div>
+      <div class="pb-context">Melhor centro de longevidade da América Latina. Forte em diagnóstico avançado. Modelo de crescimento via volume (80 pacientes/médico). Revenue concentrado em diagnóstico inicial. Modelo de seguimento subdesenvolvido comparado ao padrão internacional.</div>
+    </div>
+    <div class="ops-metrics">
+      <div class="ops-mrow"><span class="ops-ml">Pacientes/médico</span><span class="ops-mv c-vita">80</span></div>
+      <div class="ops-mrow"><span class="ops-ml">Ticket anual</span><span class="ops-mv c-vita">R$94K</span></div>
+      <div class="ops-mrow"><span class="ops-ml">Horas equipo mes 1</span><span class="ops-mv c-vita">10.5 h</span></div>
+      <div class="ops-mrow"><span class="ops-ml">Equipo por paciente</span><span class="ops-mv c-vita">2–3</span></div>
+    </div>
+  </div>
+
+  <div class="ops-timeline">
+    <div class="ops-event dot-event-vita"><div class="ops-when">Semana 1 · Dias 1–3</div><div class="ops-what">Onboarding diagnóstico — ponto forte do modelo</div><div class="ops-who">Médico (3h) + coordinadora (1h). Kits de genômica e microbioma enviados a Fleury Genômica e Gencept. Prazo de 14–21 dias. InBody 770 realizado internamente. Sem reunião de equipe multidisciplinar nesta etapa.</div><span class="load-pill load-hi">Carga alta</span></div>
+    <div class="ops-event dot-event-vita"><div class="ops-when">Semana 1 · Dia 3</div><div class="ops-what">Consulta inicial médica</div><div class="ops-who">60 min. Suplementação prescrita de forma empírica (resultados laboratoriais ainda pendentes). Sistema de registro: prontuário eletrônico padrão (sem integração com laboratórios parceiros). Médico transcreve resultados manualmente quando chegam.</div><span class="load-pill load-md">Carga media</span></div>
+    <div class="ops-event dot-event-vita"><div class="ops-when">Semanas 2–3 · Latência diagnóstica</div><div class="ops-what">Período de espera — contato reativo</div><div class="ops-who">Sem monitoramento ativo. Paciente inicia por WhatsApp quando tem dúvidas. Assistente responde. Sem alertas automáticas. Sem dados contínuos. Médico não tem visibilidade do paciente entre consultas. Gap operacional máximo.</div><span class="load-pill load-lo">Gap operacional</span></div>
+    <div class="ops-event dot-event-vita"><div class="ops-when">Semana 3 · Dias 18 e 20</div><div class="ops-what">Devolução genômica e microbioma — 2 consultas separadas</div><div class="ops-who">Médico (60 min) + nutricionista (45 min) em dias diferentes, sem sessão conjunta. Maior carga emocional do mês (APOE ε3/ε4). Tempo médico extra dedicado à psicoeducação não planejado. Coordenação interna por mensagem de texto.</div><span class="load-pill load-hi">Carga alta</span></div>
+    <div class="ops-event dot-event-vita"><div class="ops-when">Semana 4 · Encerramento</div><div class="ops-what">Consulta de encerramento + relatório manual</div><div class="ops-who">Médico (45 min consulta + 90 min relatório manual). Sem template automatizado. 4 páginas geradas no Word. Sem integração de dados do período. Alta dependência do médico para geração de documentação — bottleneck de escalabilidade claro.</div><span class="load-pill load-hi">Carga alta</span></div>
+  </div>
+
+  <div class="econ-grid">
+    <div class="econ-card">
+      <div class="econ-head c-vita">Ingresos — Ricardo F. · Mês 1</div>
+      <div class="econ-row"><span class="econ-item">Consultas médicas (3 × R$900)</span><span class="econ-val c-vita">R$2,700</span></div>
+      <div class="econ-row"><span class="econ-item">Painel genômico completo</span><span class="econ-val c-vita">R$12,000</span></div>
+      <div class="econ-row"><span class="econ-item">Microbioma 16S rRNA</span><span class="econ-val c-vita">R$2,800</span></div>
+      <div class="econ-row"><span class="econ-item">Painel 40 biomarcadores</span><span class="econ-val c-vita">R$3,500</span></div>
+      <div class="econ-row"><span class="econ-item">Consulta nutricionista (2 × R$600)</span><span class="econ-val c-vita">R$1,200</span></div>
+      <div class="econ-total"><span class="econ-tl">Total mês 1</span><span class="econ-tv c-vita">R$22,200</span></div>
+    </div>
+    <div class="econ-card">
+      <div class="econ-head c-vita">Horas equipe · Mês 1</div>
+      <div class="econ-row"><span class="econ-item">Médico principal</span><span class="econ-val c-vita">6.5 h</span></div>
+      <div class="econ-row"><span class="econ-item">Nutricionista funcional</span><span class="econ-val c-vita">2.0 h</span></div>
+      <div class="econ-row"><span class="econ-item">Coordinadora / assistente</span><span class="econ-val c-vita">2.0 h</span></div>
+      <div class="econ-row"><span class="econ-item">Coach executivo</span><span class="econ-val c-vita">— não incluído</span></div>
+      <div class="econ-row"><span class="econ-item">Data analyst</span><span class="econ-val c-vita">— não existe</span></div>
+      <div class="econ-total"><span class="econ-tl">Total horas</span><span class="econ-tv c-vita">10.5 h</span></div>
+    </div>
+  </div>
+</div>
+
+</div><!-- /main -->
+
+<script>
+let curProto = 'attia';
+let curPersp = 'pac';
+
+function setProto(p, btn) {
+  curProto = p;
+  document.querySelectorAll('.proto-btn').forEach(b => b.classList.remove('sel'));
+  btn.classList.add('sel');
+  showPanel();
+}
+
+function setPersp(p, btn) {
+  curPersp = p;
+  document.querySelectorAll('.persp-tab').forEach(b => b.classList.remove('sel'));
+  btn.classList.add('sel');
+  showPanel();
+}
+
+function showPanel() {
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('on'));
+  const target = document.getElementById(curProto + '-' + curPersp);
+  if (target) {
+    target.classList.add('on');
+    window.scrollTo({ top: document.querySelector('.persp-strip').offsetTop + 1, behavior: 'smooth' });
+  }
+}
+</script>
+</body>
+</html>

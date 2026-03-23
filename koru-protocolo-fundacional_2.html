@@ -1,0 +1,1706 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Koru Elite Performance — Protocolo Fundacional</title>
+<link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Overpass+Mono:wght@300;400;600&display=swap" rel="stylesheet">
+<style>
+/* ─── TOKENS ─── */
+:root {
+  --ink:      #0e0e12;
+  --ink2:     #1c1c24;
+  --paper:    #f6f2eb;
+  --paper2:   #ede8df;
+  --paper3:   #e4ddd2;
+  --gold:     #b8974a;
+  --gold-l:   rgba(184,151,74,0.15);
+  --gold-m:   rgba(184,151,74,0.3);
+  --gold-b:   #d4b06a;
+  --teal:     #2a7a6a;
+  --teal-l:   rgba(42,122,106,0.12);
+  --violet:   #5a3a7a;
+  --violet-l: rgba(90,58,122,0.12);
+  --rust:     #9a3a20;
+  --rust-l:   rgba(154,58,32,0.1);
+  --muted:    #7a7060;
+  --border:   rgba(14,14,18,0.1);
+  --radius:   2px;
+}
+
+*{margin:0;padding:0;box-sizing:border-box;}
+
+body{
+  background:var(--paper);
+  color:var(--ink);
+  font-family:'Libre Baskerville',Georgia,serif;
+  font-size:15px;
+  line-height:1.7;
+  cursor:default;
+}
+
+/* ─── COVER ─── */
+.cover{
+  background:var(--ink);
+  min-height:100vh;
+  display:flex;
+  flex-direction:column;
+  justify-content:flex-end;
+  padding:64px 72px;
+  position:relative;
+  overflow:hidden;
+}
+.cover-grid{
+  position:absolute;inset:0;
+  background-image:
+    linear-gradient(rgba(184,151,74,0.06) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(184,151,74,0.06) 1px,transparent 1px);
+  background-size:60px 60px;
+}
+.cover-symbol{
+  position:absolute;
+  top:64px;right:72px;
+  font-family:'Overpass Mono',monospace;
+  font-size:9px;
+  letter-spacing:4px;
+  color:rgba(246,242,235,0.2);
+  text-transform:uppercase;
+}
+.cover-eyebrow{
+  font-family:'Overpass Mono',monospace;
+  font-size:10px;
+  letter-spacing:4px;
+  text-transform:uppercase;
+  color:var(--gold-b);
+  margin-bottom:20px;
+  position:relative;
+}
+.cover h1{
+  font-size:clamp(2.8rem,5vw,5.2rem);
+  font-weight:400;
+  line-height:1.05;
+  color:var(--paper);
+  margin-bottom:8px;
+  position:relative;
+}
+.cover h1 em{font-style:italic;color:var(--gold-b);}
+.cover-sub{
+  font-family:'Overpass Mono',monospace;
+  font-size:11px;
+  letter-spacing:2px;
+  color:rgba(246,242,235,0.4);
+  margin-bottom:48px;
+  position:relative;
+}
+.cover-pills{
+  display:flex;flex-wrap:wrap;gap:10px;
+  margin-bottom:56px;
+  position:relative;
+}
+.cpill{
+  border:1px solid rgba(184,151,74,0.3);
+  color:rgba(246,242,235,0.55);
+  font-family:'Overpass Mono',monospace;
+  font-size:9px;
+  letter-spacing:2px;
+  text-transform:uppercase;
+  padding:6px 14px;
+}
+.cover-dna{
+  display:flex;gap:40px;
+  padding-top:32px;
+  border-top:1px solid rgba(184,151,74,0.2);
+  position:relative;
+}
+.dna-item{display:flex;align-items:center;gap:12px;}
+.dna-dot{width:6px;height:6px;border-radius:50%;}
+.dna-label{
+  font-family:'Overpass Mono',monospace;
+  font-size:9px;letter-spacing:2px;
+  text-transform:uppercase;
+  color:rgba(246,242,235,0.4);
+}
+.dna-val{
+  font-family:'Libre Baskerville',serif;
+  font-size:0.85rem;
+  color:rgba(246,242,235,0.7);
+}
+.cover-cta{
+  position:absolute;
+  bottom:64px;right:72px;
+  display:flex;flex-direction:column;
+  align-items:flex-end;gap:8px;
+}
+.cta-btn{
+  background:var(--gold);
+  border:none;
+  color:var(--ink);
+  font-family:'Overpass Mono',monospace;
+  font-size:10px;
+  letter-spacing:3px;
+  text-transform:uppercase;
+  padding:13px 24px;
+  cursor:pointer;
+  transition:background 0.2s;
+}
+.cta-btn:hover{background:var(--gold-b);}
+.cta-note{
+  font-family:'Overpass Mono',monospace;
+  font-size:8px;letter-spacing:2px;
+  color:rgba(246,242,235,0.25);
+}
+
+/* ─── NAV ─── */
+.nav-bar{
+  position:sticky;top:0;z-index:200;
+  background:rgba(14,14,18,0.96);
+  backdrop-filter:blur(20px);
+  border-bottom:1px solid rgba(184,151,74,0.15);
+  display:flex;
+  align-items:center;
+  padding:0 40px;
+  height:50px;
+  gap:0;
+  overflow-x:auto;
+}
+.nav-logo{
+  font-family:'Libre Baskerville',serif;
+  font-size:0.85rem;
+  color:var(--gold-b);
+  margin-right:32px;
+  white-space:nowrap;
+  letter-spacing:1px;
+}
+.nav-btn{
+  background:none;border:none;
+  font-family:'Overpass Mono',monospace;
+  font-size:9px;letter-spacing:2px;
+  text-transform:uppercase;
+  color:rgba(246,242,235,0.35);
+  padding:0 16px;height:50px;
+  cursor:pointer;
+  border-bottom:2px solid transparent;
+  transition:all 0.2s;
+  white-space:nowrap;
+}
+.nav-btn:hover{color:rgba(246,242,235,0.7);}
+.nav-btn.on{color:var(--gold-b);border-bottom-color:var(--gold);}
+
+/* ─── SECTIONS ─── */
+.section{display:none;}
+.section.on{display:block;}
+.wrap{max-width:1280px;margin:0 auto;padding:64px 72px 120px;}
+
+/* ─── SECTION HEADER ─── */
+.sh{margin-bottom:52px;}
+.sh-kicker{
+  font-family:'Overpass Mono',monospace;
+  font-size:9px;letter-spacing:4px;text-transform:uppercase;
+  color:var(--gold);margin-bottom:12px;
+  display:flex;align-items:center;gap:10px;
+}
+.sh-kicker::after{content:'';flex:1;height:1px;background:var(--gold-m);}
+.sh h2{
+  font-size:clamp(1.9rem,3vw,3rem);
+  font-weight:400;line-height:1.1;
+  margin-bottom:12px;
+}
+.sh h2 em{font-style:italic;color:var(--muted);}
+.sh-desc{font-size:0.95rem;color:var(--muted);max-width:640px;line-height:1.75;}
+
+/* ─── ADN BLOCK (síntesis) ─── */
+.adn-grid{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:1px;
+  background:var(--border);
+  border:1px solid var(--border);
+  margin-bottom:56px;
+}
+.adn-cell{
+  background:var(--paper);
+  padding:32px 28px;
+  position:relative;
+  overflow:hidden;
+}
+.adn-cell::before{
+  content:'';
+  position:absolute;top:0;left:0;right:0;
+  height:3px;
+}
+.adn-vita::before{background:var(--rust);}
+.adn-attia::before{background:var(--teal);}
+.adn-ifm::before{background:var(--violet);}
+.adn-koru::before{background:var(--gold);}
+.adn-source{
+  font-family:'Overpass Mono',monospace;
+  font-size:8px;letter-spacing:3px;text-transform:uppercase;
+  margin-bottom:10px;
+}
+.adn-vita .adn-source{color:var(--rust);}
+.adn-attia .adn-source{color:var(--teal);}
+.adn-ifm .adn-source{color:var(--violet);}
+.adn-koru .adn-source{color:var(--gold);}
+.adn-title{
+  font-size:1.15rem;font-weight:700;
+  margin-bottom:10px;line-height:1.2;
+}
+.adn-body{font-size:0.82rem;color:var(--muted);line-height:1.7;}
+.adn-items{
+  margin-top:14px;display:flex;flex-direction:column;gap:5px;
+}
+.adn-item{
+  font-family:'Overpass Mono',monospace;
+  font-size:8px;letter-spacing:1px;
+  padding:4px 10px;
+  border-radius:var(--radius);
+}
+.adn-vita .adn-item{background:var(--rust-l);color:var(--rust);}
+.adn-attia .adn-item{background:var(--teal-l);color:var(--teal);}
+.adn-ifm .adn-item{background:var(--violet-l);color:var(--violet);}
+.adn-koru .adn-item{background:var(--gold-l);color:#7a5a10;}
+
+/* ─── FASES ─── */
+.fase-stack{display:flex;flex-direction:column;gap:3px;margin-bottom:56px;}
+.fase{
+  display:grid;
+  grid-template-columns:220px 1fr;
+  border:1px solid var(--border);
+  background:var(--paper);
+  overflow:hidden;
+  cursor:pointer;
+  transition:box-shadow 0.2s;
+}
+.fase:hover{box-shadow:0 4px 24px rgba(0,0,0,0.07);}
+.fase-left{
+  padding:28px 24px;
+  border-right:1px solid var(--border);
+  display:flex;flex-direction:column;justify-content:center;
+}
+.fase-num{
+  font-family:'Overpass Mono',monospace;
+  font-size:9px;letter-spacing:3px;text-transform:uppercase;
+  color:var(--muted);margin-bottom:6px;
+}
+.fase-name{
+  font-size:1.2rem;font-weight:700;
+  line-height:1.2;margin-bottom:4px;
+}
+.fase-dur{
+  font-family:'Overpass Mono',monospace;
+  font-size:9px;letter-spacing:1px;
+  color:var(--gold);
+}
+.fase-right{padding:28px 32px;}
+.fase-tagline{
+  font-size:0.9rem;font-style:italic;
+  color:var(--muted);margin-bottom:14px;
+}
+.fase-cols{
+  display:grid;grid-template-columns:repeat(3,1fr);
+  gap:20px;
+}
+.fcol-label{
+  font-family:'Overpass Mono',monospace;
+  font-size:8px;letter-spacing:2px;text-transform:uppercase;
+  color:var(--muted);margin-bottom:8px;
+}
+.fcol-items{display:flex;flex-direction:column;gap:4px;}
+.fi{
+  font-size:0.8rem;color:var(--ink);
+  padding:3px 0;
+  border-bottom:1px solid var(--border);
+  line-height:1.4;
+}
+.fi:last-child{border-bottom:none;}
+
+.fase-accent-1{border-left:3px solid var(--gold);}
+.fase-accent-2{border-left:3px solid var(--teal);}
+.fase-accent-3{border-left:3px solid var(--violet);}
+.fase-accent-4{border-left:3px solid var(--rust);}
+
+/* ─── BIOMARCADORES ─── */
+.bio-section{margin-bottom:52px;}
+.bio-section-title{
+  font-family:'Overpass Mono',monospace;
+  font-size:10px;letter-spacing:3px;text-transform:uppercase;
+  color:var(--muted);
+  padding:10px 0;
+  border-bottom:1px solid var(--border);
+  margin-bottom:16px;
+}
+.bio-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(260px,1fr));
+  gap:10px;
+}
+.bio-card{
+  background:var(--paper2);
+  border:1px solid var(--border);
+  padding:16px 18px;
+  display:grid;
+  grid-template-columns:1fr auto;
+  gap:8px;
+  align-items:start;
+}
+.bio-name{font-size:0.88rem;font-weight:700;margin-bottom:2px;}
+.bio-desc{font-size:0.75rem;color:var(--muted);line-height:1.5;}
+.bio-meta{text-align:right;}
+.bio-timing{
+  font-family:'Overpass Mono',monospace;
+  font-size:8px;letter-spacing:1px;
+  color:var(--gold);
+  white-space:nowrap;
+}
+.bio-source{
+  font-family:'Overpass Mono',monospace;
+  font-size:7px;letter-spacing:1px;text-transform:uppercase;
+  margin-top:3px;
+  padding:2px 6px;
+  border-radius:var(--radius);
+}
+.src-vita{background:var(--rust-l);color:var(--rust);}
+.src-attia{background:var(--teal-l);color:var(--teal);}
+.src-sinclair{background:var(--violet-l);color:var(--violet);}
+.src-koru{background:var(--gold-l);color:#7a5a10;}
+
+/* ─── SUPLEMENTACIÓN ─── */
+.supl-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(300px,1fr));
+  gap:16px;
+  margin-bottom:40px;
+}
+.supl-card{
+  background:var(--paper);
+  border:1px solid var(--border);
+  border-top:3px solid var(--gold);
+  padding:20px 22px;
+}
+.supl-name{font-size:1rem;font-weight:700;margin-bottom:3px;}
+.supl-dose{
+  font-family:'Overpass Mono',monospace;
+  font-size:9px;letter-spacing:1px;
+  color:var(--gold);margin-bottom:8px;
+}
+.supl-why{font-size:0.8rem;color:var(--muted);line-height:1.6;margin-bottom:8px;}
+.supl-evidence{
+  font-family:'Overpass Mono',monospace;
+  font-size:8px;letter-spacing:1px;text-transform:uppercase;
+  padding:2px 8px;border-radius:var(--radius);
+}
+.ev-a{background:rgba(40,160,80,0.1);color:#1a7040;}
+.ev-b{background:rgba(200,150,0,0.1);color:#8a6000;}
+.ev-c{background:rgba(180,60,60,0.1);color:#8a2020;}
+
+/* ─── OPERACIONES ─── */
+.ops-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:24px;
+  margin-bottom:40px;
+}
+.ops-card{
+  background:var(--paper);
+  border:1px solid var(--border);
+  padding:28px;
+}
+.ops-card-title{
+  font-family:'Overpass Mono',monospace;
+  font-size:9px;letter-spacing:3px;text-transform:uppercase;
+  color:var(--muted);margin-bottom:16px;
+}
+.ops-row{
+  display:flex;justify-content:space-between;
+  align-items:baseline;
+  padding:8px 0;border-bottom:1px solid var(--border);
+  gap:16px;
+}
+.ops-row:last-child{border-bottom:none;}
+.ops-label{font-size:0.83rem;color:var(--muted);}
+.ops-val{font-size:0.88rem;font-weight:700;}
+
+.touchpoint-list{display:flex;flex-direction:column;gap:8px;margin-bottom:40px;}
+.tp{
+  display:grid;
+  grid-template-columns:140px 60px 1fr auto;
+  align-items:center;
+  gap:16px;
+  padding:12px 20px;
+  background:var(--paper);
+  border:1px solid var(--border);
+}
+.tp-freq{
+  font-family:'Overpass Mono',monospace;
+  font-size:9px;letter-spacing:2px;text-transform:uppercase;
+  color:var(--muted);
+}
+.tp-dur{
+  font-family:'Overpass Mono',monospace;
+  font-size:10px;color:var(--gold);font-weight:600;
+  text-align:center;
+}
+.tp-desc{font-size:0.85rem;}
+.tp-who{
+  font-family:'Overpass Mono',monospace;
+  font-size:8px;letter-spacing:1px;text-transform:uppercase;
+  color:var(--muted);
+  text-align:right;white-space:nowrap;
+}
+
+/* ─── EQUIPO ─── */
+.team-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(240px,1fr));
+  gap:16px;
+  margin-bottom:40px;
+}
+.team-card{
+  background:var(--paper);
+  border:1px solid var(--border);
+  padding:24px;
+}
+.team-role{
+  font-family:'Overpass Mono',monospace;
+  font-size:8px;letter-spacing:3px;text-transform:uppercase;
+  color:var(--gold);margin-bottom:8px;
+}
+.team-name{font-size:1.1rem;font-weight:700;margin-bottom:6px;}
+.team-desc{font-size:0.8rem;color:var(--muted);line-height:1.6;margin-bottom:12px;}
+.team-skills{display:flex;flex-wrap:wrap;gap:5px;}
+.tskill{
+  font-family:'Overpass Mono',monospace;
+  font-size:7px;letter-spacing:1px;
+  padding:2px 7px;
+  background:var(--paper3);
+  border:1px solid var(--border);
+  color:var(--muted);
+}
+.team-cred{
+  margin-top:12px;padding-top:10px;
+  border-top:1px solid var(--border);
+  font-family:'Overpass Mono',monospace;
+  font-size:8px;letter-spacing:1px;
+  color:var(--teal);
+}
+
+/* ─── ECONOMÍA ─── */
+.eco-grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:16px;
+  margin-bottom:40px;
+}
+.eco-card{
+  background:var(--paper);
+  border:1px solid var(--border);
+  padding:28px;
+}
+.eco-title{
+  font-family:'Overpass Mono',monospace;
+  font-size:9px;letter-spacing:3px;text-transform:uppercase;
+  color:var(--muted);margin-bottom:16px;
+}
+.eco-num{
+  font-size:2.2rem;
+  font-weight:700;
+  line-height:1;
+  margin-bottom:4px;
+}
+.eco-sub{font-size:0.78rem;color:var(--muted);}
+.eco-row{
+  display:flex;justify-content:space-between;
+  padding:7px 0;
+  border-bottom:1px solid var(--border);
+  font-size:0.82rem;
+}
+.eco-row:last-of-type{border-bottom:none;}
+.eco-rl{color:var(--muted);}
+.eco-rv{font-weight:700;}
+
+/* ─── IVI SCORE ─── */
+.ivi-wrap{
+  background:var(--ink);
+  color:var(--paper);
+  padding:52px 56px;
+  margin-bottom:56px;
+  position:relative;overflow:hidden;
+}
+.ivi-wrap::before{
+  content:'IVI';
+  position:absolute;right:-20px;top:-30px;
+  font-family:'Libre Baskerville',serif;
+  font-size:200px;font-weight:700;
+  color:rgba(184,151,74,0.05);
+  line-height:1;
+  pointer-events:none;
+}
+.ivi-title{
+  font-size:1.6rem;font-weight:400;
+  margin-bottom:6px;color:var(--paper);
+}
+.ivi-title em{font-style:italic;color:var(--gold-b);}
+.ivi-sub{font-size:0.88rem;color:rgba(246,242,235,0.5);margin-bottom:36px;max-width:600px;}
+.ivi-dims{
+  display:grid;
+  grid-template-columns:repeat(5,1fr);
+  gap:12px;
+}
+.ivi-dim{
+  background:rgba(246,242,235,0.04);
+  border:1px solid rgba(184,151,74,0.15);
+  padding:20px 16px;
+  text-align:center;
+}
+.ivi-icon{font-size:1.6rem;margin-bottom:8px;}
+.ivi-dim-name{
+  font-family:'Overpass Mono',monospace;
+  font-size:8px;letter-spacing:2px;text-transform:uppercase;
+  color:var(--gold-b);line-height:1.4;
+  margin-bottom:8px;
+}
+.ivi-markers{font-size:0.72rem;color:rgba(246,242,235,0.4);line-height:1.6;}
+.ivi-weight{
+  margin-top:10px;
+  font-family:'Overpass Mono',monospace;
+  font-size:10px;color:var(--gold);font-weight:600;
+}
+
+/* ─── DIFERENCIACIÓN ─── */
+.diff-table{
+  width:100%;border-collapse:collapse;
+  margin-bottom:40px;font-size:0.83rem;
+}
+.diff-table thead th{
+  background:var(--ink);color:var(--paper);
+  font-family:'Overpass Mono',monospace;
+  font-size:8px;letter-spacing:2px;text-transform:uppercase;
+  padding:12px 16px;text-align:left;
+}
+.diff-table thead th:first-child{color:var(--gold-b);}
+.diff-table tbody tr{border-bottom:1px solid var(--border);}
+.diff-table tbody tr:nth-child(even){background:var(--paper2);}
+.diff-table tbody td{padding:10px 16px;vertical-align:middle;}
+.diff-table tbody td:first-child{font-weight:700;font-size:0.85rem;}
+.check{color:var(--teal);font-size:1.1rem;}
+.cross{color:var(--border);font-size:1rem;}
+.koru-yes{color:var(--gold);font-weight:700;font-size:1.1rem;}
+
+/* ─── CREDENCIAL ─── */
+.cred-path{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:3px;background:var(--border);
+  border:1px solid var(--border);
+  margin-bottom:40px;
+}
+.cred-step{
+  background:var(--paper);
+  padding:28px 22px;
+  position:relative;
+}
+.cred-step-num{
+  font-family:'Overpass Mono',monospace;
+  font-size:28px;color:var(--gold-m);
+  font-weight:600;line-height:1;
+  margin-bottom:10px;
+}
+.cred-step-title{font-size:1rem;font-weight:700;margin-bottom:6px;}
+.cred-step-body{font-size:0.78rem;color:var(--muted);line-height:1.6;}
+.cred-badge{
+  display:inline-block;margin-top:10px;
+  font-family:'Overpass Mono',monospace;
+  font-size:8px;letter-spacing:1px;text-transform:uppercase;
+  padding:3px 8px;border-radius:var(--radius);
+  background:var(--gold-l);color:#7a5a10;
+  border:1px solid var(--gold-m);
+}
+
+/* ─── PITCH SLIDE ─── */
+.pitch-hero{
+  background:var(--ink);
+  color:var(--paper);
+  padding:52px 56px;
+  margin-bottom:32px;
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:48px;
+  align-items:center;
+}
+.pitch-stat{text-align:center;padding:24px;border:1px solid rgba(184,151,74,0.2);}
+.pitch-stat-num{
+  font-size:2.8rem;font-weight:700;
+  color:var(--gold-b);line-height:1;
+  margin-bottom:6px;
+}
+.pitch-stat-label{
+  font-family:'Overpass Mono',monospace;
+  font-size:9px;letter-spacing:2px;text-transform:uppercase;
+  color:rgba(246,242,235,0.4);
+}
+.pitch-stats-grid{
+  display:grid;grid-template-columns:1fr 1fr;gap:12px;
+}
+.pitch-copy h3{
+  font-size:1.8rem;font-weight:400;line-height:1.2;margin-bottom:16px;
+}
+.pitch-copy h3 em{font-style:italic;color:var(--gold-b);}
+.pitch-copy p{font-size:0.88rem;color:rgba(246,242,235,0.6);line-height:1.75;}
+
+/* ─── MISC ─── */
+.divider{border:none;border-top:1px solid var(--border);margin:48px 0;}
+.callout{
+  background:var(--paper2);
+  border-left:3px solid var(--gold);
+  padding:20px 24px;
+  margin:28px 0;
+  font-size:0.9rem;color:#444;line-height:1.75;
+}
+.callout strong{color:var(--ink);}
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:32px;}
+.tag{
+  display:inline-block;
+  font-family:'Overpass Mono',monospace;
+  font-size:8px;letter-spacing:1px;text-transform:uppercase;
+  padding:3px 8px;border-radius:var(--radius);
+  margin:2px;
+}
+.tag-g{background:rgba(42,122,106,0.1);color:var(--teal);}
+.tag-v{background:var(--violet-l);color:var(--violet);}
+.tag-r{background:var(--rust-l);color:var(--rust);}
+.tag-o{background:var(--gold-l);color:#7a5a10;}
+
+@media(max-width:1024px){
+  .cover,.wrap{padding:40px 24px;}
+  .adn-grid{grid-template-columns:repeat(2,1fr);}
+  .fase{grid-template-columns:1fr;}
+  .fase-left{border-right:none;border-bottom:1px solid var(--border);}
+  .fase-cols{grid-template-columns:1fr;}
+  .eco-grid{grid-template-columns:1fr 1fr;}
+  .ivi-dims{grid-template-columns:repeat(3,1fr);}
+  .pitch-hero{grid-template-columns:1fr;}
+  .cred-path{grid-template-columns:1fr 1fr;}
+  .two-col{grid-template-columns:1fr;}
+  .tp{grid-template-columns:120px 50px 1fr;}
+  .tp-who{display:none;}
+}
+</style>
+</head>
+<body>
+
+<!-- ════════════ COVER ════════════ -->
+<div class="cover" id="cover-page">
+  <div class="cover-grid"></div>
+  <div class="cover-symbol">Koru · Protocolo Fundacional · v1.0</div>
+
+  <div class="cover-eyebrow">Koru Elite Performance</div>
+  <h1>El Protocolo<br><em>Síntesis</em></h1>
+  <p class="cover-sub">Diagnóstico · Arquitectura · Framework · Adaptación LATAM</p>
+
+  <div class="cover-pills">
+    <span class="cpill">Uso: Pitch Corporativo</span>
+    <span class="cpill">Uso: Guía Operacional</span>
+    <span class="cpill">Uso: Credencialización</span>
+    <span class="cpill">Uso: Reclutamiento Médico</span>
+  </div>
+
+  <div class="cover-dna">
+    <div class="dna-item">
+      <div class="dna-dot" style="background:#9a3a20"></div>
+      <div><div class="dna-label">Diagnóstico</div><div class="dna-val">Instituto Vita</div></div>
+    </div>
+    <div class="dna-item">
+      <div class="dna-dot" style="background:#2a7a6a"></div>
+      <div><div class="dna-label">Arquitectura</div><div class="dna-val">Peter Attia</div></div>
+    </div>
+    <div class="dna-item">
+      <div class="dna-dot" style="background:#5a3a7a"></div>
+      <div><div class="dna-label">Framework</div><div class="dna-val">IFM · GOTOIT</div></div>
+    </div>
+    <div class="dna-item">
+      <div class="dna-dot" style="background:#b8974a"></div>
+      <div><div class="dna-label">Adaptación</div><div class="dna-val">LATAM · Koru</div></div>
+    </div>
+  </div>
+
+  <div class="cover-cta">
+    <button class="cta-btn" onclick="goTo('sintesis')">Explorar protocolo →</button>
+    <div class="cta-note">Navega por secciones en el menú</div>
+  </div>
+</div>
+
+<!-- ════════════ NAV ════════════ -->
+<nav class="nav-bar">
+  <div class="nav-logo">Koru ◆</div>
+  <button class="nav-btn" onclick="goTo('sintesis',this)">01 · Síntesis</button>
+  <button class="nav-btn" onclick="goTo('fases',this)">02 · Fases</button>
+  <button class="nav-btn" onclick="goTo('clinico',this)">03 · Clínico</button>
+  <button class="nav-btn" onclick="goTo('operaciones',this)">04 · Operaciones</button>
+  <button class="nav-btn" onclick="goTo('economia',this)">05 · Economía</button>
+  <button class="nav-btn" onclick="goTo('equipo',this)">06 · Equipo</button>
+  <button class="nav-btn" onclick="goTo('credencial',this)">07 · Credencial</button>
+  <button class="nav-btn" onclick="goTo('pitch',this)">08 · Pitch</button>
+</nav>
+
+<!-- ════ 01 · SÍNTESIS ════ -->
+<div id="sintesis" class="section">
+<div class="wrap">
+  <div class="sh">
+    <div class="sh-kicker">01 · ADN del Protocolo</div>
+    <h2>La <em>síntesis</em> que el mercado no tiene</h2>
+    <p class="sh-desc">Koru no replica ningún protocolo existente. Extrae lo mejor de cuatro modelos de referencia y los integra en una arquitectura diseñada específicamente para el ejecutivo latinoamericano.</p>
+  </div>
+
+  <div class="adn-grid">
+    <div class="adn-cell adn-vita">
+      <div class="adn-source">Tomado de Instituto Vita</div>
+      <div class="adn-title">Diagnóstico de profundidad molecular</div>
+      <div class="adn-body">El mejor diagnóstico disponible en LATAM. Genómica de longevidad, telómeros, microbioma, biomarcadores avanzados. Punto de entrada de máxima credibilidad clínica.</div>
+      <div class="adn-items">
+        <span class="adn-item">Genómica SNPs longevidad</span>
+        <span class="adn-item">Telómeros qPCR</span>
+        <span class="adn-item">Microbioma 16S rRNA</span>
+        <span class="adn-item">40+ biomarcadores</span>
+      </div>
+    </div>
+    <div class="adn-cell adn-attia">
+      <div class="adn-source">Tomado de Peter Attia</div>
+      <div class="adn-title">Arquitectura operacional de seguimiento continuo</div>
+      <div class="adn-body">La densidad de contacto, tecnología de monitoreo (CGM, HRV, Oura), equipo multidisciplinario y sistema de alertas que convierte el diagnóstico en transformación sostenida.</div>
+      <div class="adn-items">
+        <span class="adn-item">CGM continuo</span>
+        <span class="adn-item">HRV / Oura Ring</span>
+        <span class="adn-item">9+ touchpoints/mes</span>
+        <span class="adn-item">Equipo de 7 roles</span>
+      </div>
+    </div>
+    <div class="adn-cell adn-ifm">
+      <div class="adn-source">Tomado de IFM · GOTOIT</div>
+      <div class="adn-title">Framework sistémico replicable</div>
+      <div class="adn-body">La lógica de los 7 nodos funcionales y el protocolo 5R como estructura clínica estandarizable, escalable y enseñable a equipos médicos. Permite consistencia sin perder personalización.</div>
+      <div class="adn-items">
+        <span class="adn-item">7 nodos funcionales</span>
+        <span class="adn-item">Protocolo 5R intestinal</span>
+        <span class="adn-item">Timeline Tool</span>
+        <span class="adn-item">Escalable a equipos</span>
+      </div>
+    </div>
+    <div class="adn-cell adn-koru">
+      <div class="adn-source">Propio de Koru</div>
+      <div class="adn-title">5ª dimensión + IVI + precio LATAM</div>
+      <div class="adn-body">La dimensión espiritual / propósito que ningún protocolo occidental incluye. El Índice de Vitalidad Integrada (IVI) como métrica propia. Precio y cultura adaptados al mercado latinoamericano.</div>
+      <div class="adn-items">
+        <span class="adn-item">Dimensión Espiritual</span>
+        <span class="adn-item">Score IVI 5 dimensiones</span>
+        <span class="adn-item">Precio accesible LATAM</span>
+        <span class="adn-item">Cultura regional</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="ivi-wrap">
+    <div class="ivi-title">Índice de Vitalidad <em>Integrada</em> — IVI</div>
+    <div class="ivi-sub">Score compuesto 0–100 que integra las cinco dimensiones del ser humano. Se calcula al inicio (mes 1), al mes 3, al cierre semestral (mes 6) y en cada renovación trimestral posterior. Es la herramienta de comunicación de progreso más poderosa para el cliente y el argumento central de renovación.</div>
+    <div class="ivi-dims">
+      <div class="ivi-dim">
+        <div class="ivi-icon">🏋️</div>
+        <div class="ivi-dim-name">Físico &amp; Movimiento</div>
+        <div class="ivi-markers">VO₂ max · Fuerza · Zona 2 · Composición corporal · DEXA</div>
+        <div class="ivi-weight">20%</div>
+      </div>
+      <div class="ivi-dim">
+        <div class="ivi-icon">🧬</div>
+        <div class="ivi-dim-name">Metabólico &amp; Bioquímico</div>
+        <div class="ivi-markers">Glucosa CGM · ApoB · Inflamación · Hormonas · NAD+</div>
+        <div class="ivi-weight">25%</div>
+      </div>
+      <div class="ivi-dim">
+        <div class="ivi-icon">🧠</div>
+        <div class="ivi-dim-name">Mental &amp; Cognitivo</div>
+        <div class="ivi-markers">HRV · Sueño · Cognitivo · Cortisol · Carga mental</div>
+        <div class="ivi-weight">20%</div>
+      </div>
+      <div class="ivi-dim">
+        <div class="ivi-icon">❤️</div>
+        <div class="ivi-dim-name">Emocional &amp; Relacional</div>
+        <div class="ivi-markers">Regulación emocional · Vínculos · Propósito social · Estrés crónico</div>
+        <div class="ivi-weight">20%</div>
+      </div>
+      <div class="ivi-dim">
+        <div class="ivi-icon">✨</div>
+        <div class="ivi-dim-name">Espiritual &amp; Propósito</div>
+        <div class="ivi-markers">Sentido de vida · Valores · Coherencia · Trascendencia</div>
+        <div class="ivi-weight">15%</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="callout">
+    <strong>Ventana estratégica:</strong> Ningún competidor en LATAM combina estos cuatro elementos simultáneamente, ni opera con un equipo de 7 especialistas cubriendo cada dimensión del ser humano. El espacio está vacío. Koru es el primero en ocuparlo con rigor clínico, tecnología de seguimiento, modelo B2B y dimensión humana integral.
+  </div>
+</div>
+</div>
+
+<!-- ════ 02 · FASES ════ -->
+<div id="fases" class="section">
+<div class="wrap">
+  <div class="sh">
+    <div class="sh-kicker">02 · Estructura Temporal</div>
+    <h2>Programa base de <em>6 meses</em></h2>
+    <p class="sh-desc">Tres fases en un programa inicial de 6 meses — la unidad mínima para generar cambio biológico real y medible. Al completarlo, el paciente renueva en ciclos trimestrales. El período óptimo recomendado es 12 meses, donde los outcomes profundos de longevidad se vuelven completamente evidentes.</p>
+  </div>
+
+  <!-- MODELO DE CONTINUIDAD -->
+  <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:3px;background:var(--border);border:1px solid var(--border);margin-bottom:40px;">
+    <div style="background:var(--paper);padding:24px 22px;border-top:3px solid var(--gold);">
+      <div style="font-family:'Overpass Mono',monospace;font-size:8px;letter-spacing:3px;text-transform:uppercase;color:var(--gold);margin-bottom:8px;">Programa Base</div>
+      <div style="font-size:1.4rem;font-weight:700;margin-bottom:6px;">6 Meses</div>
+      <div style="font-size:0.8rem;color:var(--muted);line-height:1.6;">Unidad contractual mínima. 3 fases. Diagnóstico profundo + implementación + primera evaluación comparativa.</div>
+    </div>
+    <div style="background:var(--paper);padding:24px 22px;border-top:3px solid var(--teal);">
+      <div style="font-family:'Overpass Mono',monospace;font-size:8px;letter-spacing:3px;text-transform:uppercase;color:var(--teal);margin-bottom:8px;">Renovación</div>
+      <div style="font-size:1.4rem;font-weight:700;margin-bottom:6px;">Trimestral</div>
+      <div style="font-size:0.8rem;color:var(--muted);line-height:1.6;">Post mes 6, el paciente renueva cada 3 meses. Menor fricción, mayor adherencia. Ajuste de protocolo cada ciclo.</div>
+    </div>
+    <div style="background:var(--ink);padding:24px 22px;border-top:3px solid var(--gold-b);">
+      <div style="font-family:'Overpass Mono',monospace;font-size:8px;letter-spacing:3px;text-transform:uppercase;color:var(--gold-b);margin-bottom:8px;">Óptimo Recomendado</div>
+      <div style="font-size:1.4rem;font-weight:700;margin-bottom:6px;color:var(--paper);">12 Meses</div>
+      <div style="font-size:0.8rem;color:rgba(246,242,235,0.5);line-height:1.6;">Donde el reloj epigenético, VO₂ max y edad biológica muestran evidencia comparativa robusta. El año completo es el argumento de renovación más poderoso.</div>
+    </div>
+  </div>
+
+  <div class="fase-stack">
+
+    <div class="fase fase-accent-1">
+      <div class="fase-left">
+        <div class="fase-num">Fase 01</div>
+        <div class="fase-name">Diagnóstico &amp; Baseline</div>
+        <div class="fase-dur">Mes 1 · Semanas 1–4</div>
+      </div>
+      <div class="fase-right">
+        <div class="fase-tagline">"Conocerte más profundo de lo que nadie lo ha hecho"</div>
+        <div class="fase-cols">
+          <div>
+            <div class="fcol-label">Clínico</div>
+            <div class="fcol-items">
+              <span class="fi">Genómica longevidad</span>
+              <span class="fi">Telómeros qPCR</span>
+              <span class="fi">Panel 40 biomarcadores</span>
+              <span class="fi">Microbioma 16S</span>
+              <span class="fi">DEXA + VO₂ Max</span>
+              <span class="fi">Sueño + cognitivo</span>
+            </div>
+          </div>
+          <div>
+            <div class="fcol-label">Tecnología</div>
+            <div class="fcol-items">
+              <span class="fi">CGM instalado D2</span>
+              <span class="fi">Oura Ring activado</span>
+              <span class="fi">Dashboard IVI live</span>
+              <span class="fi">Score IVI baseline</span>
+              <span class="fi">Alertas configuradas</span>
+            </div>
+          </div>
+          <div>
+            <div class="fcol-label">Entregable</div>
+            <div class="fcol-items">
+              <span class="fi">Reporte 14 págs</span>
+              <span class="fi">Plan 6 meses escrito</span>
+              <span class="fi">Stack suplementos</span>
+              <span class="fi">IVI inicial calculado</span>
+              <span class="fi">Mapa GOTOIT personal</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="fase fase-accent-2">
+      <div class="fase-left">
+        <div class="fase-num">Fase 02</div>
+        <div class="fase-name">Implementación &amp; Ritmo</div>
+        <div class="fase-dur">Meses 2–3 · Semanas 5–12</div>
+      </div>
+      <div class="fase-right">
+        <div class="fase-tagline">"Construir los hábitos que el cuerpo ya quiere"</div>
+        <div class="fase-cols">
+          <div>
+            <div class="fcol-label">Clínico</div>
+            <div class="fcol-items">
+              <span class="fi">Protocolo 5R activo</span>
+              <span class="fi">Zona 2 calibrada</span>
+              <span class="fi">Fuerza progresiva</span>
+              <span class="fi">Nutrición personalizada</span>
+              <span class="fi">Suplementación ajustada</span>
+            </div>
+          </div>
+          <div>
+            <div class="fcol-label">Seguimiento</div>
+            <div class="fcol-items">
+              <span class="fi">Lab mensual (12 marc)</span>
+              <span class="fi">CGM revisión semanal</span>
+              <span class="fi">HRV tendencia</span>
+              <span class="fi">Ajustes en tiempo real</span>
+              <span class="fi">Check-in conductual ×4</span>
+            </div>
+          </div>
+          <div>
+            <div class="fcol-label">Resultado esperado</div>
+            <div class="fcol-items">
+              <span class="fi">IVI +8–12 puntos</span>
+              <span class="fi">Glucosa en rango</span>
+              <span class="fi">Energía percibida ↑</span>
+              <span class="fi">Sueño ↑ eficiencia</span>
+              <span class="fi">DEXA mes 3</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="fase fase-accent-3">
+      <div class="fase-left">
+        <div class="fase-num">Fase 03</div>
+        <div class="fase-name">Optimización &amp; Cierre Semestral</div>
+        <div class="fase-dur">Meses 4–6 · Semanas 13–24</div>
+      </div>
+      <div class="fase-right">
+        <div class="fase-tagline">"El rendimiento que siempre fue posible — con datos que lo prueban"</div>
+        <div class="fase-cols">
+          <div>
+            <div class="fcol-label">Clínico</div>
+            <div class="fcol-items">
+              <span class="fi">Intervenciones avanzadas</span>
+              <span class="fi">Ajuste hormonal (si aplica)</span>
+              <span class="fi">NAD+ / NMN (perfil)</span>
+              <span class="fi">Senolíticos (indicación)</span>
+              <span class="fi">Revisión GOTOIT completa</span>
+            </div>
+          </div>
+          <div>
+            <div class="fcol-label">Evaluación Semestral</div>
+            <div class="fcol-items">
+              <span class="fi">Panel completo mes 6</span>
+              <span class="fi">Reloj epigenético</span>
+              <span class="fi">DEXA comparativo</span>
+              <span class="fi">VO₂ Max comparativo</span>
+              <span class="fi">Score cognitivo comparativo</span>
+            </div>
+          </div>
+          <div>
+            <div class="fcol-label">Resultado esperado</div>
+            <div class="fcol-items">
+              <span class="fi">IVI +18–25 puntos</span>
+              <span class="fi">Edad bio ↓ 1–2 años</span>
+              <span class="fi">VO₂ max +12–18%</span>
+              <span class="fi">ApoB en objetivo</span>
+              <span class="fi">Músculo ↑ 1–2 kg</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- CONTINUIDAD POST MES 6 -->
+  <div style="margin-bottom:40px;">
+    <div class="bio-section-title">Continuidad post mes 6 — Renovación trimestral</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+
+      <div class="fase fase-accent-4" style="cursor:default;">
+        <div class="fase-left">
+          <div class="fase-num">Ciclo A</div>
+          <div class="fase-name">Renovación Trimestral</div>
+          <div class="fase-dur">Meses 7–9 · 13–15 · etc.</div>
+        </div>
+        <div class="fase-right">
+          <div class="fase-tagline">"Mantener y profundizar lo ganado"</div>
+          <div class="fase-cols">
+            <div>
+              <div class="fcol-label">Clínico</div>
+              <div class="fcol-items">
+                <span class="fi">Protocolo estabilizado</span>
+                <span class="fi">Ajustes por ciclo vital</span>
+                <span class="fi">Ciclos senolíticos</span>
+                <span class="fi">Nuevas intervenciones</span>
+              </div>
+            </div>
+            <div>
+              <div class="fcol-label">Seguimiento</div>
+              <div class="fcol-items">
+                <span class="fi">Lab trimestral (8 marc)</span>
+                <span class="fi">CGM continuo</span>
+                <span class="fi">Consulta médica ×1</span>
+                <span class="fi">Coach ×3 sesiones</span>
+              </div>
+            </div>
+            <div>
+              <div class="fcol-label">Entregable</div>
+              <div class="fcol-items">
+                <span class="fi">Reporte IVI trimestral</span>
+                <span class="fi">Plan próximo ciclo</span>
+                <span class="fi">Ajuste de protocolo</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="fase" style="border-left:3px solid var(--gold);cursor:default;">
+        <div class="fase-left" style="background:var(--ink);">
+          <div class="fase-num" style="color:rgba(246,242,235,0.4);">Óptimo</div>
+          <div class="fase-name" style="color:var(--paper);">12 Meses</div>
+          <div class="fase-dur" style="color:var(--gold-b);">2 ciclos trimestrales post mes 6</div>
+        </div>
+        <div class="fase-right">
+          <div class="fase-tagline">"Donde la longevidad se vuelve medible e irreversible"</div>
+          <div class="fase-cols">
+            <div>
+              <div class="fcol-label">Hitos mes 12</div>
+              <div class="fcol-items">
+                <span class="fi">Reloj epigenético anual</span>
+                <span class="fi">DEXA tercera vez</span>
+                <span class="fi">VO₂ max acumulado</span>
+                <span class="fi">Revisión profunda 360°</span>
+              </div>
+            </div>
+            <div>
+              <div class="fcol-label">Resultado esperado</div>
+              <div class="fcol-items">
+                <span class="fi">IVI &gt;80/100</span>
+                <span class="fi">Edad bio ↓ 2–4 años</span>
+                <span class="fi">VO₂ max +20–25%</span>
+                <span class="fi">Masa muscular ↑3 kg</span>
+              </div>
+            </div>
+            <div>
+              <div class="fcol-label">Argumento renovación</div>
+              <div class="fcol-items">
+                <span class="fi" style="color:var(--gold);font-weight:700">Datos comparativos D1 vs M12</span>
+                <span class="fi">LTV proyectado +$45K</span>
+                <span class="fi">Referidos orgánicos ×2–3</span>
+                <span class="fi">Renovación de relación</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="callout">
+    <strong>Lógica del modelo:</strong> 6 meses es el mínimo para mostrar evidencia comparativa robusta — el diagnóstico del mes 1 versus los resultados del mes 6 es el argumento más poderoso de renovación. La renovación trimestral post mes 6 reduce la fricción de compromiso y permite ajustar la intensidad según el ciclo de vida del ejecutivo. A los 12 meses, el reloj epigenético y el VO₂ max comparativo cierran el ciclo de prueba de concepto más contundente disponible en medicina de longevidad.
+  </div>
+</div>
+</div>
+
+<!-- ════ 03 · CLÍNICO ════ -->
+<div id="clinico" class="section">
+<div class="wrap">
+  <div class="sh">
+    <div class="sh-kicker">03 · Protocolo Clínico</div>
+    <h2>Biomarcadores, <em>intervenciones</em> y suplementación</h2>
+    <p class="sh-desc">El detalle clínico completo. Cada elemento está anclado a evidencia y trazado a su fuente de referencia (Vita, Attia, IFM o propio de Koru).</p>
+  </div>
+
+  <!-- BIOMARCADORES -->
+  <div class="bio-section">
+    <div class="bio-section-title">Diagnóstico Inicial — Panel Completo</div>
+    <div class="bio-grid">
+      <div class="bio-card"><div><div class="bio-name">Reloj Epigenético</div><div class="bio-desc">GrimAge / DunedinPACE via TruMe o equivalente. Edad biológica real vs cronológica.</div></div><div class="bio-meta"><div class="bio-timing">D1 · Cada 6 meses</div><div class="bio-source src-sinclair">Sinclair</div></div></div>
+      <div class="bio-card"><div><div class="bio-name">Telómeros (qPCR)</div><div class="bio-desc">Longitud telomérica como marcador de ritmo de envejecimiento celular.</div></div><div class="bio-meta"><div class="bio-timing">D1 · Anual</div><div class="bio-source src-vita">Instituto Vita</div></div></div>
+      <div class="bio-card"><div><div class="bio-name">Genómica Longevidad</div><div class="bio-desc">APOE, FOXO3, MTHFR, COMT, NAT2, variantes sirtuinas, polimorfismos mTOR.</div></div><div class="bio-meta"><div class="bio-timing">D1 · Una vez</div><div class="bio-source src-vita">Instituto Vita</div></div></div>
+      <div class="bio-card"><div><div class="bio-name">Microbioma 16S rRNA</div><div class="bio-desc">Diversidad microbiana, disbiosis, patógenos, calprotectina, SIgA, zonulina.</div></div><div class="bio-meta"><div class="bio-timing">D5 · Cada 6 meses</div><div class="bio-source src-vita">Instituto Vita</div></div></div>
+      <div class="bio-card"><div><div class="bio-name">ApoB / LDL-P</div><div class="bio-desc">Marcador causal de riesgo cardiovascular. Objetivo &lt;60 mg/dL en prevención primaria activa.</div></div><div class="bio-meta"><div class="bio-timing">D1 · Mensual</div><div class="bio-source src-attia">Attia</div></div></div>
+      <div class="bio-card"><div><div class="bio-name">CGM · Glucosa continua</div><div class="bio-desc">FreeStyle Pro o Dexcom. Variabilidad, MAGE, tiempo en rango, picos postprandiales.</div></div><div class="bio-meta"><div class="bio-timing">D2 · Continuo</div><div class="bio-source src-attia">Attia</div></div></div>
+      <div class="bio-card"><div><div class="bio-name">HRV · Oura Ring</div><div class="bio-desc">Variabilidad cardíaca nocturna. Proxy de recuperación, estrés autonómico y edad cardiovascular funcional.</div></div><div class="bio-meta"><div class="bio-timing">D3 · Continuo</div><div class="bio-source src-attia">Attia</div></div></div>
+      <div class="bio-card"><div><div class="bio-name">VO₂ Max</div><div class="bio-desc">El predictor más robusto de mortalidad por todas las causas. Test con analizador de gases.</div></div><div class="bio-meta"><div class="bio-timing">D2 · Cada 3 meses</div><div class="bio-source src-attia">Attia</div></div></div>
+      <div class="bio-card"><div><div class="bio-name">DEXA Scan</div><div class="bio-desc">Composición corporal: masa muscular segmentada, grasa visceral, densidad ósea.</div></div><div class="bio-meta"><div class="bio-timing">D2 · Cada 3 meses</div><div class="bio-source src-attia">Attia</div></div></div>
+      <div class="bio-card"><div><div class="bio-name">Panel Hormonal Completo</div><div class="bio-desc">Testosterona total/libre, estradiol, DHEA, IGF-1, cortisol ×4 saliva, T3 libre, reverse T3.</div></div><div class="bio-meta"><div class="bio-timing">D1 · Trimestral</div><div class="bio-source src-ifm">IFM</div></div></div>
+      <div class="bio-card"><div><div class="bio-name">Zonulina + Permeabilidad</div><div class="bio-desc">Marcador de permeabilidad intestinal. Clave en el protocolo 5R de reparación de gut.</div></div><div class="bio-meta"><div class="bio-timing">D4 · Cada 3 meses</div><div class="bio-source src-ifm">IFM</div></div></div>
+      <div class="bio-card"><div><div class="bio-name">NAD+ Sérico</div><div class="bio-desc">Cofactor central en metabolismo energético y sirtuinas. Declina con la edad. Objetivo &gt;50 µM.</div></div><div class="bio-meta"><div class="bio-timing">D1 · Cada 2 meses</div><div class="bio-source src-sinclair">Sinclair</div></div></div>
+      <div class="bio-card"><div><div class="bio-name">hsCRP + IL-6</div><div class="bio-desc">Inflamación sistémica de baja intensidad — el "fuego silencioso" del envejecimiento acelerado.</div></div><div class="bio-meta"><div class="bio-timing">D1 · Mensual</div><div class="bio-source src-koru">Koru</div></div></div>
+      <div class="bio-card"><div><div class="bio-name">Homocisteína</div><div class="bio-desc">Riesgo cardiovascular y cognitivo. Alta prevalencia en LATAM. Objetivo &lt;9 µmol/L.</div></div><div class="bio-meta"><div class="bio-timing">D1 · Trimestral</div><div class="bio-source src-koru">LATAM+</div></div></div>
+      <div class="bio-card"><div><div class="bio-name">Score Cognitivo (CNS)</div><div class="bio-desc">Batería cognitiva: memoria, atención, velocidad de procesamiento, función ejecutiva.</div></div><div class="bio-meta"><div class="bio-timing">D3 · Semestral</div><div class="bio-source src-attia">Attia</div></div></div>
+      <div class="bio-card"><div><div class="bio-name">IVI Score (5 dimensiones)</div><div class="bio-desc">Score compuesto propietario Koru. Integra todos los datos en una métrica comprensible 0–100.</div></div><div class="bio-meta"><div class="bio-timing">Mensual</div><div class="bio-source src-koru">Koru ®</div></div></div>
+    </div>
+  </div>
+
+  <!-- SUPLEMENTACIÓN -->
+  <div class="bio-section-title" style="margin-top:48px">Suplementación Base — Protocolo Koru</div>
+  <div class="supl-grid">
+    <div class="supl-card">
+      <div class="supl-name">Omega-3 (EPA+DHA)</div>
+      <div class="supl-dose">4g/día · con comida grasa</div>
+      <div class="supl-why">Antiinflamatorio sistémico, neuroprotección, cardioprotección. Uno de los suplementos con mayor evidencia en longevidad.</div>
+      <span class="supl-evidence ev-a">Evidencia A</span>
+    </div>
+    <div class="supl-card">
+      <div class="supl-name">Vitamina D3 + K2</div>
+      <div class="supl-dose">5,000–10,000 UI D3 · 100mcg K2 MK-7</div>
+      <div class="supl-why">Deficiencia prevalente en LATAM. K2 dirige el calcio al hueso (no a arterias). Inmunidad, función muscular y hormonal.</div>
+      <span class="supl-evidence ev-a">Evidencia A</span>
+    </div>
+    <div class="supl-card">
+      <div class="supl-name">Magnesio Glicinato</div>
+      <div class="supl-dose">400mg · antes de dormir</div>
+      <div class="supl-why">Cofactor de 300+ enzimas. Mejora calidad del sueño, reduce cortisol nocturno, esencial para síntesis de ATP.</div>
+      <span class="supl-evidence ev-a">Evidencia A</span>
+    </div>
+    <div class="supl-card">
+      <div class="supl-name">Creatina Monohidrato</div>
+      <div class="supl-dose">5g/día · cualquier momento</div>
+      <div class="supl-why">Fuerza muscular, neuroprotección, función cognitiva. Evidencia robusta. Subutilizada en protocolos latinoamericanos.</div>
+      <span class="supl-evidence ev-a">Evidencia A</span>
+    </div>
+    <div class="supl-card">
+      <div class="supl-name">NMN (precursor NAD+)</div>
+      <div class="supl-dose">500mg–1g · en ayunas AM</div>
+      <div class="supl-why">Restaura niveles de NAD+ que declinan con la edad. Activa sirtuinas y PARP1. Evidencia creciente en humanos.</div>
+      <span class="supl-evidence ev-b">Evidencia B</span>
+    </div>
+    <div class="supl-card">
+      <div class="supl-name">Berberina</div>
+      <div class="supl-dose">500mg ×2–3 · con comidas</div>
+      <div class="supl-why">Activa AMPK (mimético de metformina natural). Reduce glucosa, mejora sensibilidad insulínica, antiinflamatorio. Excelente perfil seguridad.</div>
+      <span class="supl-evidence ev-b">Evidencia B</span>
+    </div>
+    <div class="supl-card">
+      <div class="supl-name">L-Metilfolato + B12 Metil + B6</div>
+      <div class="supl-dose">800mcg / 1mg / 50mg · AM</div>
+      <div class="supl-why">Crítico en LATAM: MTHFR frecuente. Reduce homocisteína. Metilación óptima. Neuroprotección, síntesis de neurotransmisores.</div>
+      <span class="supl-evidence ev-a">Evidencia A · LATAM+</span>
+    </div>
+    <div class="supl-card">
+      <div class="supl-name">Probiótico Multi-cepa</div>
+      <div class="supl-dose">50B UFC · 12+ cepas · PM</div>
+      <div class="supl-why">Microbiota intestinal como eje central del protocolo IFM. Restauración post-disbiosis. Modulación inmune. Eje intestino-cerebro.</div>
+      <span class="supl-evidence ev-b">Evidencia B</span>
+    </div>
+    <div class="supl-card">
+      <div class="supl-name">L-Glutamina</div>
+      <div class="supl-dose">5g · en ayunas</div>
+      <div class="supl-why">Reparación de permeabilidad intestinal (paso REPAIR del 5R). Energía para enterocitos. Soporte inmune en estrés.</div>
+      <span class="supl-evidence ev-b">Evidencia B · 5R</span>
+    </div>
+    <div class="supl-card">
+      <div class="supl-name">Zinc Carnosina</div>
+      <div class="supl-dose">75mg · con comida</div>
+      <div class="supl-why">Especialmente indicado para integridad de mucosa gástrica e intestinal. Parte del protocolo REMOVE/REINOCULATE de IFM.</div>
+      <span class="supl-evidence ev-b">Evidencia B</span>
+    </div>
+    <div class="supl-card">
+      <div class="supl-name">Melatonina (liberación ext.)</div>
+      <div class="supl-dose">0.5–1mg · 30 min antes dormir</div>
+      <div class="supl-why">Dosis fisiológica (no farmacológica). Regulación circadiana, antioxidante mitocondrial, neuroprotección. Crítica en ejecutivos con disrupciones de viaje.</div>
+      <span class="supl-evidence ev-a">Evidencia A</span>
+    </div>
+    <div class="supl-card">
+      <div class="supl-name">Ashwagandha KSM-66</div>
+      <div class="supl-dose">600mg · PM</div>
+      <div class="supl-why">Adaptógeno con evidencia clínica: reduce cortisol, mejora HRV, testosterona, calidad de sueño. Particularmente relevante en estrés ejecutivo crónico LATAM.</div>
+      <span class="supl-evidence ev-b">Evidencia B · LATAM+</span>
+    </div>
+  </div>
+
+  <div class="callout">
+    <strong>Nota de prescripción:</strong> El stack base se personaliza en la sesión de devolución del mes 1 según genómica (MTHFR, APOE, NAT2), microbioma y biomarcadores individuales. No todos los pacientes reciben todos los suplementos — la personalización es el diferenciador clínico.
+  </div>
+</div>
+</div>
+
+<!-- ════ 04 · OPERACIONES ════ -->
+<div id="operaciones" class="section">
+<div class="wrap">
+  <div class="sh">
+    <div class="sh-kicker">04 · Modelo Operacional</div>
+    <h2>La <em>arquitectura</em> que convierte diagnóstico en resultado</h2>
+    <p class="sh-desc">El gap de Instituto Vita no es diagnóstico — es seguimiento. La arquitectura operacional de Koru replica la densidad de Attia a un costo sostenible para LATAM.</p>
+  </div>
+
+  <div class="ops-grid">
+    <div class="ops-card">
+      <div class="ops-card-title">Métricas operacionales objetivo</div>
+      <div class="ops-row"><span class="ops-label">Pacientes por médico</span><span class="ops-val">40–50</span></div>
+      <div class="ops-row"><span class="ops-label">Touchpoints por mes</span><span class="ops-val">9–11</span></div>
+      <div class="ops-row"><span class="ops-label">Horas médico por paciente/mes</span><span class="ops-val">6–8 h</span></div>
+      <div class="ops-row"><span class="ops-label">Horas equipo total/mes</span><span class="ops-val">22–28 h</span></div>
+      <div class="ops-row"><span class="ops-label">Tiempo respuesta alertas</span><span class="ops-val">&lt; 4 horas</span></div>
+      <div class="ops-row"><span class="ops-label">Adherencia objetivo mes 1</span><span class="ops-val">&gt; 80%</span></div>
+    </div>
+    <div class="ops-card">
+      <div class="ops-card-title">Tecnología operacional</div>
+      <div class="ops-row"><span class="ops-label">EMR + Dashboard integrado</span><span class="ops-val">Propio / Elation</span></div>
+      <div class="ops-row"><span class="ops-label">CGM integración API</span><span class="ops-val">Freestyle / Dexcom</span></div>
+      <div class="ops-row"><span class="ops-label">Wearable principal</span><span class="ops-val">Oura Ring Gen 3</span></div>
+      <div class="ops-row"><span class="ops-label">Sistema de alertas</span><span class="ops-val">Automatizado</span></div>
+      <div class="ops-row"><span class="ops-label">Reporte mensual</span><span class="ops-val">70% automatizado</span></div>
+      <div class="ops-row"><span class="ops-label">Telemedicina</span><span class="ops-val">Plataforma cifrada</span></div>
+    </div>
+  </div>
+
+  <!-- TOUCHPOINTS -->
+  <div class="bio-section-title">Touchpoints Mensuales — Estructura</div>
+  <div class="touchpoint-list">
+    <div class="tp">
+      <div class="tp-freq">Semana 1 · Día 1</div>
+      <div class="tp-dur">180 min</div>
+      <div class="tp-desc"><strong>Intake Day:</strong> Laboratorio completo + historia clínica profunda + instalación CGM/Oura</div>
+      <div class="tp-who">Medicina Precisión + Data Analyst</div>
+    </div>
+    <div class="tp">
+      <div class="tp-freq">Semana 1 · Día 5</div>
+      <div class="tp-dur">120 min</div>
+      <div class="tp-desc"><strong>Devolución:</strong> Resultados + Plan 6 meses + Dashboard IVI + Team Huddle de los 7 roles</div>
+      <div class="tp-who">Equipo completo</div>
+    </div>
+    <div class="tp">
+      <div class="tp-freq">Semana 2 · Día 10</div>
+      <div class="tp-dur">20 min</div>
+      <div class="tp-desc"><strong>Telemedicina CGM:</strong> Revisión datos continuos + primer ajuste nutricional/farmacológico</div>
+      <div class="tp-who">Medicina Precisión</div>
+    </div>
+    <div class="tp">
+      <div class="tp-freq">Semanal × 4</div>
+      <div class="tp-dur">30 min</div>
+      <div class="tp-desc"><strong>Check-in conductual:</strong> Adherencia, barreras, estrés ejecutivo, ajuste de anclas mínimas</div>
+      <div class="tp-who">Performance Coach</div>
+    </div>
+    <div class="tp">
+      <div class="tp-freq">Semana 2</div>
+      <div class="tp-dur">60 min</div>
+      <div class="tp-desc"><strong>Evaluación física y movimiento:</strong> Calibración zona 2, prescripción de fuerza, evaluación kinesiológica inicial</div>
+      <div class="tp-who">Preparador Físico + Kinesióloga</div>
+    </div>
+    <div class="tp">
+      <div class="tp-freq">Semana 2</div>
+      <div class="tp-dur">45 min</div>
+      <div class="tp-desc"><strong>Sesión psicológica inicial:</strong> Evaluación de estrés crónico, regulación SNA, patrones cognitivos y mapa emocional</div>
+      <div class="tp-who">Psicóloga</div>
+    </div>
+    <div class="tp">
+      <div class="tp-freq">Semana 3</div>
+      <div class="tp-dur">45 min</div>
+      <div class="tp-desc"><strong>Sesión de propósito y sentido:</strong> Exploración de valores, coherencia vida-trabajo, dimensión espiritual del IVI</div>
+      <div class="tp-who">Guía Espiritual</div>
+    </div>
+    <div class="tp">
+      <div class="tp-freq">Semana 4 · Día 26</div>
+      <div class="tp-dur">—</div>
+      <div class="tp-desc"><strong>Laboratorio de seguimiento:</strong> 12–15 marcadores. Resultados automáticos al dashboard en 48h</div>
+      <div class="tp-who">Data Analyst</div>
+    </div>
+    <div class="tp">
+      <div class="tp-freq">Semana 4 · Día 28</div>
+      <div class="tp-dur">60 min</div>
+      <div class="tp-desc"><strong>Consulta médica mensual:</strong> Revisión integral de todos los dominios + ajuste de protocolo</div>
+      <div class="tp-who">Medicina Precisión</div>
+    </div>
+    <div class="tp">
+      <div class="tp-freq">Semana 4 · Día 30</div>
+      <div class="tp-dur">—</div>
+      <div class="tp-desc"><strong>Reporte IVI mensual:</strong> 12 páginas con score 5 dimensiones, tendencias, proyección mes siguiente</div>
+      <div class="tp-who">Data Analyst</div>
+    </div>
+  </div>
+
+  <div class="callout">
+    <strong>Sistema de alertas automáticas:</strong> CGM &gt;180 mg/dL sostenido · HRV &lt;35ms por 3 noches · Sueño &lt;5.5h por 3 noches consecutivas → notificación al médico en &lt;4 horas → telemedicina reactiva sin costo adicional. Este sistema es el diferenciador operacional número uno versus cualquier competidor latinoamericano.
+  </div>
+</div>
+</div>
+
+<!-- ════ 05 · ECONOMÍA ════ -->
+<div id="economia" class="section">
+<div class="wrap">
+  <div class="sh">
+    <div class="sh-kicker">05 · Modelo Económico</div>
+    <h2>Precio LATAM, <em>valor</em> internacional</h2>
+    <p class="sh-desc">La estructura de precios de Koru es 60–70% inferior a Attia y comparable o superior en calidad. El modelo mixto B2C/B2B permite escalabilidad y ticket promedio elevado.</p>
+  </div>
+
+  <!-- PLANES -->
+  <div class="bio-section-title">Planes de Membresía</div>
+  <div class="eco-grid">
+    <div class="eco-card">
+      <div class="eco-title">Plan Koru Core</div>
+      <div class="eco-num" style="color:var(--teal)">$4,800</div>
+      <div class="eco-sub" style="margin-bottom:20px">USD / 6 meses · $800/mes</div>
+      <div class="eco-row"><span class="eco-rl">Diagnóstico inicial</span><span class="eco-rv">Completo</span></div>
+      <div class="eco-row"><span class="eco-rl">Consultas médicas</span><span class="eco-rv">6 en 6 meses</span></div>
+      <div class="eco-row"><span class="eco-rl">CGM</span><span class="eco-rv">Trimestral 14d</span></div>
+      <div class="eco-row"><span class="eco-rl">Performance Coach</span><span class="eco-rv">Mensual</span></div>
+      <div class="eco-row"><span class="eco-rl">Renovación trimestral</span><span class="eco-rv">$2,100 / trimestre</span></div>
+    </div>
+    <div class="eco-card" style="border-top:3px solid var(--gold)">
+      <div class="eco-title">Plan Koru Elite ◆</div>
+      <div class="eco-num" style="color:var(--gold)">$8,400</div>
+      <div class="eco-sub" style="margin-bottom:20px">USD / 6 meses · $1,400/mes</div>
+      <div class="eco-row"><span class="eco-rl">Diagnóstico + genómica</span><span class="eco-rv">Completo + ADN</span></div>
+      <div class="eco-row"><span class="eco-rl">Consultas médicas</span><span class="eco-rv">Ilimitadas</span></div>
+      <div class="eco-row"><span class="eco-rl">CGM continuo</span><span class="eco-rv">Todo el programa</span></div>
+      <div class="eco-row"><span class="eco-rl">Equipo 7 roles</span><span class="eco-rv">Acceso completo</span></div>
+      <div class="eco-row"><span class="eco-rl">Renovación trimestral</span><span class="eco-rv">$3,600 / trimestre</span></div>
+    </div>
+    <div class="eco-card">
+      <div class="eco-title">Plan Koru Corporate</div>
+      <div class="eco-num" style="color:var(--violet)">$5,400</div>
+      <div class="eco-sub" style="margin-bottom:20px">USD / ejecutivo / 6 meses (mín. 5)</div>
+      <div class="eco-row"><span class="eco-rl">Diagnóstico grupal</span><span class="eco-rv">Completo</span></div>
+      <div class="eco-row"><span class="eco-rl">Reporting de ROI</span><span class="eco-rv">Trimestral</span></div>
+      <div class="eco-row"><span class="eco-rl">Integración RRHH</span><span class="eco-rv">Incluida</span></div>
+      <div class="eco-row"><span class="eco-rl">Dashboard empresa</span><span class="eco-rv">Anonimizado</span></div>
+      <div class="eco-row"><span class="eco-rl">Renovación trimestral</span><span class="eco-rv">$2,400 / ejecutivo</span></div>
+    </div>
+  </div>
+
+  <!-- UNIT ECONOMICS -->
+  <div class="bio-section-title" style="margin-top:40px">Unit Economics — Por Paciente</div>
+  <div class="eco-grid">
+    <div class="eco-card">
+      <div class="eco-title">Revenue 12 Meses / Paciente Elite</div>
+      <div class="eco-row"><span class="eco-rl">Programa base 6 meses</span><span class="eco-rv">$8,400</span></div>
+      <div class="eco-row"><span class="eco-rl">Renovación trimestral ×2</span><span class="eco-rv">$7,200</span></div>
+      <div class="eco-row"><span class="eco-rl">Lab adicional (pass-through)</span><span class="eco-rv">$1,200</span></div>
+      <div class="eco-row"><span class="eco-rl">Suplementos (margen 35%)</span><span class="eco-rv">$840</span></div>
+      <div style="margin-top:14px;padding-top:14px;border-top:1px solid var(--border);display:flex;justify-content:space-between">
+        <span style="font-family:'Overpass Mono';font-size:9px;letter-spacing:2px;color:var(--muted);text-transform:uppercase">ACV 12 meses</span>
+        <span style="font-size:1.8rem;font-weight:700;color:var(--gold)">$17,640</span>
+      </div>
+    </div>
+    <div class="eco-card">
+      <div class="eco-title">Horas equipo · Mes 1</div>
+      <div class="eco-row"><span class="eco-rl">Medicina de Precisión</span><span class="eco-rv">9.0 h</span></div>
+      <div class="eco-row"><span class="eco-rl">Preparador Físico</span><span class="eco-rv">3.0 h</span></div>
+      <div class="eco-row"><span class="eco-rl">Psicóloga</span><span class="eco-rv">2.5 h</span></div>
+      <div class="eco-row"><span class="eco-rl">Kinesióloga</span><span class="eco-rv">2.0 h</span></div>
+      <div class="eco-row"><span class="eco-rl">Performance Coach</span><span class="eco-rv">3.5 h</span></div>
+      <div class="eco-row"><span class="eco-rl">Guía Espiritual</span><span class="eco-rv">1.5 h</span></div>
+      <div class="eco-row"><span class="eco-rl">Data Analyst</span><span class="eco-rv">5.0 h</span></div>
+      <div style="margin-top:14px;padding-top:14px;border-top:1px solid var(--border);display:flex;justify-content:space-between">
+        <span style="font-family:'Overpass Mono';font-size:9px;letter-spacing:2px;color:var(--muted);text-transform:uppercase">Total horas</span>
+        <span style="font-size:1.8rem;font-weight:700;color:var(--teal)">26.5 h</span>
+      </div>
+    </div>
+    <div class="eco-card">
+      <div class="eco-title">Proyección 40 Pacientes Elite</div>
+      <div class="eco-row"><span class="eco-rl">Revenue base 6M (40 pac)</span><span class="eco-rv">$336,000</span></div>
+      <div class="eco-row"><span class="eco-rl">Renovaciones trimestrales ×2</span><span class="eco-rv">$288,000</span></div>
+      <div class="eco-row"><span class="eco-rl">Revenue total 12 meses</span><span class="eco-rv">$705,600</span></div>
+      <div class="eco-row"><span class="eco-rl">LTV estimado (3 años)</span><span class="eco-rv">$52,920</span></div>
+      <div style="margin-top:14px;padding-top:14px;border-top:1px solid var(--border);display:flex;justify-content:space-between">
+        <span style="font-family:'Overpass Mono';font-size:9px;letter-spacing:2px;color:var(--muted);text-transform:uppercase">EBITDA est.</span>
+        <span style="font-size:1.8rem;font-weight:700;color:var(--violet)">$254K</span>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ════ 06 · EQUIPO ════ -->
+<div id="equipo" class="section">
+<div class="wrap">
+  <div class="sh">
+    <div class="sh-kicker">06 · Equipo Interdisciplinario</div>
+    <h2>7 roles, <em>un protocolo</em></h2>
+    <p class="sh-desc">El equipo Koru va más allá del modelo clínico convencional. Integra medicina de precisión con rendimiento físico, salud mental, movimiento, coaching, espiritualidad y datos — todas las dimensiones del IVI cubiertas por un especialista.</p>
+  </div>
+
+  <div class="team-grid">
+    <div class="team-card">
+      <div class="team-role">Rol 01 · Lead Clínico</div>
+      <div class="team-name">Medicina de Precisión</div>
+      <div class="team-desc">Director clínico del protocolo. Responsable del diagnóstico molecular, prescripción farmacológica y ajuste de intervenciones. Interpreta genómica, epigenética y biomarcadores avanzados para personalizar cada protocolo.</div>
+      <div class="team-skills">
+        <span class="tskill">Medicina Interna / Familiar</span>
+        <span class="tskill">Genómica clínica</span>
+        <span class="tskill">Biomarcadores avanzados</span>
+        <span class="tskill">Farmacología longevidad</span>
+        <span class="tskill">Medicina Funcional</span>
+      </div>
+      <div class="team-cred">DipACLM + IFM-C requerido · A4M ABAARM en proceso</div>
+    </div>
+    <div class="team-card">
+      <div class="team-role">Rol 02 · Dimensión Física</div>
+      <div class="team-name">Preparador Físico</div>
+      <div class="team-desc">Prescribe y supervisa el protocolo de movimiento con base en datos objetivos: VO₂ max, HRV, DEXA y composición corporal. Especialista en zona 2 calibrada, fuerza progresiva y periodización para la longevidad.</div>
+      <div class="team-skills">
+        <span class="tskill">Ciencias del Ejercicio</span>
+        <span class="tskill">Zona 2 calibrada</span>
+        <span class="tskill">Fuerza y potencia</span>
+        <span class="tskill">Periodización longevidad</span>
+        <span class="tskill">Wearables e interpretación HRV</span>
+      </div>
+      <div class="team-cred">NSCA-CSCS o equivalente · Formación en protocolo Attia · Koru Cert.</div>
+    </div>
+    <div class="team-card">
+      <div class="team-role">Rol 03 · Dimensión Mental</div>
+      <div class="team-name">Psicóloga</div>
+      <div class="team-desc">Trabaja el eje mental y emocional del IVI. Manejo de estrés crónico, regulación del sistema nervioso autónomo, patrones cognitivos limitantes y resiliencia ejecutiva. Puente entre la biología del estrés y el comportamiento.</div>
+      <div class="team-skills">
+        <span class="tskill">Psicología clínica</span>
+        <span class="tskill">Neuropsicología ejecutiva</span>
+        <span class="tskill">Regulación SNA</span>
+        <span class="tskill">Terapia cognitivo-conductual</span>
+        <span class="tskill">Mindfulness basado en evidencia</span>
+      </div>
+      <div class="team-cred">Título en Psicología clínica · Formación en neurociencia aplicada</div>
+    </div>
+    <div class="team-card">
+      <div class="team-role">Rol 04 · Dimensión Física</div>
+      <div class="team-name">Kinesióloga</div>
+      <div class="team-desc">Evaluación y rehabilitación del movimiento funcional. Identifica patrones disfuncionales, dolor crónico estructural y restricciones de movilidad que limitan el rendimiento. Trabaja en coordinación con el preparador físico.</div>
+      <div class="team-skills">
+        <span class="tskill">Kinesiología clínica</span>
+        <span class="tskill">Evaluación FMS / DNS</span>
+        <span class="tskill">Rehabilitación funcional</span>
+        <span class="tskill">Dolor crónico musculo-esquelético</span>
+        <span class="tskill">Movilidad y control motor</span>
+      </div>
+      <div class="team-cred">Título en Kinesiología · Formación DNS o FMS certificada</div>
+    </div>
+    <div class="team-card">
+      <div class="team-role">Rol 05 · Dimensión Conductual</div>
+      <div class="team-name">Performance Coach</div>
+      <div class="team-desc">Gestiona la adherencia conductual y la traducción del protocolo en hábitos ejecutivos sostenibles. Primer nivel de intervención en semanas de alta carga. Define "anclas mínimas" y trabaja identidad, propósito y diseño de entorno.</div>
+      <div class="team-skills">
+        <span class="tskill">Coaching ejecutivo certificado</span>
+        <span class="tskill">Diseño de hábitos</span>
+        <span class="tskill">Gestión de energía ejecutiva</span>
+        <span class="tskill">Comunicación de alto impacto</span>
+        <span class="tskill">Adherencia al protocolo</span>
+      </div>
+      <div class="team-cred">ICF-PCC o equivalente · Formación interna Koru Protocol</div>
+    </div>
+    <div class="team-card">
+      <div class="team-role">Rol 06 · Dimensión Espiritual</div>
+      <div class="team-name">Guía Espiritual</div>
+      <div class="team-desc">El rol exclusivo de Koru que ningún protocolo occidental incluye. Acompaña la dimensión de propósito, sentido de vida, valores y trascendencia. No es religioso — es la conexión entre quién eres y cómo vives. Clave en la métrica espiritual del IVI.</div>
+      <div class="team-skills">
+        <span class="tskill">Filosofía aplicada / Ética de vida</span>
+        <span class="tskill">Prácticas contemplativas</span>
+        <span class="tskill">Coherencia valores-acción</span>
+        <span class="tskill">Acompañamiento en crisis de sentido</span>
+        <span class="tskill">Tradiciones sapienciales</span>
+      </div>
+      <div class="team-cred">Formación en filosofía, espiritualidad laica o tradiciones contemplativas · Koru Cert.</div>
+    </div>
+    <div class="team-card">
+      <div class="team-role">Rol 07 · Infraestructura</div>
+      <div class="team-name">Data Analyst</div>
+      <div class="team-desc">Opera el dashboard IVI, genera reportes mensuales, monitorea alertas automáticas y coordina la logística de laboratorios. Integra datos de wearables, CGM y biomarcadores en una narrativa comprensible para el paciente y el equipo.</div>
+      <div class="team-skills">
+        <span class="tskill">Análisis de datos clínicos</span>
+        <span class="tskill">EMR y dashboards</span>
+        <span class="tskill">Interpretación CGM y wearables</span>
+        <span class="tskill">Automatización de reportes</span>
+        <span class="tskill">Coordinación de laboratorios</span>
+      </div>
+      <div class="team-cred">Background en salud digital, ingeniería o enfermería · Formación interna Koru</div>
+    </div>
+  </div>
+
+  <div class="callout">
+    <strong>Principio de reclutamiento:</strong> Cada rol cubre una de las cinco dimensiones del IVI. El equipo completo garantiza que ninguna dimensión queda sin especialista. El Guía Espiritual es el rol más diferenciador y el más difícil de encontrar — buscar en intersección de psicología transpersonal, filosofía y práctica contemplativa con experiencia ejecutiva.
+  </div>
+</div>
+</div>
+
+<!-- ════ 07 · CREDENCIAL ════ -->
+<div id="credencial" class="section">
+<div class="wrap">
+  <div class="sh">
+    <div class="sh-kicker">07 · Ruta de Credencialización</div>
+    <h2>Credibilidad <em>internacional</em>, práctica local</h2>
+    <p class="sh-desc">Cada rol del equipo Koru tiene su ruta de credencialización recomendada. Para el médico de precisión, la ruta combina la mejor certificación internacional disponible con el protocolo operacional propio. Para los demás roles, se definen certificaciones específicas por disciplina.</p>
+  </div>
+
+  <div class="cred-path">
+    <div class="cred-step">
+      <div class="cred-step-num">01</div>
+      <div class="cred-step-title">IFM AFMCP</div>
+      <div class="cred-step-body">Applying Functional Medicine in Clinical Practice. 5 días presenciales + aprendizaje online. Entrega el framework GOTOIT y el protocolo 5R. Base clínica del protocolo Koru.</div>
+      <span class="cred-badge">Prioridad 1 · $4,500 USD</span>
+    </div>
+    <div class="cred-step">
+      <div class="cred-step-num">02</div>
+      <div class="cred-step-title">DipACLM</div>
+      <div class="cred-step-body">Diploma del American College of Lifestyle Medicine. Reconocimiento internacional, requisitos alcanzables, creciente reconocimiento en LATAM. Cubre los 6 pilares fundamentales.</div>
+      <span class="cred-badge">Prioridad 1 · $1,200 USD</span>
+    </div>
+    <div class="cred-step">
+      <div class="cred-step-num">03</div>
+      <div class="cred-step-title">A4M / ABAARM</div>
+      <div class="cred-step-body">American Academy of Anti-Aging Medicine. Fellowship en medicina anti-envejecimiento y regenerativa. Cubre hormonal, epigenética aplicada y longevidad avanzada.</div>
+      <span class="cred-badge">Prioridad 2 · $6,000 USD</span>
+    </div>
+    <div class="cred-step">
+      <div class="cred-step-num">04</div>
+      <div class="cred-step-title">Koru Protocol Certification</div>
+      <div class="cred-step-body">Certificación interna propietaria. 80 horas de formación en el protocolo Koru completo: IVI, dashboard, manejo de wearables, comunicación ejecutiva, protocolo de alertas.</div>
+      <span class="cred-badge">Propio · En desarrollo</span>
+    </div>
+  </div>
+
+  <div class="two-col">
+    <div>
+      <div class="bio-section-title">Comparativo de credenciales</div>
+      <table class="diff-table">
+        <thead><tr><th>Credencial</th><th>Acceso LATAM</th><th>Reconocimiento</th><th>Costo</th><th>Tiempo</th></tr></thead>
+        <tbody>
+          <tr><td>DipACLM</td><td><span class="check">✓</span></td><td>Internacional</td><td>$1,200</td><td>6–12 meses</td></tr>
+          <tr><td>IFM-C (AFMCP)</td><td><span class="check">✓</span></td><td>Internacional</td><td>$4,500</td><td>12–18 meses</td></tr>
+          <tr><td>A4M Fellowship</td><td><span class="check">✓</span></td><td>Internacional</td><td>$6,000</td><td>18–24 meses</td></tr>
+          <tr><td>U. Andes Chile</td><td><span class="check">✓</span></td><td>Regional</td><td>$3,000</td><td>12 meses</td></tr>
+          <tr><td>Koru Protocol Cert.</td><td><span class="koru-yes">◆</span></td><td>Propio · Diferenciador</td><td>—</td><td>3 meses</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div>
+      <div class="bio-section-title">Ruta recomendada por rol</div>
+      <div class="fase" style="margin-bottom:8px">
+        <div class="fase-left" style="padding:16px 18px">
+          <div class="fase-num">Medicina Precisión</div>
+        </div>
+        <div class="fase-right" style="padding:16px 20px">
+          <div class="fi" style="border:none;padding:3px 0">Año 1: DipACLM + IFM AFMCP</div>
+          <div class="fi" style="border:none;padding:3px 0">Año 2: A4M Fellowship · ABAARM</div>
+          <div class="fi" style="border:none;padding:3px 0;color:var(--gold)">Paralelo: Koru Protocol Cert.</div>
+        </div>
+      </div>
+      <div class="fase" style="margin-bottom:8px">
+        <div class="fase-left" style="padding:16px 18px">
+          <div class="fase-num">Preparador Físico</div>
+        </div>
+        <div class="fase-right" style="padding:16px 20px">
+          <div class="fi" style="border:none;padding:3px 0">NSCA-CSCS o ACSM-CPT</div>
+          <div class="fi" style="border:none;padding:3px 0;color:var(--gold)">Koru Protocol Cert. + formación Attia</div>
+        </div>
+      </div>
+      <div class="fase" style="margin-bottom:8px">
+        <div class="fase-left" style="padding:16px 18px">
+          <div class="fase-num">Psicóloga</div>
+        </div>
+        <div class="fase-right" style="padding:16px 20px">
+          <div class="fi" style="border:none;padding:3px 0">Título en Psicología clínica</div>
+          <div class="fi" style="border:none;padding:3px 0;color:var(--gold)">Formación en neurociencia aplicada + Koru Cert.</div>
+        </div>
+      </div>
+      <div class="fase" style="margin-bottom:8px">
+        <div class="fase-left" style="padding:16px 18px">
+          <div class="fase-num">Kinesióloga</div>
+        </div>
+        <div class="fase-right" style="padding:16px 20px">
+          <div class="fi" style="border:none;padding:3px 0">Título en Kinesiología · DNS o FMS cert.</div>
+          <div class="fi" style="border:none;padding:3px 0;color:var(--gold)">Koru Protocol Cert.</div>
+        </div>
+      </div>
+      <div class="fase" style="margin-bottom:8px">
+        <div class="fase-left" style="padding:16px 18px">
+          <div class="fase-num">Performance Coach</div>
+        </div>
+        <div class="fase-right" style="padding:16px 20px">
+          <div class="fi" style="border:none;padding:3px 0">ICF-PCC o equivalente</div>
+          <div class="fi" style="border:none;padding:3px 0;color:var(--gold)">Formación interna Koru Protocol</div>
+        </div>
+      </div>
+      <div class="fase" style="margin-bottom:8px">
+        <div class="fase-left" style="padding:16px 18px">
+          <div class="fase-num">Guía Espiritual</div>
+        </div>
+        <div class="fase-right" style="padding:16px 20px">
+          <div class="fi" style="border:none;padding:3px 0">Filosofía, espiritualidad laica o tradición contemplativa</div>
+          <div class="fi" style="border:none;padding:3px 0;color:var(--gold)">Koru Spiritual Guide Cert. (en desarrollo)</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ════ 08 · PITCH ════ -->
+<div id="pitch" class="section">
+<div class="wrap">
+  <div class="sh">
+    <div class="sh-kicker">08 · Pitch Corporativo</div>
+    <h2>Para el <em>C-Suite</em> y el área de beneficios</h2>
+    <p class="sh-desc">Argumentos, datos y framing para presentar Koru Elite Performance como inversión empresarial, no como gasto de salud.</p>
+  </div>
+
+  <div class="pitch-hero">
+    <div class="pitch-copy">
+      <h3>El ejecutivo sano <em>vale más</em> que el ejecutivo brillante</h3>
+      <p>El 68% de los CEO de Fortune 500 reportan niveles de estrés que comprometen la toma de decisiones. El costo de reemplazar un C-suite ejecutivo es 2× su salario anual. Koru Elite Performance no es un beneficio de bienestar — es una inversión en el activo más crítico de su empresa.</p>
+    </div>
+    <div class="pitch-stats-grid">
+      <div class="pitch-stat"><div class="pitch-stat-num">68%</div><div class="pitch-stat-label">CEOs con estrés que afecta decisiones</div></div>
+      <div class="pitch-stat"><div class="pitch-stat-num">2×</div><div class="pitch-stat-label">Costo de reemplazar un C-suite</div></div>
+      <div class="pitch-stat"><div class="pitch-stat-num">23%</div><div class="pitch-stat-label">Mejora en productividad cognitiva (mes 3)</div></div>
+      <div class="pitch-stat"><div class="pitch-stat-num">$8.4K</div><div class="pitch-stat-label">vs $500K de reemplazo ejecutivo</div></div>
+    </div>
+  </div>
+
+  <!-- DIFERENCIACIÓN vs COMPETIDORES -->
+  <div class="bio-section-title">Koru vs. Alternativas disponibles en LATAM</div>
+  <table class="diff-table">
+    <thead>
+      <tr>
+        <th>Capacidad</th>
+        <th>Wellness Corp. LATAM</th>
+        <th>Instituto Vita</th>
+        <th>Médico funcional independiente</th>
+        <th style="color:var(--gold-b)">Koru Elite ◆</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td>Diagnóstico molecular profundo</td><td><span class="cross">—</span></td><td><span class="check">✓</span></td><td><span class="cross">—</span></td><td><span class="koru-yes">◆</span></td></tr>
+      <tr><td>CGM + HRV continuo</td><td><span class="cross">—</span></td><td><span class="cross">—</span></td><td><span class="cross">—</span></td><td><span class="koru-yes">◆</span></td></tr>
+      <tr><td>Equipo multidisciplinario 7 roles</td><td><span class="cross">—</span></td><td><span class="cross">—</span></td><td><span class="cross">—</span></td><td><span class="koru-yes">◆</span></td></tr>
+      <tr><td>7+ touchpoints mensuales</td><td><span class="cross">—</span></td><td><span class="cross">—</span></td><td><span class="cross">—</span></td><td><span class="koru-yes">◆</span></td></tr>
+      <tr><td>Score de outcome medible (IVI)</td><td><span class="cross">—</span></td><td><span class="cross">—</span></td><td><span class="cross">—</span></td><td><span class="koru-yes">◆</span></td></tr>
+      <tr><td>Modelo B2B corporativo</td><td><span class="check">✓</span></td><td><span class="cross">—</span></td><td><span class="cross">—</span></td><td><span class="koru-yes">◆</span></td></tr>
+      <tr><td>Reporte de ROI para RRHH</td><td><span class="check">✓</span></td><td><span class="cross">—</span></td><td><span class="cross">—</span></td><td><span class="koru-yes">◆</span></td></tr>
+      <tr><td>Dimensión espiritual / propósito</td><td><span class="cross">—</span></td><td><span class="cross">—</span></td><td><span class="cross">—</span></td><td><span class="koru-yes">◆</span></td></tr>
+      <tr><td>Credencialización internacional</td><td><span class="cross">—</span></td><td><span class="cross">—</span></td><td>Parcial</td><td><span class="koru-yes">◆</span></td></tr>
+    </tbody>
+  </table>
+
+  <div class="callout" style="margin-top:40px">
+    <strong>Cierre de pitch recomendado:</strong> "La pregunta no es si su empresa puede permitirse invertir en la salud de sus ejecutivos. La pregunta es si puede permitirse no hacerlo. Un CEO que llega al directorio con HRV en 35ms y glucosa en 180 después del almuerzo no está tomando las mismas decisiones que uno que llega con HRV en 65ms, glucosa estable y 8 horas de sueño reparador. Koru mide esa diferencia y la mejora sistemáticamente."
+  </div>
+</div>
+</div>
+
+<script>
+const sections = ['sintesis','fases','clinico','operaciones','economia','equipo','credencial','pitch'];
+
+function goTo(id, btn) {
+  document.getElementById('cover-page').style.display = 'none';
+  sections.forEach(s => {
+    const el = document.getElementById(s);
+    if(el) el.classList.remove('on');
+  });
+  const target = document.getElementById(id);
+  if(target) {
+    target.classList.add('on');
+    window.scrollTo({top:0,behavior:'instant'});
+  }
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('on'));
+  if(btn) { btn.classList.add('on'); }
+  else {
+    const btns = document.querySelectorAll('.nav-btn');
+    btns.forEach(b => { if(b.textContent.toLowerCase().includes(id.substring(0,4))) b.classList.add('on'); });
+  }
+}
+
+// Keyboard nav
+document.addEventListener('keydown', e => {
+  const cur = sections.findIndex(s => document.getElementById(s)?.classList.contains('on'));
+  if(e.key === 'ArrowRight' && cur < sections.length-1) goTo(sections[cur+1]);
+  if(e.key === 'ArrowLeft' && cur > 0) goTo(sections[cur-1]);
+});
+</script>
+</body>
+</html>
