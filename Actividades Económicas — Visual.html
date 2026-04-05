@@ -1,0 +1,1316 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Actividades Económicas — Eco-Aldea Regenerativa</title>
+<style>
+  :root {
+    --verde-oscuro: #1B4332;
+    --verde-med:    #2D6A4F;
+    --sage:         #52B788;
+    --sage-light:   #D8F3DC;
+    --terra:        #C4622D;
+    --terra-light:  #FAE5D3;
+    --arena:        #F8F4E9;
+    --cream:        #FDFAF4;
+    --negro:        #1A1A1A;
+    --gris:         #4A4A4A;
+    --gris-claro:   #F0EDE5;
+    --border:       #D1C9B8;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Segoe UI', system-ui, sans-serif; background: var(--cream); color: var(--negro); }
+
+  /* ── HERO ───────────────────────────────────────── */
+  .hero {
+    background: var(--verde-oscuro);
+    padding: 72px 48px 56px;
+    position: relative; overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute; top: -80px; right: -80px;
+    width: 380px; height: 380px; border-radius: 50%;
+    background: var(--verde-med); opacity: 0.5;
+  }
+  .hero::after {
+    content: '';
+    position: absolute; bottom: -60px; right: 120px;
+    width: 220px; height: 220px; border-radius: 50%;
+    background: var(--verde-med); opacity: 0.35;
+  }
+  .hero-inner { max-width: 960px; margin: 0 auto; position: relative; z-index: 1; }
+  .hero-badge {
+    display: inline-block;
+    font-size: 11px; font-weight: 700; letter-spacing: 3px;
+    color: var(--sage); text-transform: uppercase; margin-bottom: 16px;
+  }
+  .hero h1 {
+    font-family: Georgia, serif; font-size: 52px; font-weight: 700;
+    color: #fff; line-height: 1.1; margin-bottom: 16px;
+  }
+  .hero h1 span { color: var(--sage); }
+  .hero p { font-size: 17px; color: #95D5B2; max-width: 580px; line-height: 1.6; }
+  .hero-stats {
+    display: flex; gap: 40px; margin-top: 40px;
+    border-top: 1px solid rgba(255,255,255,0.12); padding-top: 32px;
+  }
+  .hero-stat .num { font-family: Georgia, serif; font-size: 38px; font-weight: 700; color: #fff; }
+  .hero-stat .lbl { font-size: 13px; color: var(--sage); margin-top: 2px; }
+
+  /* ── LATAM ──────────────────────────────────────── */
+  .section { max-width: 1080px; margin: 0 auto; padding: 60px 24px; }
+  .section-title {
+    font-family: Georgia, serif; font-size: 30px; font-weight: 700;
+    color: var(--verde-oscuro); margin-bottom: 6px;
+  }
+  .section-sub { font-size: 15px; color: var(--gris); font-style: italic; margin-bottom: 32px; }
+
+  .latam-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px;
+  }
+  .latam-card {
+    background: #fff; border: 1px solid var(--border);
+    border-radius: 12px; padding: 24px;
+    border-top: 4px solid var(--sage);
+    transition: transform .2s, box-shadow .2s;
+  }
+  .latam-card:hover { transform: translateY(-4px); box-shadow: 0 12px 32px rgba(0,0,0,.08); }
+  .latam-card:nth-child(2) { border-top-color: var(--terra); }
+  .latam-card:nth-child(3) { border-top-color: #065A82; }
+  .latam-card:nth-child(4) { border-top-color: #6D2E46; }
+  .latam-card:nth-child(5) { border-top-color: var(--sage); }
+  .latam-card:nth-child(6) { border-top-color: var(--terra); }
+  .latam-name { font-family: Georgia, serif; font-size: 18px; font-weight: 700; color: var(--verde-oscuro); margin-bottom: 4px; }
+  .latam-loc { font-size: 12px; color: var(--gris); margin-bottom: 12px; }
+  .latam-desc { font-size: 13.5px; color: var(--gris); line-height: 1.6; margin-bottom: 12px; }
+  .latam-model {
+    display: inline-block; font-size: 11.5px; font-weight: 700;
+    background: var(--sage-light); color: var(--verde-oscuro);
+    padding: 4px 10px; border-radius: 20px;
+  }
+  .latam-meta { display: flex; gap: 12px; margin-bottom: 12px; }
+  .latam-chip {
+    font-size: 11px; background: var(--gris-claro);
+    color: var(--gris); padding: 3px 8px; border-radius: 4px;
+  }
+
+  /* ── FILTROS ─────────────────────────────────────── */
+  .filters-wrap { max-width: 1080px; margin: 0 auto; padding: 0 24px 24px; }
+  .filters { display: flex; gap: 8px; flex-wrap: wrap; }
+  .filter-btn {
+    padding: 8px 18px; border-radius: 24px; border: 1.5px solid var(--border);
+    background: #fff; color: var(--gris); font-size: 13px; cursor: pointer;
+    transition: all .15s; font-family: inherit;
+  }
+  .filter-btn:hover { border-color: var(--sage); color: var(--verde-oscuro); }
+  .filter-btn.active { background: var(--verde-oscuro); color: #fff; border-color: var(--verde-oscuro); }
+
+  /* ── GRID DE ACTIVIDADES ────────────────────────── */
+  .activities-grid {
+    max-width: 1080px; margin: 0 auto; padding: 0 24px 24px;
+    display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px;
+  }
+  .act-card {
+    background: #fff; border: 1px solid var(--border);
+    border-radius: 14px; overflow: hidden;
+    transition: transform .2s, box-shadow .2s;
+    cursor: pointer;
+  }
+  .act-card:hover { transform: translateY(-4px); box-shadow: 0 16px 40px rgba(0,0,0,.1); }
+  .act-card.hidden { display: none; }
+
+  .act-header {
+    background: var(--verde-oscuro); padding: 20px 24px;
+    display: flex; align-items: flex-start; gap: 16px;
+  }
+  .act-num {
+    font-family: Georgia, serif; font-size: 36px; font-weight: 700;
+    color: var(--sage); min-width: 52px; line-height: 1;
+  }
+  .act-header-text { flex: 1; }
+  .act-categoria {
+    font-size: 10px; font-weight: 700; letter-spacing: 2px;
+    color: #95D5B2; text-transform: uppercase; margin-bottom: 4px;
+  }
+  .act-nombre { font-family: Georgia, serif; font-size: 19px; font-weight: 700; color: #fff; line-height: 1.2; }
+  .act-desc-short { font-size: 12.5px; color: #B7E4C7; margin-top: 4px; font-style: italic; }
+
+  .act-metrics {
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    border-bottom: 1px solid var(--border);
+  }
+  .act-metric {
+    padding: 12px 16px; border-right: 1px solid var(--border);
+  }
+  .act-metric:last-child { border-right: none; }
+  .act-metric:nth-child(1) { background: var(--sage-light); }
+  .act-metric:nth-child(2) { background: var(--terra-light); }
+  .act-metric:nth-child(3) { background: #FFF9C4; }
+  .act-metric-label { font-size: 10px; color: #666; margin-bottom: 3px; }
+  .act-metric-value { font-size: 14px; font-weight: 700; color: var(--negro); }
+
+  .act-body { display: flex; }
+  .act-potencial {
+    flex: 0 0 38%; padding: 18px 18px; background: var(--arena);
+    border-right: 1px solid var(--border);
+  }
+  .act-plan { flex: 1; padding: 18px 20px; background: #FAFAF7; }
+  .act-section-title {
+    font-size: 10px; font-weight: 700; letter-spacing: 2px;
+    color: var(--verde-oscuro); text-transform: uppercase; margin-bottom: 10px;
+  }
+  .act-potencial-text { font-size: 12.5px; color: var(--gris); line-height: 1.65; }
+  .act-steps { list-style: none; }
+  .act-steps li {
+    font-size: 12.5px; color: var(--gris); line-height: 1.55;
+    padding: 5px 0; display: flex; gap: 8px; align-items: flex-start;
+    border-bottom: 1px solid #EBEBEB;
+  }
+  .act-steps li:last-child { border-bottom: none; }
+  .act-step-num {
+    font-size: 11px; font-weight: 700; color: var(--terra);
+    min-width: 16px; margin-top: 1px;
+  }
+
+  /* ── STRATEGY / TIMELINE ─────────────────────────── */
+  .strategy { background: #F2EFE8; padding: 72px 24px; }
+  .strategy-inner { max-width: 1080px; margin: 0 auto; }
+  .strategy-header { margin-bottom: 52px; }
+  .strategy-header h2 {
+    font-family: Georgia, serif; font-size: 34px; color: var(--verde-oscuro);
+    margin-bottom: 8px;
+  }
+  .strategy-header p { font-size: 15px; color: var(--gris); max-width: 640px; line-height: 1.6; }
+
+  /* Timeline vertical */
+  .timeline { position: relative; padding-left: 48px; }
+  .timeline::before {
+    content: ''; position: absolute; left: 16px; top: 0; bottom: 0;
+    width: 3px; background: linear-gradient(to bottom, var(--terra), var(--sage), var(--verde-med), var(--verde-oscuro), #0D2B1C);
+    border-radius: 2px;
+  }
+
+  /* Cada año */
+  .tl-year { position: relative; margin-bottom: 24px; }
+  .tl-dot {
+    position: absolute; left: -40px; top: 20px;
+    width: 30px; height: 30px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px; font-weight: 800; color: #fff;
+    border: 3px solid #F2EFE8; z-index: 1;
+  }
+
+  /* Acordeón */
+  .tl-card { background: #fff; border-radius: 14px; overflow: hidden; border: 1px solid var(--border); }
+  .tl-header {
+    display: flex; align-items: center; gap: 16px; padding: 20px 24px;
+    cursor: pointer; user-select: none;
+    transition: background .15s;
+  }
+  .tl-header:hover { background: #FAFAF6; }
+  .tl-header-left { flex: 1; display: flex; align-items: center; gap: 20px; }
+  .tl-label {
+    font-size: 11px; font-weight: 700; letter-spacing: 2px;
+    text-transform: uppercase; white-space: nowrap;
+  }
+  .tl-title { font-family: Georgia, serif; font-size: 20px; color: var(--verde-oscuro); }
+  .tl-subtitle { font-size: 13px; color: var(--gris); font-style: italic; margin-top: 2px; }
+  .tl-income-badge {
+    font-size: 13px; font-weight: 700; padding: 5px 14px;
+    border-radius: 20px; white-space: nowrap; margin-left: auto;
+  }
+  .tl-chevron {
+    font-size: 18px; color: var(--gris); transition: transform .25s; margin-left: 12px;
+  }
+  .tl-year.open .tl-chevron { transform: rotate(180deg); }
+
+  /* Body expandible */
+  .tl-body { display: none; border-top: 1px solid var(--border); }
+  .tl-year.open .tl-body { display: block; }
+
+  .tl-body-inner { display: grid; grid-template-columns: 1fr 1fr; }
+  .tl-col { padding: 24px 28px; }
+  .tl-col + .tl-col { border-left: 1px solid var(--border); background: #FAFAF7; }
+  .tl-col-title {
+    font-size: 10px; font-weight: 800; letter-spacing: 2px;
+    text-transform: uppercase; color: var(--verde-med);
+    margin-bottom: 14px; padding-bottom: 8px;
+    border-bottom: 2px solid var(--sage-light);
+  }
+
+  /* Items dentro del body */
+  .tl-items { list-style: none; }
+  .tl-item {
+    display: flex; gap: 10px; padding: 9px 0;
+    border-bottom: 1px solid #EFEFEF; align-items: flex-start;
+    font-size: 13.5px; color: var(--gris); line-height: 1.5;
+  }
+  .tl-item:last-child { border-bottom: none; }
+  .tl-item-icon { font-size: 15px; min-width: 22px; margin-top: 1px; }
+  .tl-item strong { color: var(--negro); display: block; font-size: 13.5px; }
+
+  /* Bloque de ingresos en el body */
+  .tl-income-row {
+    display: flex; gap: 12px; padding: 16px 28px;
+    background: var(--verde-oscuro); align-items: center; flex-wrap: wrap;
+  }
+  .tl-income-item { flex: 1; min-width: 140px; }
+  .tl-income-item .lbl { font-size: 10px; color: var(--sage); letter-spacing: 1px; text-transform: uppercase; margin-bottom: 3px; }
+  .tl-income-item .val { font-size: 20px; font-weight: 700; color: #fff; }
+  .tl-income-item .note { font-size: 11px; color: #95D5B2; margin-top: 2px; }
+
+  /* Año 0 especial */
+  .tl-year-0 .tl-dot { background: var(--terra); }
+  .tl-year-0 .tl-header { border-left: 5px solid var(--terra); }
+  .tl-year-0 .tl-label { color: var(--terra); }
+  .tl-year-0 .tl-col-title { color: var(--terra); border-bottom-color: var(--terra-light); }
+  .tl-year-0 .tl-income-row { background: #5C2E10; }
+
+  .tl-year-1 .tl-dot { background: #52856A; }
+  .tl-year-1 .tl-header { border-left: 5px solid #52856A; }
+  .tl-year-1 .tl-label { color: #52856A; }
+
+  .tl-year-2 .tl-dot { background: var(--sage); }
+  .tl-year-2 .tl-header { border-left: 5px solid var(--sage); }
+  .tl-year-2 .tl-label { color: #2D6A4F; }
+
+  .tl-year-3 .tl-dot { background: var(--verde-med); }
+  .tl-year-3 .tl-header { border-left: 5px solid var(--verde-med); }
+  .tl-year-3 .tl-label { color: var(--verde-med); }
+
+  .tl-year-45 .tl-dot { background: var(--verde-oscuro); }
+  .tl-year-45 .tl-header { border-left: 5px solid var(--verde-oscuro); }
+  .tl-year-45 .tl-label { color: var(--verde-oscuro); }
+
+  /* ── GLOBAL COMMUNITIES ─────────────────────────── */
+  .global-section { background: #0D2B1C; padding: 60px 24px; }
+  .global-inner { max-width: 1080px; margin: 0 auto; }
+  .global-section .section-title { color: #D8F3DC; }
+  .global-section .section-sub { color: #95D5B2; }
+  .global-card {
+    background: #152E20; border: 1px solid #2D5A40;
+    border-radius: 12px; padding: 24px;
+    border-top: 4px solid var(--sage);
+    transition: transform .2s, box-shadow .2s;
+  }
+  .global-card:hover { transform: translateY(-4px); box-shadow: 0 12px 32px rgba(0,0,0,.4); }
+  .global-name { font-family: Georgia, serif; font-size: 18px; font-weight: 700; color: #D8F3DC; margin-bottom: 4px; }
+  .global-loc { font-size: 12px; color: #95D5B2; margin-bottom: 12px; }
+  .global-desc { font-size: 13.5px; color: #B7E4C7; line-height: 1.6; margin-bottom: 12px; }
+  .global-model {
+    display: inline-block; font-size: 11.5px; font-weight: 700;
+    background: rgba(82,183,136,0.18); color: var(--sage);
+    padding: 4px 10px; border-radius: 20px;
+  }
+  .global-meta { display: flex; gap: 10px; margin-bottom: 12px; flex-wrap: wrap; }
+  .global-chip {
+    font-size: 11px; background: rgba(255,255,255,0.07);
+    color: #95D5B2; padding: 3px 8px; border-radius: 4px;
+  }
+  .global-tag {
+    display: inline-block; font-size: 10px; font-weight: 700; letter-spacing: 1px;
+    text-transform: uppercase; padding: 2px 8px; border-radius: 4px; margin-bottom: 10px;
+  }
+  .global-tag.moderno { background: rgba(196,98,45,0.22); color: #E8945A; }
+  .global-tag.clasico { background: rgba(82,183,136,0.15); color: var(--sage); }
+
+  /* ── FOOTER ─────────────────────────────────────── */
+  footer {
+    text-align: center; padding: 32px; font-size: 12px; color: #aaa;
+    border-top: 1px solid var(--border);
+  }
+
+  /* ── RESPONSIVE ─────────────────────────────────── */
+  @media (max-width: 768px) {
+    .hero h1 { font-size: 34px; }
+    .hero-stats { gap: 24px; flex-wrap: wrap; }
+    .latam-grid { grid-template-columns: 1fr; }
+    .activities-grid { grid-template-columns: 1fr; }
+    .act-body { flex-direction: column; }
+    .act-potencial { border-right: none; border-bottom: 1px solid var(--border); flex: none; }
+    .tl-body-inner { grid-template-columns: 1fr; }
+    .tl-col + .tl-col { border-left: none; border-top: 1px solid var(--border); }
+    .tl-income-row { flex-direction: column; gap: 8px; }
+    .timeline { padding-left: 32px; }
+    .tl-dot { left: -28px; width: 22px; height: 22px; font-size: 10px; }
+    .tl-header { flex-wrap: wrap; gap: 8px; }
+    .tl-income-badge { margin-left: 0; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-inner">
+    <div class="hero-badge">Comunidad Eco-Aldea Regenerativa · Marzo 2026</div>
+    <h1>Actividades Económicas<br><span>Rentables</span></h1>
+    <p>15 modelos de ingreso validados por comunidades regenerativas exitosas en todo el mundo — desde los pioneros clásicos hasta los movimientos digitales modernos — con potencial de mercado real y plan de inicio.</p>
+    <div class="hero-stats">
+      <div class="hero-stat"><div class="num">15</div><div class="lbl">Actividades documentadas</div></div>
+      <div class="hero-stat"><div class="num">12</div><div class="lbl">Comunidades referentes globales</div></div>
+      <div class="hero-stat"><div class="num">$350K</div><div class="lbl">Potencial al año 5</div></div>
+      <div class="hero-stat"><div class="num">3–6</div><div class="lbl">Meses para arrancar las primeras</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- LATAM -->
+<div class="section">
+  <div class="section-title">Comunidades Referentes en América Latina</div>
+  <div class="section-sub">Casos documentados que prueban que el modelo regenerativo funciona en nuestra región</div>
+  <div class="latam-grid">
+    <div class="latam-card">
+      <div class="latam-name">Aldea Feliz</div>
+      <div class="latam-loc">🇨🇴 Colombia · San Francisco, Cundinamarca</div>
+      <div class="latam-meta">
+        <span class="latam-chip">Fundada: 2000s</span>
+        <span class="latam-chip">~40 personas</span>
+      </div>
+      <div class="latam-desc">Pionera del movimiento de ecoaldeas en Colombia. Integra bioconstrucción, agroecología y educación regenerativa. Calificación 4.8/5 con 40+ reseñas. Referente para toda América Latina.</div>
+      <span class="latam-model">Talleres · Turismo · Agroecología</span>
+    </div>
+    <div class="latam-card">
+      <div class="latam-name">Huehuecoyotl</div>
+      <div class="latam-loc">🇲🇽 México · Tepoztlán, Morelos</div>
+      <div class="latam-meta">
+        <span class="latam-chip">Fundada: 1982 (43 años)</span>
+        <span class="latam-chip">~30 familias</span>
+      </div>
+      <div class="latam-desc">La comunidad intencional más antigua de Latinoamérica. Economía comunal con cuotas + rentas. Produce muebles de bambú y acabados naturales. Referente mundial del Global Ecovillage Network.</div>
+      <span class="latam-model">Artesanía · Talleres · Turismo cultural</span>
+    </div>
+    <div class="latam-card">
+      <div class="latam-name">Rancho Mastatal</div>
+      <div class="latam-loc">🇨🇷 Costa Rica · Mastatal, Puriscal</div>
+      <div class="latam-meta">
+        <span class="latam-chip">Fundada: 1990s</span>
+        <span class="latam-chip">Comunidad + voluntarios</span>
+      </div>
+      <div class="latam-desc">Centro de educación sustentable en 120 ha con cascadas y ríos. Referente regional en PDC y bioconstrucción. Cursos de $100–$500 USD con hospedaje incluido. Alta demanda internacional.</div>
+      <span class="latam-model">PDC · Bioconstrucción · Voluntariado</span>
+    </div>
+    <div class="latam-card">
+      <div class="latam-name">Ecovila Tibá</div>
+      <div class="latam-loc">🇧🇷 Brasil · São Carlos, São Paulo</div>
+      <div class="latam-meta">
+        <span class="latam-chip">Fundada: 2006</span>
+        <span class="latam-chip">~25 familias</span>
+      </div>
+      <div class="latam-desc">Comunidad intencional basada en permacultura y construcción ecológica. Asociada al Instituto TIBÁ de bioarquitectura (1987). Modelo de referencia en convivencia y diseño comunitario integrado.</div>
+      <span class="latam-model">Permacultura · Bioarquitectura · Investigación</span>
+    </div>
+    <div class="latam-card">
+      <div class="latam-name">El Romero</div>
+      <div class="latam-loc">🇨🇱 Chile · Región del Bío Bío</div>
+      <div class="latam-meta">
+        <span class="latam-chip">Fundada: 2010s</span>
+        <span class="latam-chip">~15 familias</span>
+      </div>
+      <div class="latam-desc">Pionera en Chile combinando ganadería regenerativa con pastoreo holístico, sistemas agroforestales y cercas vivas. Demuestra que la ganadería bien manejada regenera el territorio.</div>
+      <span class="latam-model">Ganadería regenerativa · Permacultura</span>
+    </div>
+    <div class="latam-card">
+      <div class="latam-name">Valle del Cauca (clúster)</div>
+      <div class="latam-loc">🇨🇴 Colombia · Región Andina</div>
+      <div class="latam-meta">
+        <span class="latam-chip">2015–presente</span>
+        <span class="latam-chip">Múltiples predios</span>
+      </div>
+      <div class="latam-desc">Clúster de fincas que implementan pastoreo holístico y aumentan la carga animal por hectárea. Restauración activa de suelos. Con potencial para créditos de carbono.</div>
+      <span class="latam-model">Ganadería holística · Carbono · Agroforestería</span>
+    </div>
+  </div>
+</div>
+
+<!-- GLOBAL COMMUNITIES -->
+<div class="global-section">
+  <div class="global-inner">
+    <div class="section-title">Referentes Mundiales</div>
+    <div class="section-sub">Comunidades que demuestran que el modelo es replicable — de los pioneros de los años 60 a los movimientos digitales de hoy</div>
+    <div class="latam-grid" style="margin-top:28px;">
+
+      <div class="global-card" style="border-top-color:#52B788;">
+        <div class="global-tag clasico">Clásico · 63 años</div>
+        <div class="global-name">Findhorn Community</div>
+        <div class="global-loc">🇬🇧 Escocia, Reino Unido · Fundada: 1962</div>
+        <div class="global-meta">
+          <span class="global-chip">~400 residentes</span>
+          <span class="global-chip">GEN Original</span>
+        </div>
+        <div class="global-desc">La comunidad intencional más citada en el mundo. Comenzó cultivando hortalizas gigantes en dunas estériles. Hoy es un centro de educación holística con cursos anuales para 9,000+ visitantes. Precursora del Global Ecovillage Network.</div>
+        <span class="global-model">Educación · Turismo espiritual · Energía solar</span>
+      </div>
+
+      <div class="global-card" style="border-top-color:#C4622D;">
+        <div class="global-tag clasico">Clásico · 58 años</div>
+        <div class="global-name">Twin Oaks</div>
+        <div class="global-loc">🇺🇸 Virginia, EE.UU. · Fundada: 1967</div>
+        <div class="global-meta">
+          <span class="global-chip">~100 residentes</span>
+          <span class="global-chip">Income-sharing</span>
+        </div>
+        <div class="global-desc">Comunidad de ingresos compartidos basada en los principios de B.F. Skinner. Produce hamacas, tofu y servicios de indexación que cubren todos los gastos comunitarios. Modelo de trabajo igualitario sin dinero interno: cada miembro trabaja 42 hrs/semana.</div>
+        <span class="global-model">Manufactura · Producción de alimentos · Trabajo cooperativo</span>
+      </div>
+
+      <div class="global-card" style="border-top-color:#065A82;">
+        <div class="global-tag clasico">Clásico · 57 años</div>
+        <div class="global-name">Auroville</div>
+        <div class="global-loc">🇮🇳 Tamil Nadu, India · Fundada: 1968</div>
+        <div class="global-meta">
+          <span class="global-chip">~3,500 residentes</span>
+          <span class="global-chip">60+ países</span>
+        </div>
+        <div class="global-desc">La mayor comunidad intencional del mundo. Reforestó 2,000 ha de tierra degradada. Economía diversificada con 200+ unidades productivas: manufactura, IT, agricultura, construcción y turismo. Reconocida por UNESCO como laboratorio social.</div>
+        <span class="global-model">Manufactura · Reforestación · Economía diversificada</span>
+      </div>
+
+      <div class="global-card" style="border-top-color:#6D2E46;">
+        <div class="global-tag clasico">Clásico · 50 años</div>
+        <div class="global-name">Damanhur</div>
+        <div class="global-loc">🇮🇹 Piamonte, Italia · Fundada: 1975</div>
+        <div class="global-meta">
+          <span class="global-chip">~1,000 residentes</span>
+          <span class="global-chip">Moneda propia: Credito</span>
+        </div>
+        <div class="global-desc">Federación de comunidades con economía interna propia. Construyeron durante 16 años en secreto los Templos del Hombre — declarados "8ava maravilla del mundo subterráneo". Artesanías, agricultura orgánica, turismo espiritual y educación son sus pilares.</div>
+        <span class="global-model">Artesanía · Turismo espiritual · Moneda complementaria</span>
+      </div>
+
+      <div class="global-card" style="border-top-color:#028090;">
+        <div class="global-tag clasico">Moderno · 30 años</div>
+        <div class="global-name">Tamera</div>
+        <div class="global-loc">🇵🇹 Alentejo, Portugal · Fundada: 1995</div>
+        <div class="global-meta">
+          <span class="global-chip">~150 residentes</span>
+          <span class="global-chip">Solar Village</span>
+        </div>
+        <div class="global-desc">Centro de investigación y peace research en 335 ha. Pionera en paisajes de retención de agua — recuperaron una cuenca degradada en 5 años. Sistema solar off-grid completo. Referente mundial en soberanía energética e hídrica.</div>
+        <span class="global-model">Energía solar · Gestión de agua · Investigación regenerativa</span>
+      </div>
+
+      <div class="global-card" style="border-top-color:#E8945A;">
+        <div class="global-tag moderno">Digital · 1M+ seguidores</div>
+        <div class="global-name">Wild Minds / One Tree Farm</div>
+        <div class="global-loc">🇬🇧 Suroeste, Reino Unido · Fundada: ~2015</div>
+        <div class="global-meta">
+          <span class="global-chip">1M+ seguidores</span>
+          <span class="global-chip">Off-grid + Digital</span>
+        </div>
+        <div class="global-desc">El modelo más moderno: finca off-grid como base física + comunidad digital de membresía con 1 millón de seguidores. Fundada por Billy y Alfie en One Tree Farm (SW de UK). Ofrece frameworks replicables para soberanía territorial, inversión privada y planificación comunitaria. wildmindscommunity.com</div>
+        <span class="global-model">Membresía digital · Off-grid · Modelo replicable</span>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- FILTROS -->
+<div class="filters-wrap">
+  <div class="section-title" style="margin-bottom:16px">Las 15 Actividades Económicas</div>
+  <div class="filters">
+    <button class="filter-btn active" data-cat="todos">Todas (15)</button>
+    <button class="filter-btn" data-cat="Alimentos">🌿 Alimentos</button>
+    <button class="filter-btn" data-cat="Turismo">🏕 Turismo</button>
+    <button class="filter-btn" data-cat="Educación">📚 Educación</button>
+    <button class="filter-btn" data-cat="Pecuaria">🐄 Pecuaria</button>
+    <button class="filter-btn" data-cat="Digital">💻 Digital</button>
+    <button class="filter-btn" data-cat="Mercado verde">🌍 Mercado Verde</button>
+    <button class="filter-btn" data-cat="Servicios">🔧 Servicios</button>
+    <button class="filter-btn" data-cat="Biodiversidad">🐝 Biodiversidad</button>
+  </div>
+</div>
+
+<!-- GRID -->
+<div class="activities-grid" id="grid">
+
+  <!-- 01 -->
+  <div class="act-card" data-cat="Alimentos">
+    <div class="act-header">
+      <div class="act-num">01</div>
+      <div class="act-header-text">
+        <div class="act-categoria">Alimentos</div>
+        <div class="act-nombre">Agricultura Regenerativa & CSA</div>
+        <div class="act-desc-short">Producción agroecológica con venta directa por suscripción comunitaria</div>
+      </div>
+    </div>
+    <div class="act-metrics">
+      <div class="act-metric"><div class="act-metric-label">Ingreso / año</div><div class="act-metric-value">$20K–$80K</div></div>
+      <div class="act-metric"><div class="act-metric-label">Inversión inicial</div><div class="act-metric-value">Medio</div></div>
+      <div class="act-metric"><div class="act-metric-label">Tiempo retorno</div><div class="act-metric-value">12–18 meses</div></div>
+    </div>
+    <div class="act-body">
+      <div class="act-potencial">
+        <div class="act-section-title">Potencial de mercado</div>
+        <div class="act-potencial-text">Mercado de alimentos regenerativos crece 25% anual. Un CSA con 40–80 familias genera ingresos estables. Márgenes de venta directa: 40–60%. Certificación orgánica añade 30–40% de prima. Referente: Aldea Feliz (Colombia).</div>
+      </div>
+      <div class="act-plan">
+        <div class="act-section-title">Plan de inicio (3–6 meses)</div>
+        <ol class="act-steps">
+          <li><span class="act-step-num">1.</span>Mapear el territorio e inventariar suelos, agua y biodiversidad existente.</li>
+          <li><span class="act-step-num">2.</span>Diseñar la finca con permacultura: zonas, sectores y flujos de energía.</li>
+          <li><span class="act-step-num">3.</span>Identificar 20–40 familias fundadoras dispuestas a suscribirse con pago anticipado.</li>
+          <li><span class="act-step-num">4.</span>Arrancar con cultivos de ciclo corto (hortalizas, hierbas) para generar caja rápido.</li>
+          <li><span class="act-step-num">5.</span>Documentar el proceso y construir comunidad en redes sociales.</li>
+        </ol>
+      </div>
+    </div>
+  </div>
+
+  <!-- 02 -->
+  <div class="act-card" data-cat="Turismo">
+    <div class="act-header">
+      <div class="act-num">02</div>
+      <div class="act-header-text">
+        <div class="act-categoria">Turismo</div>
+        <div class="act-nombre">Turismo Regenerativo</div>
+        <div class="act-desc-short">Visitas, estadías y experiencias inmersivas en la comunidad</div>
+      </div>
+    </div>
+    <div class="act-metrics">
+      <div class="act-metric"><div class="act-metric-label">Ingreso / año</div><div class="act-metric-value">$30K–$120K</div></div>
+      <div class="act-metric"><div class="act-metric-label">Inversión inicial</div><div class="act-metric-value">Medio-alto</div></div>
+      <div class="act-metric"><div class="act-metric-label">Tiempo retorno</div><div class="act-metric-value">18–30 meses</div></div>
+    </div>
+    <div class="act-body">
+      <div class="act-potencial">
+        <div class="act-section-title">Potencial de mercado</div>
+        <div class="act-potencial-text">Turismo regenerativo crece 25–30% anual. Ecolodges cobran $80–$200/noche. 10 camas con 50% ocupación genera $140K+ al año. Rancho Mastatal (Costa Rica): 120 ha, referente regional con alta demanda internacional.</div>
+      </div>
+      <div class="act-plan">
+        <div class="act-section-title">Plan de inicio (3–6 meses)</div>
+        <ol class="act-steps">
+          <li><span class="act-step-num">1.</span>Definir la experiencia diferencial que no existe en otro lugar.</li>
+          <li><span class="act-step-num">2.</span>Construir 2–4 hospedajes curados (cabaña, glamping, domo) con materiales locales.</li>
+          <li><span class="act-step-num">3.</span>Crear paquetes de 3, 5 y 7 días con experiencias de trabajo regenerativo.</li>
+          <li><span class="act-step-num">4.</span>Aliarse con tour operadores en turismo sostenible y Regenerative Travel.</li>
+          <li><span class="act-step-num">5.</span>Implementar sistema de reservas online con política de impacto verificable.</li>
+        </ol>
+      </div>
+    </div>
+  </div>
+
+  <!-- 03 -->
+  <div class="act-card" data-cat="Educación">
+    <div class="act-header">
+      <div class="act-num">03</div>
+      <div class="act-header-text">
+        <div class="act-categoria">Educación</div>
+        <div class="act-nombre">Centro de Educación y Retiros</div>
+        <div class="act-desc-short">Cursos de permacultura, bioconstrucción, CNV, bienestar y gobernanza</div>
+      </div>
+    </div>
+    <div class="act-metrics">
+      <div class="act-metric"><div class="act-metric-label">Ingreso / año</div><div class="act-metric-value">$25K–$90K</div></div>
+      <div class="act-metric"><div class="act-metric-label">Inversión inicial</div><div class="act-metric-value">Bajo-medio</div></div>
+      <div class="act-metric"><div class="act-metric-label">Tiempo retorno</div><div class="act-metric-value">6–12 meses</div></div>
+    </div>
+    <div class="act-body">
+      <div class="act-potencial">
+        <div class="act-section-title">Potencial de mercado</div>
+        <div class="act-potencial-text">PDCs de 2 semanas: $600–$1,500 por participante. Con 10 cursos/año y 15 participantes: $90K–$180K. Huehuecoyotl (México, 1982) lleva 40+ años con este modelo. Rancho Mastatal cobra $100–$500 USD por taller.</div>
+      </div>
+      <div class="act-plan">
+        <div class="act-section-title">Plan de inicio (3–6 meses)</div>
+        <ol class="act-steps">
+          <li><span class="act-step-num">1.</span>Certificar miembros como instructores de PDC o en CNV / gobernanza.</li>
+          <li><span class="act-step-num">2.</span>Acondicionar espacio para talleres: salón, cocina colectiva, zona de camping.</li>
+          <li><span class="act-step-num">3.</span>Lanzar primer curso piloto con precio reducido para construir testimonios.</li>
+          <li><span class="act-step-num">4.</span>Crear oferta de retiros de bienestar para financiar entre cursos.</li>
+          <li><span class="act-step-num">5.</span>Digitalizar contenidos clave para ingresos residuales continuos.</li>
+        </ol>
+      </div>
+    </div>
+  </div>
+
+  <!-- 04 -->
+  <div class="act-card" data-cat="Alimentos">
+    <div class="act-header">
+      <div class="act-num">04</div>
+      <div class="act-header-text">
+        <div class="act-categoria">Industria local</div>
+        <div class="act-nombre">Productos con Valor Agregado</div>
+        <div class="act-desc-short">Alimentos artesanales, cosmética natural, textiles y productos de la finca</div>
+      </div>
+    </div>
+    <div class="act-metrics">
+      <div class="act-metric"><div class="act-metric-label">Ingreso / año</div><div class="act-metric-value">$15K–$60K</div></div>
+      <div class="act-metric"><div class="act-metric-label">Inversión inicial</div><div class="act-metric-value">Bajo</div></div>
+      <div class="act-metric"><div class="act-metric-label">Tiempo retorno</div><div class="act-metric-value">6–10 meses</div></div>
+    </div>
+    <div class="act-body">
+      <div class="act-potencial">
+        <div class="act-section-title">Potencial de mercado</div>
+        <div class="act-potencial-text">Márgenes de 50–80% en productos artesanales regenerativos. Mercado de consumo consciente supera $500B global (2025). Huehuecoyotl exporta bambú y acabados naturales. Canales: mercados, e-commerce, canastas premium.</div>
+      </div>
+      <div class="act-plan">
+        <div class="act-section-title">Plan de inicio (3–6 meses)</div>
+        <ol class="act-steps">
+          <li><span class="act-step-num">1.</span>Identificar excedentes naturales: frutas, plantas medicinales, lana, miel.</li>
+          <li><span class="act-step-num">2.</span>Desarrollar 3–5 productos piloto con empaque que cuente la historia de la comunidad.</li>
+          <li><span class="act-step-num">3.</span>Obtener registros sanitarios y validar en ferias locales.</li>
+          <li><span class="act-step-num">4.</span>Crear tienda online con narrativa regenerativa clara.</li>
+          <li><span class="act-step-num">5.</span>Construir modelo de suscripción mensual (canasta o caja) para clientes recurrentes.</li>
+        </ol>
+      </div>
+    </div>
+  </div>
+
+  <!-- 05 -->
+  <div class="act-card" data-cat="Mercado verde">
+    <div class="act-header">
+      <div class="act-num">05</div>
+      <div class="act-header-text">
+        <div class="act-categoria">Mercado verde</div>
+        <div class="act-nombre">Créditos de Carbono</div>
+        <div class="act-desc-short">Monetización de la restauración ecológica mediante mercados de carbono voluntarios</div>
+      </div>
+    </div>
+    <div class="act-metrics">
+      <div class="act-metric"><div class="act-metric-label">Ingreso / año</div><div class="act-metric-value">$10K–$50K</div></div>
+      <div class="act-metric"><div class="act-metric-label">Inversión inicial</div><div class="act-metric-value">Muy bajo</div></div>
+      <div class="act-metric"><div class="act-metric-label">Tiempo retorno</div><div class="act-metric-value">24–36 meses</div></div>
+    </div>
+    <div class="act-body">
+      <div class="act-potencial">
+        <div class="act-section-title">Potencial de mercado</div>
+        <div class="act-potencial-text">Mercado voluntario de carbono: $1.4B en 2024, proyecta $50B en 2030. Proyectos de suelos regenerativos: $100–$500/ha. Reforestación y agroforestería acceden a Verra y Gold Standard. El eje andino tiene ventajas de biodiversidad.</div>
+      </div>
+      <div class="act-plan">
+        <div class="act-section-title">Plan de inicio (3–6 meses)</div>
+        <ol class="act-steps">
+          <li><span class="act-step-num">1.</span>Mapear el área bajo manejo regenerativo y estimar secuestro potencial de carbono.</li>
+          <li><span class="act-step-num">2.</span>Contactar verificadores (Verra, Gold Standard) y consultores locales en REDD+.</li>
+          <li><span class="act-step-num">3.</span>Documentar la línea base del ecosistema y el plan de restauración.</li>
+          <li><span class="act-step-num">4.</span>Agruparse con comunidades vecinas para alcanzar volúmenes comercializables.</li>
+          <li><span class="act-step-num">5.</span>Explorar pagos por servicios hídricos y biodiversidad con gobiernos locales.</li>
+        </ol>
+      </div>
+    </div>
+  </div>
+
+  <!-- 06 -->
+  <div class="act-card" data-cat="Mercado verde">
+    <div class="act-header">
+      <div class="act-num">06</div>
+      <div class="act-header-text">
+        <div class="act-categoria">Energía</div>
+        <div class="act-nombre">Energía Renovable Comunitaria</div>
+        <div class="act-desc-short">Generación solar, biogás o microhidro con venta de excedentes a la red</div>
+      </div>
+    </div>
+    <div class="act-metrics">
+      <div class="act-metric"><div class="act-metric-label">Ingreso / año</div><div class="act-metric-value">$8K–$40K</div></div>
+      <div class="act-metric"><div class="act-metric-label">Inversión inicial</div><div class="act-metric-value">Alto</div></div>
+      <div class="act-metric"><div class="act-metric-label">Tiempo retorno</div><div class="act-metric-value">5–8 años</div></div>
+    </div>
+    <div class="act-body">
+      <div class="act-potencial">
+        <div class="act-section-title">Potencial de mercado</div>
+        <div class="act-potencial-text">Tendencia regulatoria en toda LatAm. Sistema solar 30 kW genera $8K–$15K/año en ahorro + venta. Biogás comunitario (a partir del estiércol ganadero) reduce costos de gas y fertilizantes hasta 70%. Retorno estable y de largo plazo.</div>
+      </div>
+      <div class="act-plan">
+        <div class="act-section-title">Plan de inicio (3–6 meses)</div>
+        <ol class="act-steps">
+          <li><span class="act-step-num">1.</span>Auditar el consumo energético y los recursos disponibles (sol, agua, biomasa).</li>
+          <li><span class="act-step-num">2.</span>Diseñar el sistema con un ingeniero y explorar financiamiento colectivo.</li>
+          <li><span class="act-step-num">3.</span>Solicitar conexión a red y permisos de exportación de excedentes.</li>
+          <li><span class="act-step-num">4.</span>Construir en etapas: primero autoconsumo, luego escalar para venta.</li>
+          <li><span class="act-step-num">5.</span>Conectar el biogás al sistema ganadero para aprovechar el estiércol.</li>
+        </ol>
+      </div>
+    </div>
+  </div>
+
+  <!-- 07 -->
+  <div class="act-card" data-cat="Digital">
+    <div class="act-header">
+      <div class="act-num">07</div>
+      <div class="act-header-text">
+        <div class="act-categoria">Digital</div>
+        <div class="act-nombre">Hub de Nómadas Digitales</div>
+        <div class="act-desc-short">Co-living y co-working para trabajadores remotos que valoran el entorno natural</div>
+      </div>
+    </div>
+    <div class="act-metrics">
+      <div class="act-metric"><div class="act-metric-label">Ingreso / año</div><div class="act-metric-value">$20K–$70K</div></div>
+      <div class="act-metric"><div class="act-metric-label">Inversión inicial</div><div class="act-metric-value">Medio</div></div>
+      <div class="act-metric"><div class="act-metric-label">Tiempo retorno</div><div class="act-metric-value">12–24 meses</div></div>
+    </div>
+    <div class="act-body">
+      <div class="act-potencial">
+        <div class="act-section-title">Potencial de mercado</div>
+        <div class="act-potencial-text">35 millones de nómadas digitales globales en 2024 (+131% desde 2019). Co-living en entornos naturales: $500–$1,500/mes por habitación. Comunidades en Colombia, Costa Rica y México tienen listas de espera de meses.</div>
+      </div>
+      <div class="act-plan">
+        <div class="act-section-title">Plan de inicio (3–6 meses)</div>
+        <ol class="act-steps">
+          <li><span class="act-step-num">1.</span>Instalar conectividad de alta velocidad (fibra o satelital) como condición base.</li>
+          <li><span class="act-step-num">2.</span>Habilitar 4–8 espacios de habitación-trabajo con comodidades mínimas.</li>
+          <li><span class="act-step-num">3.</span>Crear membresía mensual: alojamiento + comidas + acceso a vida comunitaria.</li>
+          <li><span class="act-step-num">4.</span>Publicar en Nomad List, Remote Year, Outsite, Workfrom.</li>
+          <li><span class="act-step-num">5.</span>Integrar a los nómadas con trabajo regenerativo semanal como parte del trato.</li>
+        </ol>
+      </div>
+    </div>
+  </div>
+
+  <!-- 08 -->
+  <div class="act-card" data-cat="Servicios">
+    <div class="act-header">
+      <div class="act-num">08</div>
+      <div class="act-header-text">
+        <div class="act-categoria">Servicios</div>
+        <div class="act-nombre">Consultoría y Bioconstrucción</div>
+        <div class="act-desc-short">Asesoría en diseño regenerativo, permacultura y construcción natural para terceros</div>
+      </div>
+    </div>
+    <div class="act-metrics">
+      <div class="act-metric"><div class="act-metric-label">Ingreso / año</div><div class="act-metric-value">$15K–$60K</div></div>
+      <div class="act-metric"><div class="act-metric-label">Inversión inicial</div><div class="act-metric-value">Muy bajo</div></div>
+      <div class="act-metric"><div class="act-metric-label">Tiempo retorno</div><div class="act-metric-value">3–6 meses</div></div>
+    </div>
+    <div class="act-body">
+      <div class="act-potencial">
+        <div class="act-section-title">Potencial de mercado</div>
+        <div class="act-potencial-text">Construcción sostenible crece 11% anual. Consultoría bioclimática: $3K–$10K por proyecto. Huehuecoyotl exporta conocimiento en bambú y acabados naturales. La comunidad misma es el portafolio viviente más potente.</div>
+      </div>
+      <div class="act-plan">
+        <div class="act-section-title">Plan de inicio (3–6 meses)</div>
+        <ol class="act-steps">
+          <li><span class="act-step-num">1.</span>Documentar y sistematizar la experiencia propia como portafolio.</li>
+          <li><span class="act-step-num">2.</span>Identificar 2–3 miembros con expertise en diseño o construcción natural.</li>
+          <li><span class="act-step-num">3.</span>Ofrecer primeras consultorías a proyectos vecinos a precio de lanzamiento.</li>
+          <li><span class="act-step-num">4.</span>Publicar el proceso en redes y construir canal de contenido.</li>
+          <li><span class="act-step-num">5.</span>Escalar a contratos con municipios y organizaciones ambientales.</li>
+        </ol>
+      </div>
+    </div>
+  </div>
+
+  <!-- 09 -->
+  <div class="act-card" data-cat="Pecuaria">
+    <div class="act-header" style="background: #2D4A22;">
+      <div class="act-num">09</div>
+      <div class="act-header-text">
+        <div class="act-categoria">Pecuaria</div>
+        <div class="act-nombre">Ganadería Regenerativa</div>
+        <div class="act-desc-short">Pastoreo holístico de vacunos y ovinos que regenera suelos y genera productos premium</div>
+      </div>
+    </div>
+    <div class="act-metrics">
+      <div class="act-metric"><div class="act-metric-label">Ingreso / año</div><div class="act-metric-value">$18K–$75K</div></div>
+      <div class="act-metric"><div class="act-metric-label">Inversión inicial</div><div class="act-metric-value">Medio-alto</div></div>
+      <div class="act-metric"><div class="act-metric-label">Tiempo retorno</div><div class="act-metric-value">18–36 meses</div></div>
+    </div>
+    <div class="act-body">
+      <div class="act-potencial">
+        <div class="act-section-title">Potencial de mercado</div>
+        <div class="act-potencial-text">Ganadería regenerativa genera 14–28% retorno anual, superando a la convencional. El pastoreo holístico aumenta la carga animal por hectárea y mejora el suelo. Carne premium: precio 40–60% superior al mercado. El estiércol alimenta el sistema de biogás. Referente: clúster Valle del Cauca, Colombia.</div>
+      </div>
+      <div class="act-plan">
+        <div class="act-section-title">Plan de inicio (3–6 meses)</div>
+        <ol class="act-steps">
+          <li><span class="act-step-num">1.</span>Diseñar sistema de pastoreo rotacional con potreros divididos y tiempos de recuperación.</li>
+          <li><span class="act-step-num">2.</span>Adquirir primer lote de animales (10–20 vacunos o 30–50 ovinos) de razas adaptadas.</li>
+          <li><span class="act-step-num">3.</span>Establecer cercas eléctricas móviles para controlar el pastoreo sin costo fijo alto.</li>
+          <li><span class="act-step-num">4.</span>Desarrollar canales directos: carnicerías premium, restaurantes, mercados de productores.</li>
+          <li><span class="act-step-num">5.</span>Certificar la producción como 'regenerativa' para acceder al precio premium.</li>
+        </ol>
+      </div>
+    </div>
+  </div>
+
+  <!-- 10 -->
+  <div class="act-card" data-cat="Turismo">
+    <div class="act-header" style="background: #3D3B2D;">
+      <div class="act-num">10</div>
+      <div class="act-header-text">
+        <div class="act-categoria">Turismo / Bienestar</div>
+        <div class="act-nombre">Turismo Ecuestre & Equinoterapia</div>
+        <div class="act-desc-short">Cabalgatas, experiencias con caballos y terapia asistida para visitantes</div>
+      </div>
+    </div>
+    <div class="act-metrics">
+      <div class="act-metric"><div class="act-metric-label">Ingreso / año</div><div class="act-metric-value">$12K–$45K</div></div>
+      <div class="act-metric"><div class="act-metric-label">Inversión inicial</div><div class="act-metric-value">Medio</div></div>
+      <div class="act-metric"><div class="act-metric-label">Tiempo retorno</div><div class="act-metric-value">12–24 meses</div></div>
+    </div>
+    <div class="act-body">
+      <div class="act-potencial">
+        <div class="act-section-title">Potencial de mercado</div>
+        <div class="act-potencial-text">Turismo ecuestre en auge: cabalgatas de medio día a $40–$80/persona; paquetes de 3 días con alojamiento a $300–$500. Equinoterapia: $25–$90 USD por sesión con mercado urbano en crecimiento. 4–6 caballos bien manejados generan ingresos todo el año.</div>
+      </div>
+      <div class="act-plan">
+        <div class="act-section-title">Plan de inicio (3–6 meses)</div>
+        <ol class="act-steps">
+          <li><span class="act-step-num">1.</span>Adquirir 3–6 caballos mansos; priorizar razas criollas de bajo costo de mantenimiento.</li>
+          <li><span class="act-step-num">2.</span>Diseñar rutas de cabalgata que recorran los puntos más bellos del territorio.</li>
+          <li><span class="act-step-num">3.</span>Capacitar 1–2 guías ecuestres con conocimiento del territorio y primeros auxilios.</li>
+          <li><span class="act-step-num">4.</span>Crear paquetes combinados: cabalgata + almuerzo de finca + noche en la comunidad.</li>
+          <li><span class="act-step-num">5.</span>Explorar alianzas con centros de salud y colegios para ofrecer equinoterapia.</li>
+        </ol>
+      </div>
+    </div>
+  </div>
+
+  <!-- 11 -->
+  <div class="act-card" data-cat="Educación">
+    <div class="act-header" style="background: #2A3D4F;">
+      <div class="act-num">11</div>
+      <div class="act-header-text">
+        <div class="act-categoria">Educación / Agro</div>
+        <div class="act-nombre">Granja Educativa</div>
+        <div class="act-desc-short">Visitas escolares, talleres vivenciales y programas agropecuarios para niños y familias</div>
+      </div>
+    </div>
+    <div class="act-metrics">
+      <div class="act-metric"><div class="act-metric-label">Ingreso / año</div><div class="act-metric-value">$15K–$55K</div></div>
+      <div class="act-metric"><div class="act-metric-label">Inversión inicial</div><div class="act-metric-value">Bajo</div></div>
+      <div class="act-metric"><div class="act-metric-label">Tiempo retorno</div><div class="act-metric-value">6–12 meses</div></div>
+    </div>
+    <div class="act-body">
+      <div class="act-potencial">
+        <div class="act-section-title">Potencial de mercado</div>
+        <div class="act-potencial-text">Agroturismo educativo en auge: familias urbanas pagan $25–$60/niño en visitas de un día. Campamentos de granja de fin de semana: $200–$400 por familia. Granjas bien diseñadas reciben 500–2,000 visitantes escolares al año. Alta demanda en Colombia, México y Argentina.</div>
+      </div>
+      <div class="act-plan">
+        <div class="act-section-title">Plan de inicio (3–6 meses)</div>
+        <ol class="act-steps">
+          <li><span class="act-step-num">1.</span>Diseñar recorrido educativo de 2–3 h con estaciones: huerto, animales, cocina de campo.</li>
+          <li><span class="act-step-num">2.</span>Crear paquetes diferenciados: colegio, familia (fin de semana) y campamento (3–5 días).</li>
+          <li><span class="act-step-num">3.</span>Desarrollar materiales pedagógicos alineados con el currículo escolar.</li>
+          <li><span class="act-step-num">4.</span>Acondicionar instalaciones: seguridad, baños y área de almuerzo al aire libre.</li>
+          <li><span class="act-step-num">5.</span>Contactar colegios privados y públicos del área urbana cercana con precio especial.</li>
+        </ol>
+      </div>
+    </div>
+  </div>
+
+  <!-- 12 -->
+  <div class="act-card" data-cat="Biodiversidad">
+    <div class="act-header" style="background: #3D2D1A;">
+      <div class="act-num">12</div>
+      <div class="act-header-text">
+        <div class="act-categoria">Biodiversidad</div>
+        <div class="act-nombre">Apicultura & Meliponicultura</div>
+        <div class="act-desc-short">Miel de abejas nativas, propóleo, cera y productos terapéuticos de alta demanda</div>
+      </div>
+    </div>
+    <div class="act-metrics">
+      <div class="act-metric"><div class="act-metric-label">Ingreso / año</div><div class="act-metric-value">$8K–$35K</div></div>
+      <div class="act-metric"><div class="act-metric-label">Inversión inicial</div><div class="act-metric-value">Muy bajo</div></div>
+      <div class="act-metric"><div class="act-metric-label">Tiempo retorno</div><div class="act-metric-value">6–12 meses</div></div>
+    </div>
+    <div class="act-body">
+      <div class="act-potencial">
+        <div class="act-section-title">Potencial de mercado</div>
+        <div class="act-potencial-text">LatAm tiene 400+ especies de meliponinas. Miel nativa se vende a $20–$60 USD/litro (vs. $5–$8 convencional). En Ecuador, 330 familias dependen de la meliponicultura como ingreso principal. La polinización de los cultivos de la comunidad es un beneficio adicional.</div>
+      </div>
+      <div class="act-plan">
+        <div class="act-section-title">Plan de inicio (3–6 meses)</div>
+        <ol class="act-steps">
+          <li><span class="act-step-num">1.</span>Identificar especies de abejas nativas en el territorio y flores disponibles por temporada.</li>
+          <li><span class="act-step-num">2.</span>Adquirir 10–20 colmenas/meliponarios y capacitarse en su manejo.</li>
+          <li><span class="act-step-num">3.</span>Establecer protocolo de cosecha sostenible que preserve la biodiversidad.</li>
+          <li><span class="act-step-num">4.</span>Desarrollar 3–5 productos derivados: miel, propóleo, cera, hidromiel, jabones.</li>
+          <li><span class="act-step-num">5.</span>Posicionar con certificación de origen y narrativa regenerativa para el mercado premium.</li>
+        </ol>
+      </div>
+    </div>
+  </div>
+
+  <!-- 13 -->
+  <div class="act-card" data-cat="Digital">
+    <div class="act-header">
+      <div class="act-num">13</div>
+      <div class="act-header-text">
+        <div class="act-categoria">Digital</div>
+        <div class="act-nombre">Membresía Digital & Comunidad Online</div>
+        <div class="act-desc-short">Monetizar el conocimiento regenerativo — cursos, frameworks y comunidad privada de acceso pago</div>
+      </div>
+    </div>
+    <div class="act-metrics">
+      <div class="act-metric"><div class="act-metric-label">Ingreso / año</div><div class="act-metric-value">$15K–$80K</div></div>
+      <div class="act-metric"><div class="act-metric-label">Inversión inicial</div><div class="act-metric-value">Bajo</div></div>
+      <div class="act-metric"><div class="act-metric-label">Tiempo retorno</div><div class="act-metric-value">3–6 meses</div></div>
+    </div>
+    <div class="act-body">
+      <div class="act-potencial">
+        <div class="act-section-title">Potencial de mercado</div>
+        <div class="act-potencial-text">Wild Minds Community (UK) creció a 1M+ seguidores monetizando su proceso de vida off-grid. La economía del conocimiento crece 15% anual. 500–2,000 miembros a $15–$30/mes = $90K–$720K anuales sin tierra adicional. El proceso de construir la comunidad ES el contenido.</div>
+      </div>
+      <div class="act-plan">
+        <div class="act-section-title">Plan de inicio (3–6 meses)</div>
+        <ol class="act-steps">
+          <li><span class="act-step-num">1.</span>Documentar el proceso de construcción con fotos, videos y diarios de campo desde el día 1.</li>
+          <li><span class="act-step-num">2.</span>Publicar 3–5 piezas semanales en Instagram y YouTube (cortos y documentales).</li>
+          <li><span class="act-step-num">3.</span>Crear newsletter gratuita para construir audiencia fiel antes de monetizar.</li>
+          <li><span class="act-step-num">4.</span>Lanzar membresía pagada con guías, webinars, comunidad privada y soporte directo.</li>
+          <li><span class="act-step-num">5.</span>Empaquetar el proceso como framework replicable para proyectos similares.</li>
+        </ol>
+      </div>
+    </div>
+  </div>
+
+  <!-- 14 -->
+  <div class="act-card" data-cat="Alimentos">
+    <div class="act-header">
+      <div class="act-num">14</div>
+      <div class="act-header-text">
+        <div class="act-categoria">Alimentos</div>
+        <div class="act-nombre">Farm to Table & Gastronomía Rural</div>
+        <div class="act-desc-short">Cenas en la finca, cajas de productos con marca propia y experiencias culinarias en el campo</div>
+      </div>
+    </div>
+    <div class="act-metrics">
+      <div class="act-metric"><div class="act-metric-label">Ingreso / año</div><div class="act-metric-value">$18K–$60K</div></div>
+      <div class="act-metric"><div class="act-metric-label">Inversión inicial</div><div class="act-metric-value">Bajo–Medio</div></div>
+      <div class="act-metric"><div class="act-metric-label">Tiempo retorno</div><div class="act-metric-value">6–12 meses</div></div>
+    </div>
+    <div class="act-body">
+      <div class="act-potencial">
+        <div class="act-section-title">Potencial de mercado</div>
+        <div class="act-potencial-text">La tendencia Farm to Table crece 20% anual en LatAm. Una cena en la finca a $50–$100 USD con 20–30 comensales genera $1,000–$3,000 por evento. Cajas de productos con marca premium capturan el segmento urbano de alto poder adquisitivo. Referente: @uncuento.defincas — "campo creativo, rentable y sostenible".</div>
+      </div>
+      <div class="act-plan">
+        <div class="act-section-title">Plan de inicio (3–6 meses)</div>
+        <ol class="act-steps">
+          <li><span class="act-step-num">1.</span>Crear identidad visual y narrativa de marca para los productos de la finca.</li>
+          <li><span class="act-step-num">2.</span>Fotografía profesional de los productos y la experiencia en el campo.</li>
+          <li><span class="act-step-num">3.</span>Organizar 2–4 cenas experienciales piloto para validar formato y precio.</li>
+          <li><span class="act-step-num">4.</span>Lanzar cajas de suscripción mensual con 8–12 productos de temporada.</li>
+          <li><span class="act-step-num">5.</span>Aliarse con chefs locales y restaurantes que valoren la trazabilidad del producto.</li>
+        </ol>
+      </div>
+    </div>
+  </div>
+
+  <!-- 15 -->
+  <div class="act-card" data-cat="Turismo">
+    <div class="act-header">
+      <div class="act-num">15</div>
+      <div class="act-header-text">
+        <div class="act-categoria">Turismo</div>
+        <div class="act-nombre">Glamping & Bienestar en la Naturaleza</div>
+        <div class="act-desc-short">Domos geodésicos, cabañas en árbol y retiros de desconexión digital en entorno regenerativo</div>
+      </div>
+    </div>
+    <div class="act-metrics">
+      <div class="act-metric"><div class="act-metric-label">Ingreso / año</div><div class="act-metric-value">$25K–$90K</div></div>
+      <div class="act-metric"><div class="act-metric-label">Inversión inicial</div><div class="act-metric-value">Medio–Alto</div></div>
+      <div class="act-metric"><div class="act-metric-label">Tiempo retorno</div><div class="act-metric-value">12–24 meses</div></div>
+    </div>
+    <div class="act-body">
+      <div class="act-potencial">
+        <div class="act-section-title">Potencial de mercado</div>
+        <div class="act-potencial-text">El glamping crece 14% anual globalmente. Una unidad premium ($80–$200 USD/noche) con 60% de ocupación genera $17,500–$43,000 anuales. Con 4–6 unidades y retiros de bienestar integrados, se pueden superar los $100,000/año. Airbnb categoría "Unique Stays" tiene alta visibilidad orgánica.</div>
+      </div>
+      <div class="act-plan">
+        <div class="act-section-title">Plan de inicio (3–6 meses)</div>
+        <ol class="act-steps">
+          <li><span class="act-step-num">1.</span>Construir 2–3 unidades diferenciadas: domos geodésicos, cabañas elevadas o tiendas de lujo.</li>
+          <li><span class="act-step-num">2.</span>Diseñar la experiencia completa: desayuno en la huerta, silencio digital, baños naturales.</li>
+          <li><span class="act-step-num">3.</span>Publicar en Airbnb, Glamping Hub y canales propios con fotografía profesional.</li>
+          <li><span class="act-step-num">4.</span>Ofrecer paquetes de retiro de bienestar: meditación, yoga, temazcal y cocina regenerativa.</li>
+          <li><span class="act-step-num">5.</span>Construir reputación con reviews verificadas y estrategia activa en Instagram.</li>
+        </ol>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- STRATEGY TIMELINE -->
+<section class="strategy">
+  <div class="strategy-inner">
+    <div class="strategy-header">
+      <h2>Plan por Año — Del terreno al territorio productivo</h2>
+      <p>Desde la infraestructura base hasta la madurez económica. Haz clic en cada año para ver el detalle. Las comunidades más exitosas de LatAm siguieron exactamente este orden de prioridades.</p>
+    </div>
+
+    <div class="timeline">
+
+      <!-- ── AÑO 0 ─────────────────────────────────── -->
+      <div class="tl-year tl-year-0 open">
+        <div class="tl-dot">0</div>
+        <div class="tl-card">
+          <div class="tl-header" onclick="toggle(this)">
+            <div class="tl-header-left">
+              <div>
+                <div class="tl-label">Año 0 · Meses 1–12</div>
+                <div class="tl-title">Infraestructura Base</div>
+                <div class="tl-subtitle">La condición previa a cualquier actividad económica</div>
+              </div>
+            </div>
+            <div class="tl-income-badge" style="background:#FAE5D3;color:#8B3A1A;">Sin ingresos · Inversión fundacional</div>
+            <div class="tl-chevron">▾</div>
+          </div>
+          <div class="tl-body">
+            <div class="tl-body-inner">
+              <div class="tl-col">
+                <div class="tl-col-title">Infraestructura física transversal</div>
+                <ul class="tl-items">
+                  <li class="tl-item"><span class="tl-item-icon">🛣</span><div><strong>Acceso y movilidad</strong>Mejora del camino de entrada, estacionamiento, señalética básica del predio.</div></li>
+                  <li class="tl-item"><span class="tl-item-icon">💧</span><div><strong>Sistema hídrico</strong>Pozo, cisterna o captación de manantial. Red de distribución por gravedad. Primer sistema de riego por goteo para el huerto fundacional.</div></li>
+                  <li class="tl-item"><span class="tl-item-icon">⚡</span><div><strong>Energía inicial</strong>Panel solar + banco de baterías para lo esencial: iluminación, internet y herramientas. Mínimo 3 kW de capacidad instalada.</div></li>
+                  <li class="tl-item"><span class="tl-item-icon">🌐</span><div><strong>Internet de alta velocidad</strong>Condición no negociable. Antena satelital (Starlink) o fibra rural. Habilita trabajo remoto, reservas y presencia digital.</div></li>
+                  <li class="tl-item"><span class="tl-item-icon">🚽</span><div><strong>Saneamiento básico</strong>Baños secos o biodigestores, duchas, sistema de aguas grises con fitodepuración. Cumplimiento normativo local.</div></li>
+                  <li class="tl-item"><span class="tl-item-icon">🏠</span><div><strong>Habitación fundadora</strong>Alojamiento mínimo viable para los co-fundadores residentes (2–4 unidades simples). Cocina y comedor comunitario.</div></li>
+                  <li class="tl-item"><span class="tl-item-icon">🔧</span><div><strong>Taller y bodega</strong>Espacio cubierto para herramientas, semillas, insumos y reparaciones. El primer edificio que conviene construir.</div></li>
+                  <li class="tl-item"><span class="tl-item-icon">🐄</span><div><strong>Corrales y potreros base</strong>Cercado perimetral del predio. División inicial de potreros. Gallinero, espacio para cerdos y primeros corrales de ganado menor.</div></li>
+                </ul>
+              </div>
+              <div class="tl-col">
+                <div class="tl-col-title">Fundamentos organizacionales y productivos</div>
+                <ul class="tl-items">
+                  <li class="tl-item"><span class="tl-item-icon">⚖️</span><div><strong>Entidad legal</strong>Constitución de la cooperativa, SAS, asociación o fideicomiso de tierra. Estatutos, reglamento interno, roles y responsabilidades firmados.</div></li>
+                  <li class="tl-item"><span class="tl-item-icon">📜</span><div><strong>Acuerdos financieros</strong>Aportaciones de cada co-fundador, política de salida, gobernanza del dinero, cuenta bancaria colectiva y presupuesto operativo año 1.</div></li>
+                  <li class="tl-item"><span class="tl-item-icon">🗺</span><div><strong>Diseño de permacultura</strong>Levantamiento topográfico y análisis de suelos. Diseño participativo del sitio: zonas, sectores, flujos de agua y energía, ubicación de cada actividad.</div></li>
+                  <li class="tl-item"><span class="tl-item-icon">🌱</span><div><strong>Primer huerto y vivero</strong>Huerto de autoconsumo (verduras, hierbas, frutales jóvenes). Vivero de propagación para reforestar y vender. Primeras colmenas instaladas.</div></li>
+                  <li class="tl-item"><span class="tl-item-icon">📋</span><div><strong>Gobernanza operativa</strong>Reunión semanal de comunidad. Calendario de turnos. Proceso de toma de decisiones consensuado. Formación básica en CNV y facilitación.</div></li>
+                  <li class="tl-item"><span class="tl-item-icon">📱</span><div><strong>Presencia digital</strong>Sitio web, Instagram y canal de YouTube. Documentar el proceso de construcción desde el día 1: esto será el contenido que atrae co-fundadores, turistas y estudiantes.</div></li>
+                  <li class="tl-item"><span class="tl-item-icon">🤝</span><div><strong>Red de alianzas locales</strong>Contacto con municipio, colegios cercanos, mercados locales y productores vecinos. Relaciones que habilitarán las actividades económicas del año 1.</div></li>
+                  <li class="tl-item"><span class="tl-item-icon">🐴</span><div><strong>Primeros animales</strong>Incorporar los primeros animales de bajo costo y alta versatilidad: gallinas, cabras o colmenas. Los caballos y el ganado mayor pueden esperar al año 1–2.</div></li>
+                </ul>
+              </div>
+            </div>
+            <div class="tl-income-row">
+              <div class="tl-income-item"><div class="lbl">Inversión estimada</div><div class="val">$40,000–$120,000</div><div class="note">Depende del estado del predio y lo que ya existe</div></div>
+              <div class="tl-income-item"><div class="lbl">Fuentes de fondos</div><div class="val">Aportes co-fundadores</div><div class="note">+ Crowdfunding + Créditos blandos + Donaciones</div></div>
+              <div class="tl-income-item"><div class="lbl">Ingresos este año</div><div class="val">$0–$5,000</div><div class="note">Eventuales: venta de excedentes del huerto o visitas piloto</div></div>
+              <div class="tl-income-item"><div class="lbl">Resultado esperado</div><div class="val">El predio está listo</div><div class="note">Agua, energía, internet, corrales, cocina y comunidad operando</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── AÑO 1 ─────────────────────────────────── -->
+      <div class="tl-year tl-year-1">
+        <div class="tl-dot">1</div>
+        <div class="tl-card">
+          <div class="tl-header" onclick="toggle(this)">
+            <div class="tl-header-left">
+              <div>
+                <div class="tl-label">Año 1 · Meses 12–24</div>
+                <div class="tl-title">Siembra</div>
+                <div class="tl-subtitle">Primeras fuentes de ingreso de bajo riesgo y retorno rápido</div>
+              </div>
+            </div>
+            <div class="tl-income-badge" style="background:#D8F3DC;color:#1B4332;">Meta: $20,000–$45,000</div>
+            <div class="tl-chevron">▾</div>
+          </div>
+          <div class="tl-body">
+            <div class="tl-body-inner">
+              <div class="tl-col">
+                <div class="tl-col-title">Actividades económicas que arrancan</div>
+                <ul class="tl-items">
+                  <li class="tl-item"><span class="tl-item-icon">🏫</span><div><strong>Granja Educativa (prioridad #1)</strong>Iniciar con visitas de colegios cercanos. Bajo costo, retorno inmediato, genera visibilidad local. Meta: 2–3 visitas por semana a $30–$60 por estudiante.</div></li>
+                  <li class="tl-item"><span class="tl-item-icon">🥦</span><div><strong>Agricultura y venta directa</strong>CSA con las primeras 15–25 familias suscriptoras. Mercado semanal de productores. Los excedentes del huerto financian los gastos operativos básicos.</div></li>
+                  <li class="tl-item"><span class="tl-item-icon">🍯</span><div><strong>Apicultura y meliponicultura</strong>Las colmenas instaladas en año 0 dan su primera cosecha. Miel nativa posicionada como producto premium local. Primeros productos derivados (propóleo, cera).</div></li>
+                  <li class="tl-item"><span class="tl-item-icon">📚</span><div><strong>Primeros talleres y retiros</strong>1–2 talleres piloto (permacultura, bioconstrucción o CNV) con grupos de 10–15 personas. Retiro de fin de semana para validar el modelo de hospitalidad.</div></li>
+                  <li class="tl-item"><span class="tl-item-icon">📦</span><div><strong>Productos artesanales iniciales</strong>3–5 SKU simples: mermeladas, conservas, jabones de cera, plantas del vivero. Venta en ferias locales y tienda online básica.</div></li>
+                </ul>
+              </div>
+              <div class="tl-col">
+                <div class="tl-col-title">Infraestructura que se construye este año</div>
+                <ul class="tl-items">
+                  <li class="tl-item"><span class="tl-item-icon">🏕</span><div><strong>2–3 hospedajes simples</strong>Cabañas o glamping básico para recibir los primeros visitantes de talleres y retiros. Materiales locales, bioconstrucción participativa.</div></li>
+                  <li class="tl-item"><span class="tl-item-icon">🐴</span><div><strong>Primeros 2–3 caballos</strong>Incorporar caballos criollos para uso interno y pruebas de cabalgata. Empezar a entrenarlos con visitantes antes de lanzar el servicio formal.</div></li>
+                  <li class="tl-item"><span class="tl-item-icon">🐄</span><div><strong>Lote inicial de ganado menor</strong>10–20 ovinos o caprinos para empezar el pastoreo rotacional. Aprenden el manejo holístico del suelo antes de escalar a bovinos.</div></li>
+                  <li class="tl-item"><span class="tl-item-icon">🌿</span><div><strong>Expansión del huerto</strong>Pasar de huerto de autoconsumo a huerto productivo. Instalar sistema de riego eficiente. Primeros árboles frutales establecidos.</div></li>
+                  <li class="tl-item"><span class="tl-item-icon">📡</span><div><strong>Estación de trabajo para nómadas</strong>Espacio básico de co-work: buena luz, internet estable, mesa larga. Probar el modelo con los primeros 1–2 nómadas digitales en residencia temporal.</div></li>
+                </ul>
+              </div>
+            </div>
+            <div class="tl-income-row">
+              <div class="tl-income-item"><div class="lbl">Granja educativa</div><div class="val">$8,000–$15,000</div><div class="note">Visitas escolares + campamentos</div></div>
+              <div class="tl-income-item"><div class="lbl">Alimentos + apicultura</div><div class="val">$6,000–$14,000</div><div class="note">CSA + mercado + productos</div></div>
+              <div class="tl-income-item"><div class="lbl">Talleres y retiros</div><div class="val">$5,000–$12,000</div><div class="note">2–4 eventos piloto</div></div>
+              <div class="tl-income-item"><div class="lbl">Total estimado año 1</div><div class="val">$20,000–$45,000</div><div class="note">Cubre gastos operativos básicos</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── AÑO 2 ─────────────────────────────────── -->
+      <div class="tl-year tl-year-2">
+        <div class="tl-dot">2</div>
+        <div class="tl-card">
+          <div class="tl-header" onclick="toggle(this)">
+            <div class="tl-header-left">
+              <div>
+                <div class="tl-label">Año 2 · Meses 24–36</div>
+                <div class="tl-title">Florecimiento</div>
+                <div class="tl-subtitle">Turismo, caballos y ganadería entran en operación plena</div>
+              </div>
+            </div>
+            <div class="tl-income-badge" style="background:#D8F3DC;color:#1B4332;">Meta: $50,000–$100,000</div>
+            <div class="tl-chevron">▾</div>
+          </div>
+          <div class="tl-body">
+            <div class="tl-body-inner">
+              <div class="tl-col">
+                <div class="tl-col-title">Actividades que escalan o se lanzan</div>
+                <ul class="tl-items">
+                  <li class="tl-item"><span class="tl-item-icon">🏕</span><div><strong>Turismo regenerativo en plena operación</strong>Los hospedajes del año 1 ahora tienen reseñas y reservas. Publicar en Booking, Airbnb y Regenerative Travel. Meta: 60% de ocupación media anual.</div></li>
+                  <li class="tl-item"><span class="tl-item-icon">🐴</span><div><strong>Turismo ecuestre formal</strong>Rutas de cabalgata diseñadas y guiadas. Paquetes de medio día y día completo. Alianza con agencias de turismo local. Primeras sesiones de equinoterapia piloto.</div></li>
+                  <li class="tl-item"><span class="tl-item-icon">💻</span><div><strong>Hub de nómadas digitales</strong>Lanzar oficialmente el programa de co-living. 3–5 residentes temporales simultáneos. Membresía mensual con todas las amenidades incluidas.</div></li>
+                  <li class="tl-item"><span class="tl-item-icon">🐄</span><div><strong>Ganadería regenerativa: bovinos</strong>Con el suelo ya preparado por los ovinos del año 1, incorporar el primer lote de bovinos (10–15 cabezas). Sistema de pastoreo rotacional operando.</div></li>
+                  <li class="tl-item"><span class="tl-item-icon">📚</span><div><strong>Programa educativo consolidado</strong>Calendario anual de PDC y talleres (6–8 eventos). Primer curso online lanzado. Granja educativa con programa escolar permanente.</div></li>
+                </ul>
+              </div>
+              <div class="tl-col">
+                <div class="tl-col-title">Infraestructura que se amplía</div>
+                <ul class="tl-items">
+                  <li class="tl-item"><span class="tl-item-icon">🏡</span><div><strong>Ampliación del hospedaje</strong>Llegar a 6–8 camas de calidad. Considerar un domo o cabaña premium para aumentar el ticket promedio de turismo.</div></li>
+                  <li class="tl-item"><span class="tl-item-icon">🐎</span><div><strong>Establo y manejo equino</strong>Establo cubierto, veterinario de confianza, equipo completo de montura. Los caballos son ahora un activo productivo consolidado.</div></li>
+                  <li class="tl-item"><span class="tl-item-icon">🥛</span><div><strong>Pequeña planta de procesamiento</strong>Espacio con normativa básica para producir lácteos artesanales (queso, yogur) del ganado. Amplía el catálogo de valor agregado.</div></li>
+                  <li class="tl-item"><span class="tl-item-icon">☀️</span><div><strong>Ampliación del sistema solar</strong>Duplicar la capacidad instalada para sostener la demanda del turismo y los nómadas. Evaluar factibilidad del biogás con el estiércol ganadero.</div></li>
+                  <li class="tl-item"><span class="tl-item-icon">🌳</span><div><strong>Sistema agroforestal en desarrollo</strong>Los árboles del año 1 ya crecen. Ampliar corredores de biodiversidad. Empezar a documentar el secuestro de carbono para futura certificación.</div></li>
+                </ul>
+              </div>
+            </div>
+            <div class="tl-income-row">
+              <div class="tl-income-item"><div class="lbl">Turismo (hospedaje + ecuestre)</div><div class="val">$22,000–$45,000</div><div class="note">Principal motor del año 2</div></div>
+              <div class="tl-income-item"><div class="lbl">Nómadas digitales</div><div class="val">$10,000–$20,000</div><div class="note">3–5 residentes simultáneos</div></div>
+              <div class="tl-income-item"><div class="lbl">Educación + alimentos</div><div class="val">$18,000–$35,000</div><div class="note">Talleres + CSA + granja + miel</div></div>
+              <div class="tl-income-item"><div class="lbl">Total estimado año 2</div><div class="val">$50,000–$100,000</div><div class="note">La comunidad empieza a pagarse sola</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── AÑO 3 ─────────────────────────────────── -->
+      <div class="tl-year tl-year-3">
+        <div class="tl-dot">3</div>
+        <div class="tl-card">
+          <div class="tl-header" onclick="toggle(this)">
+            <div class="tl-header-left">
+              <div>
+                <div class="tl-label">Año 3 · Meses 36–48</div>
+                <div class="tl-title">Consolidación</div>
+                <div class="tl-subtitle">La ganadería, el carbono y la consultoría abren nuevos mercados</div>
+              </div>
+            </div>
+            <div class="tl-income-badge" style="background:#D8F3DC;color:#1B4332;">Meta: $100,000–$180,000</div>
+            <div class="tl-chevron">▾</div>
+          </div>
+          <div class="tl-body">
+            <div class="tl-body-inner">
+              <div class="tl-col">
+                <div class="tl-col-title">Actividades que maduran o se lanzan</div>
+                <ul class="tl-items">
+                  <li class="tl-item"><span class="tl-item-icon">🐄</span><div><strong>Ganadería regenerativa premium</strong>El hato bovino ahora produce carne de calidad certificable. Lácteos artesanales con sello propio. Canal directo a carnicerías premium, restaurantes y canastas.</div></li>
+                  <li class="tl-item"><span class="tl-item-icon">🌍</span><div><strong>Primeros créditos de carbono</strong>Con 3 años de documentación del ecosistema, solicitar la verificación (Verra o equivalente). El sistema agroforestal y los suelos ganaderos son los activos certificables.</div></li>
+                  <li class="tl-item"><span class="tl-item-icon">🔧</span><div><strong>Consultoría hacia afuera</strong>La comunidad ya es un caso de estudio. Ofrecer asesoría a fincas y proyectos vecinos. Talleres de bioconstrucción para terceros. Los ingresos de consultoría son de alto margen.</div></li>
+                  <li class="tl-item"><span class="tl-item-icon">🏫</span><div><strong>Granja educativa: campamentos residenciales</strong>Pasar de visitas de día a programas de 3–5 días para colegios y familias. El hospedaje ya existente habilita este salto de ticket.</div></li>
+                  <li class="tl-item"><span class="tl-item-icon">🛒</span><div><strong>E-commerce y suscripciones maduras</strong>Catálogo consolidado de 10–15 productos. Suscripción mensual con 50–80 familias. Canal online genera ingresos pasivos continuos.</div></li>
+                </ul>
+              </div>
+              <div class="tl-col">
+                <div class="tl-col-title">Infraestructura que se integra</div>
+                <ul class="tl-items">
+                  <li class="tl-item"><span class="tl-item-icon">⚡</span><div><strong>Biogás comunitario operativo</strong>El estiércol del ganado (bovinos + ovinos + cerdos si los hay) alimenta el biodigestor. Gas para cocina y generación eléctrica. Ahorra $3,000–$8,000 anuales en energía.</div></li>
+                  <li class="tl-item"><span class="tl-item-icon">📊</span><div><strong>Sistema de monitoreo regenerativo</strong>Sensores de suelo, análisis de carbono, seguimiento de biodiversidad. Datos que respaldan los créditos de carbono y el storytelling de la comunidad.</div></li>
+                  <li class="tl-item"><span class="tl-item-icon">🤝</span><div><strong>Red de comunidades activa</strong>Alianza formal con otras ecoaldeas de la región (intercambio de aprendizajes, derivación de visitantes, compras colectivas de insumos).</div></li>
+                  <li class="tl-item"><span class="tl-item-icon">🏗</span><div><strong>Salon comunitario de gran formato</strong>Espacio para eventos de 50–100 personas: congresos, retiros corporativos, bodas regenerativas. Abre un mercado completamente nuevo de eventos.</div></li>
+                </ul>
+              </div>
+            </div>
+            <div class="tl-income-row">
+              <div class="tl-income-item"><div class="lbl">Ganadería + productos</div><div class="val">$28,000–$55,000</div><div class="note">Carne + lácteos + miel + artesanías</div></div>
+              <div class="tl-income-item"><div class="lbl">Turismo + eventos</div><div class="val">$35,000–$70,000</div><div class="note">Hospedaje + ecuestre + eventos</div></div>
+              <div class="tl-income-item"><div class="lbl">Consultoría + carbono</div><div class="val">$15,000–$40,000</div><div class="note">Servicios + primeros créditos</div></div>
+              <div class="tl-income-item"><div class="lbl">Total estimado año 3</div><div class="val">$100,000–$180,000</div><div class="note">Excedentes permiten reinversión</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── AÑOS 4–5 ───────────────────────────────── -->
+      <div class="tl-year tl-year-45">
+        <div class="tl-dot" style="font-size:9px;">4–5</div>
+        <div class="tl-card">
+          <div class="tl-header" onclick="toggle(this)">
+            <div class="tl-header-left">
+              <div>
+                <div class="tl-label">Años 4–5 · Meses 48–72</div>
+                <div class="tl-title">Madurez y Expansión</div>
+                <div class="tl-subtitle">El territorio como modelo replicable — energía renovable y escala regional</div>
+              </div>
+            </div>
+            <div class="tl-income-badge" style="background:#1B4332;color:#D8F3DC;">Meta: $200,000–$350,000+</div>
+            <div class="tl-chevron">▾</div>
+          </div>
+          <div class="tl-body">
+            <div class="tl-body-inner">
+              <div class="tl-col">
+                <div class="tl-col-title">Actividades en plena escala</div>
+                <ul class="tl-items">
+                  <li class="tl-item"><span class="tl-item-icon">☀️</span><div><strong>Energía renovable comunitaria</strong>Sistema solar ampliado (20–50 kW). Venta de excedentes a la red. El biogás cubre cocina y parte de la electricidad. Ahorro + ingreso neto de $15,000–$40,000/año.</div></li>
+                  <li class="tl-item"><span class="tl-item-icon">🌍</span><div><strong>Créditos de carbono consolidados</strong>Primera venta formal de créditos certificados. Reforestación activa que aumenta el volumen año a año. Posible alianza con empresas que buscan compensar su huella.</div></li>
+                  <li class="tl-item"><span class="tl-item-icon">🔧</span><div><strong>Consultoría de alto valor</strong>La reputación construida en años 1–3 atrae contratos grandes: municipios, desarrolladores sostenibles, ONGs. El equipo de consultores crece dentro de la comunidad.</div></li>
+                  <li class="tl-item"><span class="tl-item-icon">🌐</span><div><strong>Marca y franquicia del modelo</strong>Documentación completa del proceso para replicar. Posibilidad de co-fundar o asesorar otras comunidades en la región. La comunidad se convierte en referente LatAm.</div></li>
+                  <li class="tl-item"><span class="tl-item-icon">🏦</span><div><strong>Fondos y financiamiento de impacto</strong>Con 4–5 años de trayectoria documentada, acceder a fondos de inversión de impacto, cooperación internacional o bonos verdes para escalar infraestructura.</div></li>
+                </ul>
+              </div>
+              <div class="tl-col">
+                <div class="tl-col-title">Estado del territorio al año 5</div>
+                <ul class="tl-items">
+                  <li class="tl-item"><span class="tl-item-icon">🏘</span><div><strong>20–40 residentes estables</strong>La comunidad tiene masa crítica para operar los 12 modelos económicos simultáneamente, con roles especializados por actividad.</div></li>
+                  <li class="tl-item"><span class="tl-item-icon">🐄</span><div><strong>Hato ganadero maduro</strong>30–60 bovinos en pastoreo holístico. Suelo notablemente mejorado. Certificación regenerativa activa. Carne, lácteos y cuero como productos premium.</div></li>
+                  <li class="tl-item"><span class="tl-item-icon">🌳</span><div><strong>Ecosistema en regeneración visible</strong>Corredores boscosos establecidos, nacientes de agua recuperadas, biodiversidad documentada. El paisaje mismo es el mejor argumento de venta.</div></li>
+                  <li class="tl-item"><span class="tl-item-icon">📚</span><div><strong>Centro educativo regional</strong>200–500 estudiantes anuales entre visitas escolares, PDC, talleres y campamentos. Referente educativo en toda la región.</div></li>
+                  <li class="tl-item"><span class="tl-item-icon">🤝</span><div><strong>Red de 5–10 comunidades aliadas</strong>Derivación mutua de visitantes, compras colectivas, intercambio de saberes. El proyecto individual se convierte en movimiento regional.</div></li>
+                </ul>
+              </div>
+            </div>
+            <div class="tl-income-row">
+              <div class="tl-income-item"><div class="lbl">Energía + carbono</div><div class="val">$30,000–$80,000</div><div class="note">Mercados verdes maduros</div></div>
+              <div class="tl-income-item"><div class="lbl">Turismo + educación</div><div class="val">$80,000–$150,000</div><div class="note">Escala plena con reputación</div></div>
+              <div class="tl-income-item"><div class="lbl">Ganadería + consultoría</div><div class="val">$60,000–$120,000</div><div class="note">Productos premium + servicios</div></div>
+              <div class="tl-income-item"><div class="lbl">Total estimado año 4–5</div><div class="val">$200,000–$350,000+</div><div class="note">Autonomía económica plena</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /timeline -->
+  </div>
+</section>
+
+<footer>
+  Comunidad Eco-Aldea Regenerativa · Documento de investigación · Marzo 2026 · Referentes: GEN, Findhorn, Twin Oaks, Auroville, Damanhur, Tamera, Wild Minds, Aldea Feliz, Huehuecoyotl, Rancho Mastatal, Ecovila Tibá · Tendencias: @uncuento.defincas
+</footer>
+
+<script>
+  // Filtro por categoría
+  const btns = document.querySelectorAll('.filter-btn');
+  const cards = document.querySelectorAll('.act-card');
+  btns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      btns.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      const cat = btn.dataset.cat;
+      cards.forEach(card => {
+        if (cat === 'todos' || card.dataset.cat === cat) {
+          card.classList.remove('hidden');
+        } else {
+          card.classList.add('hidden');
+        }
+      });
+    });
+  });
+
+  // Acordeón del timeline
+  function toggle(header) {
+    const year = header.closest('.tl-year');
+    year.classList.toggle('open');
+  }
+</script>
+</body>
+</html>

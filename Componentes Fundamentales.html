@@ -1,0 +1,1125 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Componentes Fundamentales — Eco-Aldea Regenerativa</title>
+<style>
+  :root {
+    --verde-oscuro: #1B4332;
+    --verde-med:    #2D6A4F;
+    --sage:         #52B788;
+    --sage-light:   #D8F3DC;
+    --terra:        #C4622D;
+    --terra-light:  #FAE5D3;
+    --arena:        #F8F4E9;
+    --cream:        #FDFAF4;
+    --negro:        #1A1A1A;
+    --gris:         #4A4A4A;
+    --gris-claro:   #F0EDE5;
+    --border:       #D1C9B8;
+    --azul:         #065A82;
+    --azul-light:   #E0F2FE;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Segoe UI', system-ui, sans-serif; background: var(--cream); color: var(--negro); }
+
+  /* HERO */
+  .hero {
+    background: var(--verde-oscuro); padding: 56px 48px 48px;
+    position: relative; overflow: hidden;
+  }
+  .hero::before {
+    content:''; position:absolute; top:-80px; right:-80px;
+    width:380px; height:380px; border-radius:50%;
+    background:var(--verde-med); opacity:.45;
+  }
+  .hero-inner { max-width: 1080px; margin: 0 auto; position: relative; z-index:1; }
+  .hero-badge {
+    display:inline-block; font-size:11px; font-weight:700;
+    letter-spacing:3px; color:var(--sage); text-transform:uppercase; margin-bottom:14px;
+  }
+  .hero h1 {
+    font-family:Georgia,serif; font-size:46px; font-weight:700;
+    color:#fff; line-height:1.1; margin-bottom:12px;
+  }
+  .hero h1 span { color:var(--sage); }
+  .hero p { font-size:16px; color:#95D5B2; max-width:620px; line-height:1.65; }
+  .hero-ref {
+    margin-top:28px; padding-top:24px;
+    border-top:1px solid rgba(255,255,255,.12);
+    font-size:12px; color:rgba(255,255,255,.45);
+  }
+  .hero-ref strong { color:rgba(255,255,255,.7); }
+
+  /* TABS NAV */
+  .tabs-nav-wrap {
+    background: var(--verde-oscuro);
+    position: sticky; top:0; z-index:100;
+    box-shadow: 0 2px 12px rgba(0,0,0,.25);
+  }
+  .tabs-nav {
+    max-width:1080px; margin:0 auto;
+    display:flex; padding: 0 24px;
+  }
+  .tab-btn {
+    padding: 16px 28px; border:none; background:transparent;
+    color: rgba(255,255,255,.5); font-size:14px; font-weight:600;
+    cursor:pointer; border-bottom:3px solid transparent;
+    transition: all .2s; white-space:nowrap; font-family:inherit;
+  }
+  .tab-btn:hover { color:rgba(255,255,255,.8); }
+  .tab-btn.active {
+    color:#fff; border-bottom-color: var(--sage);
+  }
+  .tab-num {
+    display:inline-flex; align-items:center; justify-content:center;
+    width:22px; height:22px; border-radius:50%;
+    background:rgba(255,255,255,.12); font-size:11px;
+    margin-right:8px;
+  }
+  .tab-btn.active .tab-num { background:var(--sage); color:var(--verde-oscuro); }
+
+  /* TAB PANELS */
+  .tab-panel { display:none; }
+  .tab-panel.active { display:block; }
+
+  /* SECTION UTILITY */
+  .section { max-width:1080px; margin:0 auto; padding:52px 24px; }
+  .section-title {
+    font-family:Georgia,serif; font-size:30px; font-weight:700;
+    color:var(--verde-oscuro); margin-bottom:6px;
+  }
+  .section-sub { font-size:15px; color:var(--gris); font-style:italic; margin-bottom:36px; }
+  .block-label {
+    font-size:10px; font-weight:800; letter-spacing:2.5px;
+    text-transform:uppercase; color:var(--verde-med);
+    margin-bottom:14px; padding-bottom:8px;
+    border-bottom:2px solid var(--sage-light);
+  }
+
+  /* ── COMPONENTE 1: VISIÓN ───────────────────── */
+  .vision-purpose {
+    background: var(--verde-oscuro); border-radius:16px;
+    padding:40px 44px; margin-bottom:40px; position:relative; overflow:hidden;
+  }
+  .vision-purpose::after {
+    content:''; position:absolute; bottom:-40px; right:-40px;
+    width:220px; height:220px; border-radius:50%;
+    background:var(--verde-med); opacity:.3;
+  }
+  .vision-purpose blockquote {
+    font-family:Georgia,serif; font-size:22px; line-height:1.6;
+    color:#fff; max-width:820px; position:relative; z-index:1;
+  }
+  .vision-purpose blockquote::before {
+    content:'"'; font-size:72px; color:var(--sage); opacity:.5;
+    line-height:.5; display:block; margin-bottom:8px;
+    font-family:Georgia,serif;
+  }
+  .vision-purpose cite {
+    display:block; margin-top:16px; font-size:13px;
+    color:var(--sage); font-style:normal; letter-spacing:1px;
+  }
+
+  .valores-grid {
+    display:grid; grid-template-columns:repeat(3,1fr); gap:16px;
+    margin-bottom:40px;
+  }
+  .valor-card {
+    background:#fff; border:1px solid var(--border);
+    border-radius:14px; padding:24px; border-top:4px solid var(--sage);
+    transition: transform .2s, box-shadow .2s;
+  }
+  .valor-card:hover { transform:translateY(-3px); box-shadow:0 10px 28px rgba(0,0,0,.08); }
+  .valor-card:nth-child(2) { border-top-color:var(--terra); }
+  .valor-card:nth-child(3) { border-top-color:var(--azul); }
+  .valor-card:nth-child(4) { border-top-color:#6D2E46; }
+  .valor-card:nth-child(5) { border-top-color:#028090; }
+  .valor-card:nth-child(6) { border-top-color:#52856A; }
+  .valor-icon { font-size:28px; margin-bottom:10px; }
+  .valor-nombre { font-family:Georgia,serif; font-size:17px; font-weight:700; color:var(--verde-oscuro); margin-bottom:6px; }
+  .valor-desc { font-size:13px; color:var(--gris); line-height:1.65; }
+  .valor-link { font-size:11px; color:var(--sage); margin-top:10px; font-weight:600; display:block; }
+
+  .vida-grid {
+    display:grid; grid-template-columns:1fr 1fr; gap:24px; margin-bottom:40px;
+  }
+  .vida-card {
+    background:var(--arena); border-radius:14px; padding:28px;
+    border:1px solid var(--border);
+  }
+  .vida-card h4 { font-family:Georgia,serif; font-size:16px; color:var(--verde-oscuro); margin-bottom:14px; }
+  .vida-items { list-style:none; }
+  .vida-items li {
+    font-size:13.5px; color:var(--gris); padding:7px 0;
+    border-bottom:1px solid #E5E0D6; display:flex; gap:10px; align-items:flex-start;
+    line-height:1.5;
+  }
+  .vida-items li:last-child { border-bottom:none; }
+  .vida-dot { min-width:8px; height:8px; border-radius:50%; background:var(--sage); margin-top:5px; }
+
+  .acuerdos-list { list-style:none; margin-bottom:40px; }
+  .acuerdo-item {
+    background:#fff; border:1px solid var(--border); border-left:4px solid var(--terra);
+    border-radius:0 12px 12px 0; padding:18px 22px;
+    display:flex; gap:16px; align-items:flex-start;
+    margin-bottom:10px; font-size:14px; color:var(--gris); line-height:1.6;
+  }
+  .acuerdo-num {
+    font-family:Georgia,serif; font-size:22px; font-weight:700;
+    color:var(--terra); min-width:28px; line-height:1;
+  }
+  .acuerdo-item strong { color:var(--negro); display:block; margin-bottom:2px; }
+
+  .territorio-band {
+    background: linear-gradient(135deg, #0D2B1C 0%, var(--verde-oscuro) 100%);
+    border-radius:16px; padding:36px 40px;
+    display:grid; grid-template-columns:repeat(4,1fr); gap:24px;
+  }
+  .terr-item .terr-val {
+    font-family:Georgia,serif; font-size:28px; font-weight:700; color:#fff;
+  }
+  .terr-item .terr-lbl { font-size:12px; color:var(--sage); margin-top:4px; line-height:1.4; }
+
+  /* ── COMPONENTE 2: SELECCIÓN ────────────────── */
+  .etapas-flow {
+    display:grid; grid-template-columns:repeat(4,1fr);
+    gap:0; margin-bottom:48px; position:relative;
+  }
+  .etapas-flow::before {
+    content:''; position:absolute; top:36px; left:12.5%; right:12.5%;
+    height:3px; background:linear-gradient(to right, var(--terra), var(--sage), var(--verde-med), var(--verde-oscuro));
+    z-index:0;
+  }
+  .etapa-step { text-align:center; padding:0 8px; position:relative; z-index:1; }
+  .etapa-dot {
+    width:72px; height:72px; border-radius:50%;
+    display:flex; align-items:center; justify-content:center;
+    margin:0 auto 14px; font-size:24px;
+    border:3px solid var(--cream); position:relative; z-index:1;
+  }
+  .etapa-dot.e1 { background:var(--terra); }
+  .etapa-dot.e2 { background:#52856A; }
+  .etapa-dot.e3 { background:var(--sage); }
+  .etapa-dot.e4 { background:var(--verde-oscuro); }
+  .etapa-tag { font-size:10px; font-weight:700; letter-spacing:1.5px; text-transform:uppercase; color:var(--gris); margin-bottom:4px; }
+  .etapa-nombre { font-family:Georgia,serif; font-size:15px; font-weight:700; color:var(--verde-oscuro); margin-bottom:4px; }
+  .etapa-duracion { font-size:12px; color:var(--terra); font-weight:600; }
+
+  .etapa-detalle {
+    background:#fff; border:1px solid var(--border); border-radius:14px;
+    overflow:hidden; margin-bottom:16px;
+  }
+  .etapa-det-header {
+    padding:18px 24px; display:flex; align-items:center; gap:14px;
+    cursor:pointer; user-select:none; transition:background .15s;
+  }
+  .etapa-det-header:hover { background:var(--gris-claro); }
+  .etapa-det-num {
+    width:36px; height:36px; border-radius:50%;
+    display:flex; align-items:center; justify-content:center;
+    font-weight:700; font-size:14px; color:#fff; flex-shrink:0;
+  }
+  .n1 { background:var(--terra); }
+  .n2 { background:#52856A; }
+  .n3 { background:var(--sage); }
+  .n4 { background:var(--verde-oscuro); }
+  .etapa-det-title { font-family:Georgia,serif; font-size:18px; color:var(--verde-oscuro); flex:1; }
+  .etapa-det-chip {
+    font-size:11px; font-weight:700; padding:4px 12px; border-radius:20px; background:var(--sage-light); color:var(--verde-oscuro);
+  }
+  .etapa-det-chev { font-size:18px; color:var(--gris); transition:transform .25s; }
+  .etapa-detalle.open .etapa-det-chev { transform:rotate(180deg); }
+  .etapa-det-body { display:none; border-top:1px solid var(--border); }
+  .etapa-detalle.open .etapa-det-body { display:block; }
+  .etapa-det-inner { display:grid; grid-template-columns:1fr 1fr; }
+  .etapa-col { padding:24px 28px; }
+  .etapa-col+.etapa-col { border-left:1px solid var(--border); background:#FAFAF7; }
+  .etapa-col h5 { font-size:10px; font-weight:800; letter-spacing:2px; text-transform:uppercase; color:var(--verde-med); margin-bottom:14px; padding-bottom:8px; border-bottom:2px solid var(--sage-light); }
+  .etapa-col ul { list-style:none; }
+  .etapa-col ul li { font-size:13.5px; color:var(--gris); padding:7px 0; border-bottom:1px solid #EFEFEF; display:flex; gap:8px; line-height:1.5; }
+  .etapa-col ul li:last-child { border-bottom:none; }
+  .li-dot { min-width:8px; height:8px; border-radius:50%; background:var(--sage); margin-top:5px; flex-shrink:0; }
+  .li-dot.terra { background:var(--terra); }
+
+  .cuestionario-grid {
+    display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-bottom:40px;
+  }
+  .pregunta-card {
+    background:#fff; border:1px solid var(--border); border-radius:12px;
+    padding:18px 20px; display:flex; gap:14px; align-items:flex-start;
+  }
+  .preg-num {
+    font-family:Georgia,serif; font-size:22px; font-weight:700;
+    color:var(--sage); min-width:28px; line-height:1;
+  }
+  .preg-text { font-size:13.5px; color:var(--gris); line-height:1.6; }
+  .preg-text strong { color:var(--negro); display:block; margin-bottom:2px; font-size:13px; letter-spacing:.5px; }
+
+  .criterios-table { width:100%; border-collapse:collapse; margin-bottom:40px; }
+  .criterios-table th {
+    background:var(--verde-oscuro); color:#fff; padding:12px 16px;
+    text-align:left; font-size:11px; letter-spacing:1.5px; text-transform:uppercase;
+  }
+  .criterios-table th:first-child { border-radius:8px 0 0 0; }
+  .criterios-table th:last-child { border-radius:0 8px 0 0; }
+  .criterios-table td { padding:13px 16px; font-size:13.5px; border-bottom:1px solid var(--border); color:var(--gris); }
+  .criterios-table tr:last-child td { border-bottom:none; }
+  .criterios-table tr:nth-child(even) td { background:var(--gris-claro); }
+  .peso-badge {
+    font-size:11px; font-weight:700; padding:3px 10px; border-radius:20px; display:inline-block;
+  }
+  .peso-alta { background:var(--terra-light); color:var(--terra); }
+  .peso-media { background:var(--sage-light); color:var(--verde-oscuro); }
+
+  /* ── COMPONENTE 3: GOBERNANZA ───────────────── */
+  .circulos-diagram {
+    background: var(--verde-oscuro); border-radius:16px;
+    padding:40px; margin-bottom:40px; text-align:center;
+    position:relative; overflow:hidden;
+  }
+  .circulos-diagram::before {
+    content:''; position:absolute; top:-60px; left:-60px;
+    width:300px; height:300px; border-radius:50%;
+    background:var(--verde-med); opacity:.2;
+  }
+  .circulos-title { font-family:Georgia,serif; font-size:13px; color:var(--sage); letter-spacing:2px; text-transform:uppercase; margin-bottom:28px; }
+  .circulos-outer {
+    display:inline-flex; flex-direction:column; align-items:center;
+    gap:4px; position:relative; z-index:1;
+  }
+  .circ-asamblea {
+    background:rgba(255,255,255,.08); border:2px solid rgba(82,183,136,.6);
+    border-radius:16px; padding:14px 40px; color:#fff;
+    font-family:Georgia,serif; font-size:16px; font-weight:700; margin-bottom:12px;
+  }
+  .circ-asamblea span { display:block; font-size:11px; color:var(--sage); font-family:'Segoe UI',sans-serif; font-weight:400; margin-top:2px; }
+  .circulos-inner { display:flex; gap:16px; }
+  .circ-work {
+    background:rgba(255,255,255,.06); border:1.5px solid rgba(82,183,136,.35);
+    border-radius:12px; padding:14px 22px; color:#D8F3DC;
+    font-size:14px; font-weight:600; text-align:center; min-width:160px;
+  }
+  .circ-work span { display:block; font-size:11px; color:#95D5B2; font-weight:400; margin-top:4px; }
+  .circ-arrow { color:var(--sage); font-size:20px; display:flex; align-items:center; }
+
+  .roles-grid {
+    display:grid; grid-template-columns:repeat(3,1fr); gap:16px; margin-bottom:40px;
+  }
+  .rol-card {
+    background:#fff; border:1px solid var(--border); border-radius:14px; overflow:hidden;
+  }
+  .rol-header {
+    padding:16px 20px; font-family:Georgia,serif; font-size:16px; font-weight:700; color:#fff;
+  }
+  .rol-header.tierra { background:var(--verde-med); }
+  .rol-header.infra { background:var(--terra); }
+  .rol-header.comunidad { background:var(--azul); }
+  .rol-header span { display:block; font-size:11px; font-family:'Segoe UI',sans-serif; font-weight:400; opacity:.8; margin-top:2px; }
+  .rol-items { list-style:none; padding:16px 20px; }
+  .rol-items li { font-size:13px; color:var(--gris); padding:6px 0; border-bottom:1px solid #F0EDE5; display:flex; gap:8px; line-height:1.4; }
+  .rol-items li:last-child { border-bottom:none; }
+  .rol-freq { padding:10px 20px; background:var(--gris-claro); font-size:11px; font-weight:700; color:var(--gris); letter-spacing:1px; text-transform:uppercase; }
+
+  .decision-steps {
+    display:grid; grid-template-columns:repeat(5,1fr); gap:0; margin-bottom:40px; position:relative;
+  }
+  .decision-steps::before {
+    content:''; position:absolute; top:28px; left:10%; right:10%;
+    height:2px; background:linear-gradient(to right, var(--terra), var(--sage));
+  }
+  .dec-step { text-align:center; padding:0 6px; position:relative; z-index:1; }
+  .dec-dot {
+    width:56px; height:56px; border-radius:50%; margin:0 auto 12px;
+    display:flex; align-items:center; justify-content:center;
+    font-size:20px; border:3px solid var(--cream);
+  }
+  .dec-dot.d1 { background:var(--terra); }
+  .dec-dot.d2 { background:#C4895A; }
+  .dec-dot.d3 { background:#52856A; }
+  .dec-dot.d4 { background:var(--sage); }
+  .dec-dot.d5 { background:var(--verde-oscuro); }
+  .dec-nombre { font-size:13px; font-weight:700; color:var(--verde-oscuro); margin-bottom:4px; }
+  .dec-desc { font-size:11.5px; color:var(--gris); line-height:1.45; }
+
+  .reunion-grid { display:grid; grid-template-columns:1fr 1fr; gap:24px; margin-bottom:40px; }
+  .reunion-card { background:#fff; border:1px solid var(--border); border-radius:14px; overflow:hidden; }
+  .reunion-card-head { padding:16px 20px; background:var(--arena); border-bottom:1px solid var(--border); display:flex; justify-content:space-between; align-items:center; }
+  .reunion-card-head h4 { font-family:Georgia,serif; font-size:16px; color:var(--verde-oscuro); }
+  .reunion-freq { font-size:11px; font-weight:700; background:var(--verde-oscuro); color:#fff; padding:3px 10px; border-radius:20px; }
+  .reunion-items { list-style:none; padding:16px 20px; }
+  .reunion-items li { font-size:13.5px; color:var(--gris); padding:6px 0; border-bottom:1px solid #F0EDE5; display:flex; gap:8px; line-height:1.45; }
+  .reunion-items li:last-child { border-bottom:none; }
+
+  .herramientas-row { display:grid; grid-template-columns:repeat(4,1fr); gap:14px; }
+  .herr-card { background:#fff; border:1px solid var(--border); border-radius:12px; padding:20px; text-align:center; }
+  .herr-icon { font-size:28px; margin-bottom:8px; }
+  .herr-nombre { font-size:14px; font-weight:700; color:var(--negro); margin-bottom:4px; }
+  .herr-uso { font-size:12px; color:var(--gris); line-height:1.45; }
+
+  /* ── COMPONENTE 4: LEGAL & FINANZAS ─────────── */
+  .legal-table { width:100%; border-collapse:collapse; margin-bottom:40px; }
+  .legal-table th { background:var(--verde-oscuro); color:#fff; padding:14px 18px; text-align:left; font-size:11px; letter-spacing:1.5px; text-transform:uppercase; }
+  .legal-table th:first-child { border-radius:8px 0 0 0; }
+  .legal-table th:last-child { border-radius:0 8px 0 0; }
+  .legal-table td { padding:14px 18px; font-size:13.5px; border-bottom:1px solid var(--border); color:var(--gris); vertical-align:top; }
+  .legal-table tr:nth-child(even) td { background:var(--gris-claro); }
+  .legal-table tr:last-child td { border-bottom:none; }
+  .rec-badge { font-size:10px; font-weight:800; background:var(--sage-light); color:var(--verde-oscuro); padding:2px 8px; border-radius:20px; letter-spacing:.5px; white-space:nowrap; }
+
+  .aportes-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:16px; margin-bottom:40px; }
+  .aporte-card { background:#fff; border:1px solid var(--border); border-radius:14px; overflow:hidden; text-align:center; }
+  .aporte-head { padding:16px; font-size:11px; font-weight:800; letter-spacing:1.5px; text-transform:uppercase; color:#fff; }
+  .aporte-head.entrada { background:var(--terra); }
+  .aporte-head.mensual { background:var(--verde-med); }
+  .aporte-head.reserva { background:var(--azul); }
+  .aporte-head.salida { background:#6D2E46; }
+  .aporte-body { padding:20px 16px; }
+  .aporte-val { font-family:Georgia,serif; font-size:24px; font-weight:700; color:var(--negro); margin-bottom:4px; }
+  .aporte-sub { font-size:12px; color:var(--gris); line-height:1.5; }
+
+  .proyeccion-table { width:100%; border-collapse:collapse; margin-bottom:40px; }
+  .proyeccion-table th { background:#0D2B1C; color:#D8F3DC; padding:12px 16px; text-align:left; font-size:11px; letter-spacing:1.5px; text-transform:uppercase; }
+  .proyeccion-table th:first-child { border-radius:8px 0 0 0; }
+  .proyeccion-table th:last-child { border-radius:0 8px 0 0; }
+  .proyeccion-table td { padding:13px 16px; font-size:13.5px; border-bottom:1px solid var(--border); color:var(--gris); }
+  .proyeccion-table tr:last-child td { background:var(--sage-light); font-weight:700; color:var(--verde-oscuro); }
+  .total-row td { font-weight:700 !important; color:var(--verde-oscuro) !important; }
+  .monto-val { font-weight:700; color:var(--negro); }
+
+  .hoja-ruta {
+    background: var(--verde-oscuro); border-radius:16px; padding:36px 40px; margin-bottom:40px;
+  }
+  .hoja-title { font-family:Georgia,serif; font-size:18px; color:#D8F3DC; margin-bottom:24px; }
+  .hoja-steps { display:grid; grid-template-columns:repeat(3,1fr); gap:20px; }
+  .hoja-step { background:rgba(255,255,255,.07); border-radius:12px; padding:20px; }
+  .hoja-step-num { font-family:Georgia,serif; font-size:32px; font-weight:700; color:var(--sage); margin-bottom:6px; }
+  .hoja-step-title { font-size:14px; font-weight:700; color:#fff; margin-bottom:8px; }
+  .hoja-step-items { list-style:none; }
+  .hoja-step-items li { font-size:12.5px; color:#B7E4C7; padding:4px 0; border-bottom:1px solid rgba(255,255,255,.08); line-height:1.4; }
+  .hoja-step-items li:last-child { border-bottom:none; }
+
+  .fondos-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:16px; }
+  .fondo-card { background:#fff; border:1px solid var(--border); border-radius:12px; padding:22px; }
+  .fondo-tag { font-size:10px; font-weight:800; letter-spacing:1.5px; text-transform:uppercase; color:var(--terra); margin-bottom:8px; }
+  .fondo-nombre { font-family:Georgia,serif; font-size:17px; font-weight:700; color:var(--negro); margin-bottom:6px; }
+  .fondo-desc { font-size:13px; color:var(--gris); line-height:1.6; }
+
+  /* FOOTER */
+  footer { text-align:center; padding:32px; font-size:12px; color:#aaa; border-top:1px solid var(--border); }
+
+  /* RESPONSIVE */
+  @media (max-width:768px) {
+    .hero h1 { font-size:32px; }
+    .valores-grid, .roles-grid, .aportes-grid, .fondos-grid { grid-template-columns:1fr; }
+    .vida-grid, .cuestionario-grid, .etapa-det-inner, .reunion-grid { grid-template-columns:1fr; }
+    .etapa-col+.etapa-col { border-left:none; border-top:1px solid var(--border); }
+    .decision-steps { grid-template-columns:repeat(3,1fr); gap:12px; }
+    .decision-steps::before { display:none; }
+    .etapas-flow { grid-template-columns:1fr 1fr; gap:20px; }
+    .etapas-flow::before { display:none; }
+    .territorio-band { grid-template-columns:1fr 1fr; gap:16px; }
+    .herramientas-row { grid-template-columns:1fr 1fr; }
+    .hoja-steps { grid-template-columns:1fr; }
+    .tabs-nav { overflow-x:auto; }
+    .tab-btn { padding:14px 18px; font-size:13px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-inner">
+    <div class="hero-badge">Eco-Aldea Regenerativa · Chile · Marzo 2026</div>
+    <h1>Componentes<br><span>Fundamentales</span></h1>
+    <p>Los cuatro pilares que toda comunidad intencional debe construir antes de abrir sus puertas — con visión planetaria regenerativa, vida activa y economía diversificada como ejes del proyecto.</p>
+    <div class="hero-ref">
+      Basado en <strong>Creating a Life Together</strong> (Diana Leafe Christian, 2003) · Referentes: Findhorn, Twin Oaks, Auroville, Aldea Feliz, Huehuecoyotl, Wild Minds · Marco legal: Chile (SpA / Cooperativa)
+    </div>
+  </div>
+</section>
+
+<!-- TABS NAV -->
+<div class="tabs-nav-wrap">
+  <nav class="tabs-nav">
+    <button class="tab-btn active" onclick="switchTab(0)"><span class="tab-num">1</span>Visión &amp; Misión</button>
+    <button class="tab-btn" onclick="switchTab(1)"><span class="tab-num">2</span>Selección de Miembros</button>
+    <button class="tab-btn" onclick="switchTab(2)"><span class="tab-num">3</span>Modelo de Gobernanza</button>
+    <button class="tab-btn" onclick="switchTab(3)"><span class="tab-num">4</span>Estructura Legal &amp; Financiera</button>
+  </nav>
+</div>
+
+<!-- ════════════════════════════════════════════ -->
+<!-- TAB 1: VISIÓN & MISIÓN                       -->
+<!-- ════════════════════════════════════════════ -->
+<div class="tab-panel active" id="panel-0">
+<div class="section">
+  <div class="section-title">Declaración de Propósito</div>
+  <div class="section-sub">El "por qué" que une a los co-fundadores — primer documento que debe existir por escrito y que toda decisión futura debe respetar</div>
+
+  <div class="vision-purpose">
+    <blockquote>
+      Construir un territorio vivo en Chile donde familias comprometidas co-crean una vida activa, abundante y enraizada — con el movimiento y la vitalidad como base, los alimentos que crecen donde vivimos como sustento, y la regeneración del planeta como horizonte. Un lugar donde los humanos y la naturaleza prosperamos juntos, donde cada familia tiene su espacio y el colectivo es más poderoso que cada uno por separado.
+      <cite>— Declaración de propósito fundacional · Comunidad Eco-Aldea Regenerativa</cite>
+    </blockquote>
+  </div>
+
+  <div style="background:var(--sage-light);border-radius:14px;padding:28px 32px;margin-bottom:40px;border-left:5px solid var(--sage);">
+    <div class="block-label" style="margin-bottom:12px;">Nuestra Visión Planetaria</div>
+    <p style="font-size:15px;color:var(--gris);line-height:1.75;max-width:860px;">
+      Nuestra visión trasciende el predio: <strong style="color:var(--verde-oscuro);">queremos un planeta regenerativo.</strong> Un planeta donde los humanos cuidamos nuestro entorno natural y tenemos una relación simbiótica y productiva con todo nuestro ecosistema. Donde todos los seres prosperan — se protege la vida silvestre, se respeta el agua y los alimentos crecen en abundancia en la tierra donde vivimos. Esta comunidad no es un refugio del mundo: es una demostración de que ese mundo es posible.
+    </p>
+  </div>
+
+  <div class="block-label">Los 6 Valores Fundamentales</div>
+  <div class="valores-grid">
+    <div class="valor-card">
+      <div class="valor-icon">🏃</div>
+      <div class="valor-nombre">Movimiento y Vitalidad como Base</div>
+      <div class="valor-desc">El deporte, el movimiento y la actividad física no son un extra — son parte del diseño de la comunidad. El terreno, la arquitectura y la rutina diaria están pensados para que el cuerpo se mueva y se exija. Optimización y rendimiento como cultura compartida.</div>
+      <span class="valor-link">→ Infraestructura deportiva en Año 0 · Retiros de bienestar (Act. 15)</span>
+    </div>
+    <div class="valor-card">
+      <div class="valor-icon">🌍</div>
+      <div class="valor-nombre">Un Planeta Regenerativo</div>
+      <div class="valor-desc">Cada decisión — de suelo, agua, construcción o economía — debe mejorar el ecosistema. Aplicamos ganadería holística, agroforestería y permacultura no como técnica sino como filosofía. Esta comunidad es una demostración de que otro modo de habitar la Tierra es posible.</div>
+      <span class="valor-link">→ Actividades 1, 5, 9 · Tamera y Findhorn como referentes</span>
+    </div>
+    <div class="valor-card">
+      <div class="valor-icon">🦋</div>
+      <div class="valor-nombre">Todos los Seres Prosperan</div>
+      <div class="valor-desc">Protegemos la vida silvestre, respetamos el ciclo del agua y producimos alimentos en abundancia donde vivimos. No somos dueños del territorio: somos sus guardianes. Los animales silvestres, los insectos y las plantas tienen tanto derecho a estar aquí como nosotros.</div>
+      <span class="valor-link">→ Corredores boscosos · Meliponicultura (Act. 12) · Créditos carbono (Act. 5)</span>
+    </div>
+    <div class="valor-card">
+      <div class="valor-icon">🤝</div>
+      <div class="valor-nombre">Comunidad con Privacidad</div>
+      <div class="valor-desc">Creemos en compartir espacios, recursos y sueños — y en que cada familia necesita su propio espacio. Lo comunitario se diseña y se elige; nunca se impone. El todo es más que la suma de las partes: colaboramos encontrando los puntos donde nuestros sueños se intersectan.</div>
+      <span class="valor-link">→ Planos de zonas privadas/comunes desde Año 0 · Gobernanza por consentimiento</span>
+    </div>
+    <div class="valor-card">
+      <div class="valor-icon">🌱</div>
+      <div class="valor-nombre">Para las Generaciones que Vienen</div>
+      <div class="valor-desc">Nuestras descendencias son importantes. Les daremos la oportunidad de disfrutar lo que nosotros pudimos disfrutar en nuestra niñez — tierra libre, naturaleza sin miedo, juego sin pantallas, comida real. Las decisiones sobre el territorio se toman pensando en ellos.</div>
+      <span class="valor-link">→ Granja educativa (Act. 11) · Horizonte de planificación: 50–100 años</span>
+    </div>
+    <div class="valor-card">
+      <div class="valor-icon">⚖️</div>
+      <div class="valor-nombre">Rentables y Felices Juntos</div>
+      <div class="valor-desc">Buscamos el equilibrio económico sin sacrificar el disfrute. Cada persona tiene un rol que saca lo mejor de ella para el equipo. Las 15 actividades económicas no son solo ingresos: son la expresión práctica de lo que creemos. Somos rentables porque nos importa seguir aquí por décadas.</div>
+      <span class="valor-link">→ $350K+ al año 5 · Distribución 50/30/20 · Roles por fortaleza, no jerarquía</span>
+    </div>
+  </div>
+
+  <div class="block-label">Descripción de la Vida Cotidiana</div>
+  <div class="vida-grid">
+    <div class="vida-card">
+      <h4>Un día de semana tipo (Año 2+)</h4>
+      <ul class="vida-items">
+        <li><span class="vida-dot" style="background:var(--terra);"></span><strong>06:30</strong> — El día empieza con el cuerpo: carrera por el territorio, entrenamiento, yoga o trabajo físico en la tierra. No hay diferencia entre ejercicio y trabajo productivo.</li>
+        <li><span class="vida-dot"></span><strong>08:30</strong> — Desayuno con alimentos de la propia huerta. En familia o en la cocina común según el día (opt-in 3x/semana).</li>
+        <li><span class="vida-dot"></span><strong>09:30</strong> — Trabajo comunitario rotativo: huerta, animales, infraestructura o administración (12 hrs/semana total).</li>
+        <li><span class="vida-dot"></span><strong>12:00</strong> — Almuerzo en familia. Los niños con tiempo libre en contacto con la naturaleza y los animales.</li>
+        <li><span class="vida-dot"></span><strong>14:00</strong> — Trabajo individual: actividad económica propia, digital, educación o atención de visitantes.</li>
+        <li><span class="vida-dot"></span><strong>17:00</strong> — Deporte colectivo opcional: fútbol, bicicleta, trekking, natación en el estero.</li>
+        <li><span class="vida-dot"></span><strong>19:00</strong> — Vida social orgánica: fogón, música, conversación. Lo espontáneo es tan valioso como lo planificado.</li>
+      </ul>
+    </div>
+    <div class="vida-card">
+      <h4>Qué se comparte / qué es privado</h4>
+      <ul class="vida-items">
+        <li><span class="vida-dot"></span><strong>Compartido:</strong> Infraestructura deportiva y de movimiento, herramientas de trabajo, vehículos, cocina comunitaria (opt-in), espacios recreativos, red solar y agua</li>
+        <li><span class="vida-dot"></span><strong>Privado:</strong> Vivienda familiar, cocina propia, ingresos personales más allá de la cuota, ritmos personales, decisiones de crianza</li>
+        <li><span class="vida-dot"></span><strong>Obligaciones mínimas:</strong> 12 hrs/semana de trabajo comunitario + asamblea mensual. El movimiento físico no es obligatorio, pero el diseño del lugar lo hace inevitable.</li>
+        <li><span class="vida-dot"></span><strong>Opt-in:</strong> Cada familia elige en cuáles de las 15 actividades económicas participa activamente, según sus fortalezas y energía disponible.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="block-label">Acuerdos de Convivencia</div>
+  <ul class="acuerdos-list">
+    <li class="acuerdo-item">
+      <span class="acuerdo-num">1</span>
+      <div><strong>El movimiento es cultura, no obligación</strong>Los espacios e infraestructuras para el deporte y la actividad física son parte del diseño comunitario y se mantienen entre todos. Nadie está obligado a participar en actividades deportivas colectivas, pero sí a respetar y cuidar esos espacios como cualquier otro bien común.</div>
+    </li>
+    <li class="acuerdo-item">
+      <span class="acuerdo-num">2</span>
+      <div><strong>El agua y la vida silvestre son límites no negociables</strong>Ninguna actividad económica, ninguna obra y ninguna decisión puede comprometer las fuentes de agua del territorio ni los corredores de fauna nativa. Esto no se somete a votación: es el piso mínimo de nuestra visión planetaria y no se cede bajo ninguna circunstancia.</div>
+    </li>
+    <li class="acuerdo-item">
+      <span class="acuerdo-num">3</span>
+      <div><strong>Colaboramos en los sueños que se intersectan</strong>No todos participan en todo. Cada familia elige las actividades económicas y proyectos en los que se involucra activamente, siempre que cumpla sus obligaciones mínimas. Buscamos los puntos de unión — y respetamos los caminos divergentes.</div>
+    </li>
+    <li class="acuerdo-item">
+      <span class="acuerdo-num">4</span>
+      <div><strong>Cada persona tiene un rol que saca lo mejor de ella</strong>La asignación de roles en los círculos se hace en función de las fortalezas reales de cada miembro, no de jerarquías. Los roles rotan periódicamente para evitar la acumulación de poder informal y para que todos desarrollen nuevas capacidades.</div>
+    </li>
+    <li class="acuerdo-item">
+      <span class="acuerdo-num">5</span>
+      <div><strong>Transparencia financiera total y decisiones por consentimiento</strong>El estado de cuentas es accesible a todos en tiempo real. Las decisiones se toman cuando nadie tiene una objeción fundamentada y razonada — no cuando todos están entusiasmados. "No me gusta" no es objeción válida; "esto daña el proyecto porque..." sí lo es.</div>
+    </li>
+    <li class="acuerdo-item">
+      <span class="acuerdo-num">6</span>
+      <div><strong>Resolución directa antes de escalar — y compromiso de permanencia</strong>Los conflictos se trabajan primero entre las partes (máx. 7 días) antes de activar mediación formal. Al firmar, cada miembro asume un compromiso mínimo de 3 años de residencia activa — tiempo mínimo para que una comunidad construya raíces reales.</div>
+    </li>
+  </ul>
+
+  <div class="block-label">Visión Territorial al Año 5</div>
+  <div class="territorio-band">
+    <div class="terr-item"><div class="terr-val">200–500 ha</div><div class="terr-lbl">Superficie mínima requerida (bosque + pradera + agua)</div></div>
+    <div class="terr-item"><div class="terr-val">15–20</div><div class="terr-lbl">Familias residentes en plena operación</div></div>
+    <div class="terr-item"><div class="terr-val">$350K+</div><div class="terr-lbl">Ingreso anual proyectado con 15 actividades activas</div></div>
+    <div class="terr-item"><div class="terr-val">100%</div><div class="terr-lbl">Energía solar + agua propia + saneamiento ecológico</div></div>
+  </div>
+</div>
+</div>
+
+<!-- ════════════════════════════════════════════ -->
+<!-- TAB 2: SELECCIÓN DE MIEMBROS                 -->
+<!-- ════════════════════════════════════════════ -->
+<div class="tab-panel" id="panel-1">
+<div class="section">
+  <div class="section-title">Proceso de Selección de Miembros</div>
+  <div class="section-sub">El libro es explícito: aceptar a las personas equivocadas es la causa #1 de fracaso en comunidades intencionales</div>
+
+  <div class="block-label">Las 4 Etapas del Proceso</div>
+  <div class="etapas-flow" style="margin-bottom:40px;">
+    <div class="etapa-step">
+      <div class="etapa-dot e1">📝</div>
+      <div class="etapa-tag">Etapa 1</div>
+      <div class="etapa-nombre">Consulta Inicial</div>
+      <div class="etapa-duracion">1–2 semanas</div>
+    </div>
+    <div class="etapa-step">
+      <div class="etapa-dot e2">🏕</div>
+      <div class="etapa-tag">Etapa 2</div>
+      <div class="etapa-nombre">Visita de Conocimiento</div>
+      <div class="etapa-duracion">2–3 días en el terreno</div>
+    </div>
+    <div class="etapa-step">
+      <div class="etapa-dot e3">🌱</div>
+      <div class="etapa-tag">Etapa 3</div>
+      <div class="etapa-nombre">Período Provisional</div>
+      <div class="etapa-duracion">3–6 meses</div>
+    </div>
+    <div class="etapa-step">
+      <div class="etapa-dot e4">🤝</div>
+      <div class="etapa-tag">Etapa 4</div>
+      <div class="etapa-nombre">Membresía Plena</div>
+      <div class="etapa-duracion">Firma del acuerdo</div>
+    </div>
+  </div>
+
+  <div class="etapa-detalle open" id="det-1">
+    <div class="etapa-det-header" onclick="toggleEtapa('det-1')">
+      <div class="etapa-det-num n1">1</div>
+      <div class="etapa-det-title">Consulta Inicial &amp; Cuestionario</div>
+      <div class="etapa-det-chip">Sin compromiso de ninguna parte</div>
+      <div class="etapa-det-chev">▾</div>
+    </div>
+    <div class="etapa-det-body">
+      <div class="etapa-det-inner">
+        <div class="etapa-col">
+          <h5>Qué ocurre en esta etapa</h5>
+          <ul>
+            <li><span class="li-dot"></span>La persona interesada completa el cuestionario de 12 preguntas (ver abajo)</li>
+            <li><span class="li-dot"></span>El Círculo de Comunidad &amp; Admisión revisa en conjunto (máx. 7 días)</li>
+            <li><span class="li-dot"></span>Si hay alineación básica: se agenda una videollamada de 60 min para resolver dudas de ambas partes</li>
+            <li><span class="li-dot"></span>Si no hay alineación: respuesta escrita con honestidad y sin puerta cerrada</li>
+          </ul>
+        </div>
+        <div class="etapa-col">
+          <h5>Filtros de incompatibilidad temprana</h5>
+          <ul>
+            <li><span class="li-dot terra"></span>Expectativa de retorno financiero a corto plazo (menos de 5 años)</li>
+            <li><span class="li-dot terra"></span>Resistencia al proceso de decisiones colectivas o al consenso</li>
+            <li><span class="li-dot terra"></span>Incapacidad de cubrir el aporte de entrada y la cuota mensual</li>
+            <li><span class="li-dot terra"></span>Expectativa de vida rural sin participación en el trabajo de la tierra</li>
+            <li><span class="li-dot terra"></span>Rechazo explícito a la cultura de movimiento y vida activa como valor compartido</li>
+            <li><span class="li-dot terra"></span>Desalineación fundamental con la visión planetaria regenerativa</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="etapa-detalle" id="det-2">
+    <div class="etapa-det-header" onclick="toggleEtapa('det-2')">
+      <div class="etapa-det-num n2">2</div>
+      <div class="etapa-det-title">Visita de Conocimiento en el Terreno</div>
+      <div class="etapa-det-chip">2–3 días de inmersión real</div>
+      <div class="etapa-det-chev">▾</div>
+    </div>
+    <div class="etapa-det-body">
+      <div class="etapa-det-inner">
+        <div class="etapa-col">
+          <h5>Agenda de la visita</h5>
+          <ul>
+            <li><span class="li-dot"></span>Día 1 — Recorrido del territorio, presentación del plan económico y la visión</li>
+            <li><span class="li-dot"></span>Día 1 tarde — Participación en trabajo de la tarde (huerta o infraestructura)</li>
+            <li><span class="li-dot"></span>Día 2 — Asistencia a una reunión de círculo real (no simulada)</li>
+            <li><span class="li-dot"></span>Día 2 tarde — Convivencia informal: comida, fogón, conversación libre</li>
+            <li><span class="li-dot"></span>Día 3 — Revisión del modelo financiero y pacto de accionistas borrador</li>
+            <li><span class="li-dot"></span>Día 3 tarde — Feedback mutuo honesto y próximos pasos</li>
+          </ul>
+        </div>
+        <div class="etapa-col">
+          <h5>Lo que la comunidad evalúa</h5>
+          <ul>
+            <li><span class="li-dot"></span>¿Cómo reacciona ante el desacuerdo o la frustración pequeña?</li>
+            <li><span class="li-dot"></span>¿Escucha antes de hablar o monopoliza la conversación?</li>
+            <li><span class="li-dot"></span>¿Se integra al trabajo físico con disposición real?</li>
+            <li><span class="li-dot"></span>¿Sus habilidades complementan las que ya existen en la comunidad?</li>
+            <li><span class="li-dot"></span>¿Sus valores cotidianos coinciden con los declarados en el cuestionario?</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="etapa-detalle" id="det-3">
+    <div class="etapa-det-header" onclick="toggleEtapa('det-3')">
+      <div class="etapa-det-num n3">3</div>
+      <div class="etapa-det-title">Período Provisional</div>
+      <div class="etapa-det-chip">3–6 meses con cuota reducida (50%)</div>
+      <div class="etapa-det-chev">▾</div>
+    </div>
+    <div class="etapa-det-body">
+      <div class="etapa-det-inner">
+        <div class="etapa-col">
+          <h5>Condiciones del período provisional</h5>
+          <ul>
+            <li><span class="li-dot"></span>Acceso a vivienda provisional (si disponible) o estadías de 2–3 semanas/mes</li>
+            <li><span class="li-dot"></span>Cuota mensual reducida: 50% de la cuota plena durante el período</li>
+            <li><span class="li-dot"></span>Participación obligatoria en el trabajo comunitario y en las reuniones</li>
+            <li><span class="li-dot"></span>Sin derecho a voto en decisiones de inversión importantes (más de $1M CLP)</li>
+            <li><span class="li-dot"></span>Mentoría asignada: un miembro pleno acompaña su integración</li>
+          </ul>
+        </div>
+        <div class="etapa-col">
+          <h5>Evaluación al final del período</h5>
+          <ul>
+            <li><span class="li-dot"></span>El postulante hace una autoevaluación escrita de su experiencia</li>
+            <li><span class="li-dot"></span>Cada miembro pleno emite una opinión escrita (no en asamblea)</li>
+            <li><span class="li-dot"></span>El Círculo de Comunidad &amp; Admisión sintetiza y presenta a la asamblea</li>
+            <li><span class="li-dot"></span>Decisión por consentimiento: ¿alguien tiene una objeción fundamentada?</li>
+            <li><span class="li-dot"></span>Si la hay: se abre período de 30 días adicionales con objetivos específicos</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="etapa-detalle" id="det-4">
+    <div class="etapa-det-header" onclick="toggleEtapa('det-4')">
+      <div class="etapa-det-num n4">4</div>
+      <div class="etapa-det-title">Membresía Plena &amp; Protocolo de Salida</div>
+      <div class="etapa-det-chip">Firma del acuerdo formal</div>
+      <div class="etapa-det-chev">▾</div>
+    </div>
+    <div class="etapa-det-body">
+      <div class="etapa-det-inner">
+        <div class="etapa-col">
+          <h5>Lo que incluye el acuerdo de miembro</h5>
+          <ul>
+            <li><span class="li-dot"></span>Monto y forma del aporte de entrada (USD 20,000 por familia, pagadero en 3 cuotas)</li>
+            <li><span class="li-dot"></span>Cuota mensual de operaciones ($250 USD/mes incluye agua, energía, internet, mantenimiento)</li>
+            <li><span class="li-dot"></span>Derechos de uso de áreas privadas y comunes definidos por planos</li>
+            <li><span class="li-dot"></span>Obligaciones mínimas: 12 hrs/semana trabajo comunitario + asamblea mensual</li>
+            <li><span class="li-dot"></span>Participación en el pacto de accionistas de la SpA (ver Componente 4)</li>
+          </ul>
+        </div>
+        <div class="etapa-col">
+          <h5>Protocolo de salida (definido al entrar)</h5>
+          <ul>
+            <li><span class="li-dot terra"></span>Preaviso mínimo: 6 meses antes de la salida efectiva</li>
+            <li><span class="li-dot terra"></span>La comunidad tiene opción preferente de recompra por 90 días</li>
+            <li><span class="li-dot terra"></span>Precio de recompra: aporte original ajustado por IPC, menos deudas pendientes</li>
+            <li><span class="li-dot terra"></span>Salida antes de 3 años: penalización del 15% sobre el valor de recompra</li>
+            <li><span class="li-dot terra"></span>Aportes de mejora a infraestructura común no son reembolsables</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="block-label" style="margin-top:48px;">Cuestionario de Consulta Inicial (12 preguntas)</div>
+  <div class="cuestionario-grid">
+    <div class="pregunta-card"><span class="preg-num">1</span><div class="preg-text"><strong>Motivación</strong>¿Por qué quieres vivir en comunidad intencional? ¿Qué no está funcionando en tu forma de vida actual que este proyecto resolvería?</div></div>
+    <div class="pregunta-card"><span class="preg-num">2</span><div class="preg-text"><strong>Experiencia previa</strong>¿Has vivido o participado en comunidades, cooperativas o colectivos? ¿Qué aprendiste — incluyendo lo que salió mal?</div></div>
+    <div class="pregunta-card"><span class="preg-num">3</span><div class="preg-text"><strong>Habilidades clave</strong>¿Cuáles son tus 3 habilidades más relevantes para un proyecto como este? (agricultura, construcción, salud, educación, tecnología, finanzas, comunicación, etc.)</div></div>
+    <div class="pregunta-card"><span class="preg-num">4</span><div class="preg-text"><strong>Horizonte de compromiso</strong>¿Cuál es tu horizonte real de permanencia? ¿Qué circunstancias te harían querer salir antes de 5 años?</div></div>
+    <div class="pregunta-card"><span class="preg-num">5</span><div class="preg-text"><strong>Conflicto</strong>Describe una situación de conflicto real que hayas tenido con un vecino, colega o familiar. ¿Cómo lo resolviste? ¿Qué harías diferente hoy?</div></div>
+    <div class="pregunta-card"><span class="preg-num">6</span><div class="preg-text"><strong>Economía personal</strong>¿Puedes cubrir el aporte de entrada de USD 20,000 y la cuota mensual de USD 250 sin comprometer tu estabilidad personal? ¿Tienes deudas significativas?</div></div>
+    <div class="pregunta-card"><span class="preg-num">7</span><div class="preg-text"><strong>Movimiento y vida activa</strong>El deporte y el movimiento son parte del diseño de esta comunidad. ¿Practicas algún deporte o actividad física de forma regular? ¿Qué rol tiene el movimiento en tu vida cotidiana? ¿Hay algo en este enfoque que te genere resistencia?</div></div>
+    <div class="pregunta-card"><span class="preg-num">8</span><div class="preg-text"><strong>Trabajo de la tierra y actividades</strong>¿Tienes experiencia con agricultura, ganadería o gestión de territorios rurales? ¿Estás dispuesto a 12 horas semanales de trabajo físico comunitario? ¿Cuáles de las 15 actividades económicas te generan más entusiasmo?</div></div>
+    <div class="pregunta-card"><span class="preg-num">9</span><div class="preg-text"><strong>Familia y convivencia</strong>¿Tienes hijos? ¿Qué edades? ¿Tu núcleo familiar comparte este proyecto? ¿Alguien cercano a ti tiene reservas sobre esta decisión?</div></div>
+    <div class="pregunta-card"><span class="preg-num">10</span><div class="preg-text"><strong>Decisiones colectivas</strong>¿Cómo te sientes cuando una decisión grupal va en contra de tu preferencia personal? Da un ejemplo de una vez que hayas cedido ante la decisión de un colectivo.</div></div>
+    <div class="pregunta-card"><span class="preg-num">11</span><div class="preg-text"><strong>Lo que quieres dar</strong>¿Qué aportarías de forma única a esta comunidad que sería difícil de reemplazar? ¿Cuál es tu visión de tu rol aquí a 3 años?</div></div>
+    <div class="pregunta-card"><span class="preg-num">12</span><div class="preg-text"><strong>Lo que quieres recibir</strong>¿Qué necesitas de la comunidad para estar bien? ¿Tienes alguna necesidad especial (salud, privacidad, ritmos de trabajo) que deberíamos conocer de antemano?</div></div>
+  </div>
+
+  <div class="block-label">Criterios de Evaluación</div>
+  <table class="criterios-table">
+    <thead><tr><th>Criterio</th><th>Cómo se evalúa</th><th>Momento</th><th>Peso</th></tr></thead>
+    <tbody>
+      <tr><td>Alineación real con los 6 valores</td><td>Cuestionario + conversación + observación en visita</td><td>Etapas 1, 2 y 3</td><td><span class="peso-badge peso-alta">Alta</span></td></tr>
+      <tr><td>Actitud ante el desacuerdo y el conflicto</td><td>Pregunta 5 + dinámica de grupo en visita + reunión real</td><td>Etapas 2 y 3</td><td><span class="peso-badge peso-alta">Alta</span></td></tr>
+      <tr><td>Capacidad financiera real</td><td>Declaración escrita (no verificación formal) + historial</td><td>Etapa 1</td><td><span class="peso-badge peso-media">Media</span></td></tr>
+      <tr><td>Habilidades complementarias al equipo actual</td><td>Portfolio, referencias, trabajo práctico en visita</td><td>Etapas 1 y 2</td><td><span class="peso-badge peso-media">Media</span></td></tr>
+      <tr><td>Compromiso del núcleo familiar completo</td><td>Visita incluye a toda la familia; conversación individual</td><td>Etapa 2</td><td><span class="peso-badge peso-alta">Alta</span></td></tr>
+      <tr><td>Disponibilidad real de tiempo y energía</td><td>Plan de transición escrito hacia la vida comunitaria</td><td>Etapa 3</td><td><span class="peso-badge peso-media">Media</span></td></tr>
+    </tbody>
+  </table>
+</div>
+</div>
+
+<!-- ════════════════════════════════════════════ -->
+<!-- TAB 3: GOBERNANZA                            -->
+<!-- ════════════════════════════════════════════ -->
+<div class="tab-panel" id="panel-2">
+<div class="section">
+  <div class="section-title">Modelo de Gobernanza</div>
+  <div class="section-sub">Basado en sociocracia con círculos funcionales — el modelo que mejor funciona en comunidades de 5–30 familias según el libro</div>
+
+  <div class="block-label">Estructura de Círculos</div>
+  <div class="circulos-diagram">
+    <div class="circulos-title">Arquitectura de Decisiones</div>
+    <div class="circulos-outer">
+      <div class="circ-asamblea">
+        Asamblea General
+        <span>Todos los miembros · Mensual · Decisiones estratégicas y de alto impacto</span>
+      </div>
+      <div class="circ-arrow">↓ delega autonomía en ↓</div>
+      <div class="circulos-inner">
+        <div class="circ-work">
+          🌿 Tierra &amp; Producción
+          <span>Decisiones agrícolas, ganaderas y ambientales</span>
+        </div>
+        <div class="circ-work">
+          🔧 Infraestructura &amp; Finanzas
+          <span>Obras, mantenimiento, tesorería, inversión</span>
+        </div>
+        <div class="circ-work">
+          🤝 Comunidad &amp; Admisión
+          <span>Nuevos miembros, conflictos, bienestar</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="block-label">Responsabilidades por Círculo</div>
+  <div class="roles-grid">
+    <div class="rol-card">
+      <div class="rol-header tierra">🌿 Tierra &amp; Producción<span>Coordinador rotativo — 6 meses</span></div>
+      <ul class="rol-items">
+        <li><span class="li-dot" style="background:var(--verde-med)"></span>Plan de siembra y rotación de cultivos</li>
+        <li><span class="li-dot" style="background:var(--verde-med)"></span>Manejo del hato ganadero y pastoreo holístico</li>
+        <li><span class="li-dot" style="background:var(--verde-med)"></span>Sistemas de agua y riego</li>
+        <li><span class="li-dot" style="background:var(--verde-med)"></span>Créditos de carbono y certificaciones</li>
+        <li><span class="li-dot" style="background:var(--verde-med)"></span>Voluntarios y WWOOFers (gestión)</li>
+        <li><span class="li-dot" style="background:var(--verde-med)"></span>Actividades económicas 1, 4, 5, 9, 10, 11, 12</li>
+      </ul>
+      <div class="rol-freq">Reunión: cada 2 semanas · Lunes 9:00</div>
+    </div>
+    <div class="rol-card">
+      <div class="rol-header infra">🔧 Infraestructura &amp; Finanzas<span>Coordinador rotativo — 6 meses</span></div>
+      <ul class="rol-items">
+        <li><span class="li-dot" style="background:var(--terra)"></span>Mantenimiento de viviendas y caminos</li>
+        <li><span class="li-dot" style="background:var(--terra)"></span>Sistema solar, biogás y saneamiento</li>
+        <li><span class="li-dot" style="background:var(--terra)"></span>Tesorería y presupuesto mensual</li>
+        <li><span class="li-dot" style="background:var(--terra)"></span>Fondo de reserva e inversiones mayores</li>
+        <li><span class="li-dot" style="background:var(--terra)"></span>Relación con INDAP, CORFO y financistas</li>
+        <li><span class="li-dot" style="background:var(--terra)"></span>Actividades económicas 6, 7, 8, 13</li>
+      </ul>
+      <div class="rol-freq">Reunión: cada 2 semanas · Miércoles 9:00</div>
+    </div>
+    <div class="rol-card">
+      <div class="rol-header comunidad" style="background:var(--azul);">🤝 Comunidad, Bienestar &amp; Admisión<span>Coordinador rotativo — 6 meses</span></div>
+      <ul class="rol-items">
+        <li><span class="li-dot" style="background:var(--azul)"></span>Proceso de selección de nuevos miembros</li>
+        <li><span class="li-dot" style="background:var(--azul)"></span>Mediación y resolución de conflictos</li>
+        <li><span class="li-dot" style="background:var(--azul)"></span>Bienestar, salud y vida activa de los residentes</li>
+        <li><span class="li-dot" style="background:var(--azul)"></span>Infraestructura y agenda deportiva comunitaria</li>
+        <li><span class="li-dot" style="background:var(--azul)"></span>Turismo, retiros de bienestar y visitantes externos</li>
+        <li><span class="li-dot" style="background:var(--azul)"></span>Comunicación, marca y redes sociales</li>
+        <li><span class="li-dot" style="background:var(--azul)"></span>Actividades económicas 2, 3, 14, 15</li>
+      </ul>
+      <div class="rol-freq">Reunión: cada 2 semanas · Viernes 9:00</div>
+    </div>
+  </div>
+
+  <div class="block-label">Proceso de Decisión por Consentimiento</div>
+  <div class="decision-steps">
+    <div class="dec-step">
+      <div class="dec-dot d1">📢</div>
+      <div class="dec-nombre">Propuesta</div>
+      <div class="dec-desc">Presentada por escrito con 48h de anticipación. Incluye contexto, alternativas consideradas y recomendación.</div>
+    </div>
+    <div class="dec-step">
+      <div class="dec-dot d2">❓</div>
+      <div class="dec-nombre">Preguntas</div>
+      <div class="dec-desc">Ronda de preguntas aclaratorias únicamente. No se debate todavía. El proponente responde sin defenderse.</div>
+    </div>
+    <div class="dec-step">
+      <div class="dec-dot d3">💬</div>
+      <div class="dec-nombre">Reacciones</div>
+      <div class="dec-desc">Cada miembro comparte su reacción (buena o mala). Se escucha sin interrupciones. No es votación.</div>
+    </div>
+    <div class="dec-step">
+      <div class="dec-dot d4">🚧</div>
+      <div class="dec-nombre">Objeciones</div>
+      <div class="dec-desc">¿Alguien tiene una objeción fundamentada? Es válida si puede argumentar que la propuesta daña el proyecto de forma concreta.</div>
+    </div>
+    <div class="dec-step">
+      <div class="dec-dot d5">✅</div>
+      <div class="dec-nombre">Aprobación</div>
+      <div class="dec-desc">Sin objeciones = aprobado. Con objeciones = el proponente modifica la propuesta incorporando la objeción y el ciclo se repite.</div>
+    </div>
+  </div>
+
+  <div class="block-label" style="margin-top:48px;">Estructura de Reuniones</div>
+  <div class="reunion-grid">
+    <div class="reunion-card">
+      <div class="reunion-card-head">
+        <h4>Asamblea General</h4>
+        <span class="reunion-freq">Mensual · 1er domingo</span>
+      </div>
+      <ul class="reunion-items">
+        <li><span class="li-dot"></span>Check-in emocional breve de cada miembro (máx. 2 min/persona)</li>
+        <li><span class="li-dot"></span>Reporte de estado de cada círculo (5 min/círculo)</li>
+        <li><span class="li-dot"></span>Decisiones que exceden la autonomía de los círculos</li>
+        <li><span class="li-dot"></span>Actualizaciones financieras: ingresos, gastos, reserva</li>
+        <li><span class="li-dot"></span>Propuestas de nuevos miembros o salidas</li>
+        <li><span class="li-dot"></span>Cierre: compromisos concretos con fecha (who does what by when)</li>
+      </ul>
+    </div>
+    <div class="reunion-card">
+      <div class="reunion-card-head">
+        <h4>Reuniones de Círculo</h4>
+        <span class="reunion-freq">Quincenal · Día fijo</span>
+      </div>
+      <ul class="reunion-items">
+        <li><span class="li-dot"></span>Revisión de compromisos de la reunión anterior</li>
+        <li><span class="li-dot"></span>Decisiones operativas dentro del dominio del círculo</li>
+        <li><span class="li-dot"></span>Problemas que requieren coordinación con otros círculos</li>
+        <li><span class="li-dot"></span>Alertas tempranas: ¿qué podría salir mal este mes?</li>
+        <li><span class="li-dot"></span>Actas publicadas en Loomio máx. 24h después</li>
+      </ul>
+    </div>
+    <div class="reunion-card">
+      <div class="reunion-card-head">
+        <h4>Reglas de facilitación</h4>
+        <span class="reunion-freq">Todas las reuniones</span>
+      </div>
+      <ul class="reunion-items">
+        <li><span class="li-dot"></span>Facilitador rotativo (no siempre el mismo fundador)</li>
+        <li><span class="li-dot"></span>Secretario rotativo, actas en tiempo real en documento compartido</li>
+        <li><span class="li-dot"></span>Distinción explícita: ¿esto es información, consulta o decisión?</li>
+        <li><span class="li-dot"></span>Máximo 90 min por reunión; temas adicionales pasan a siguiente</li>
+        <li><span class="li-dot"></span>Decisiones urgentes por Loomio con plazo de 48h para objeciones</li>
+      </ul>
+    </div>
+    <div class="reunion-card">
+      <div class="reunion-card-head">
+        <h4>Retiro Anual de la Comunidad</h4>
+        <span class="reunion-freq">Anual · Enero</span>
+      </div>
+      <ul class="reunion-items">
+        <li><span class="li-dot"></span>Revisión profunda de los 6 valores: ¿seguimos alineados? ¿la cultura de movimiento y la visión planetaria están vivas en lo cotidiano?</li>
+        <li><span class="li-dot"></span>Balance del año: logros, fracasos y aprendizajes honestos</li>
+        <li><span class="li-dot"></span>Planificación del año siguiente con objetivos, presupuesto e infraestructura deportiva/bienestar</li>
+        <li><span class="li-dot"></span>Revisión del pacto de convivencia: ¿algo necesita actualizarse?</li>
+        <li><span class="li-dot"></span>Espacio de celebración, deporte colectivo y agradecimiento por el camino recorrido</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="block-label">Herramientas de Gobernanza Digital</div>
+  <div class="herramientas-row">
+    <div class="herr-card">
+      <div class="herr-icon">🗳</div>
+      <div class="herr-nombre">Loomio</div>
+      <div class="herr-uso">Votaciones asincrónicas, hilos de discusión y registro permanente de decisiones. Usado por Findhorn y GEN.</div>
+    </div>
+    <div class="herr-card">
+      <div class="herr-icon">📋</div>
+      <div class="herr-nombre">Notion / Obsidian</div>
+      <div class="herr-uso">Documentación del proyecto: estatutos, acuerdos, cuestionarios, actas y manual de la comunidad.</div>
+    </div>
+    <div class="herr-card">
+      <div class="herr-icon">💬</div>
+      <div class="herr-nombre">Signal / WhatsApp</div>
+      <div class="herr-uso">Comunicación informal del día a día. Canal separado por círculo para no mezclar lo urgente con lo estratégico.</div>
+    </div>
+    <div class="herr-card">
+      <div class="herr-icon">📊</div>
+      <div class="herr-nombre">Google Sheets</div>
+      <div class="herr-uso">Tesorería compartida en tiempo real, seguimiento del fondo de reserva y registro de horas de trabajo comunitario.</div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ════════════════════════════════════════════ -->
+<!-- TAB 4: LEGAL & FINANCIERA                    -->
+<!-- ════════════════════════════════════════════ -->
+<div class="tab-panel" id="panel-3">
+<div class="section">
+  <div class="section-title">Estructura Legal &amp; Financiera</div>
+  <div class="section-sub">Marco jurídico chileno adaptado al modelo de comunidad intencional — el libro recomienda definir esto antes de recibir el primer peso</div>
+
+  <div class="block-label">Comparativa de Figuras Legales en Chile</div>
+  <table class="legal-table">
+    <thead><tr><th>Figura</th><th>Gobernanza</th><th>Acciones / Aportes</th><th>Ventajas clave</th><th>Limitaciones</th><th>Recomendación</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><strong>SpA</strong> (Sociedad por Acciones)</td>
+        <td>Accionistas definen las reglas en el pacto (muy flexible)</td>
+        <td>Acciones diferenciadas: económicas vs. de decisión</td>
+        <td>Constitución rápida (1 día), altamente personalizable, permite múltiples clases de accionistas</td>
+        <td>No tiene vocación cooperativa cultural; puede generar tensiones de "empresa" vs. "comunidad"</td>
+        <td><span class="rec-badge">Etapa inicial (Año 0–3)</span></td>
+      </tr>
+      <tr>
+        <td><strong>Cooperativa de Vivienda</strong></td>
+        <td>Democrática (1 persona = 1 voto), regulada por DECOOP</td>
+        <td>Cuotas iguales de participación</td>
+        <td>Identidad cooperativa fuerte, ventajas tributarias, cultura participativa integrada, acceso a INDAP</td>
+        <td>Constitución más lenta, supervisión estatal, aportes homogéneos pueden ser limitantes</td>
+        <td><span class="rec-badge">Etapa consolidada (Año 3+)</span></td>
+      </tr>
+      <tr>
+        <td><strong>Comunidad de Bienes</strong></td>
+        <td>Todos los copropietarios por igual; muy rígida</td>
+        <td>Propiedad compartida proporcional</td>
+        <td>Simple y conocida; no requiere constitución formal</td>
+        <td>Cualquier copropietario puede exigir liquidación; peligroso para la continuidad</td>
+        <td><span class="rec-badge" style="background:var(--terra-light);color:var(--terra);">No recomendada</span></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="block-label">Estructura de Aportes y Cuotas</div>
+  <div class="aportes-grid">
+    <div class="aporte-card">
+      <div class="aporte-head entrada">Aporte de Entrada</div>
+      <div class="aporte-body">
+        <div class="aporte-val">USD 20.000</div>
+        <div class="aporte-sub">Por familia · Pagadero en 3 cuotas de USD 6.667 a lo largo del período provisional · Da derecho a acciones en la SpA y uso de área privada definida por planos</div>
+      </div>
+    </div>
+    <div class="aporte-card">
+      <div class="aporte-head mensual">Cuota Mensual</div>
+      <div class="aporte-body">
+        <div class="aporte-val">USD 250</div>
+        <div class="aporte-sub">Por familia/mes · Cubre agua, energía solar, internet, mantenimiento de áreas comunes y fondo de reserva básico · Ajustable anualmente por acuerdo de la asamblea</div>
+      </div>
+    </div>
+    <div class="aporte-card">
+      <div class="aporte-head reserva">Fondo de Reserva</div>
+      <div class="aporte-body">
+        <div class="aporte-val">15%</div>
+        <div class="aporte-sub">De todos los ingresos operacionales · Para emergencias de infraestructura, mantenimiento mayor y eventualidades · No se distribuye; solo se usa por decisión de asamblea</div>
+      </div>
+    </div>
+    <div class="aporte-card">
+      <div class="aporte-head salida">Distribución de Utilidades</div>
+      <div class="aporte-body">
+        <div class="aporte-val">50/30/20</div>
+        <div class="aporte-sub">50% reinversión en el proyecto · 30% al fondo de reserva · 20% distribución a miembros activos según participación · Válido a partir del Año 2 cuando los ingresos sean estables</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="block-label">Proyección Financiera Integrada</div>
+  <table class="proyeccion-table">
+    <thead><tr><th>Etapa</th><th>Familias</th><th>Ingresos actividades</th><th>Cuotas mensuales</th><th>Fondo reserva (15%)</th><th>Total disponible</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Año 0</strong> — Infraestructura</td><td>3–5 co-fund.</td><td>$0</td><td>$9,000–$15,000</td><td>$1,350–$2,250</td><td class="monto-val">$7,650–$12,750</td></tr>
+      <tr><td><strong>Año 1</strong> — Primeras actividades</td><td>5–8</td><td>$12,000–$30,000</td><td>$15,000–$24,000</td><td>$4,050–$8,100</td><td class="monto-val">$22,950–$45,900</td></tr>
+      <tr><td><strong>Año 2</strong> — Turismo + educación</td><td>8–12</td><td>$40,000–$70,000</td><td>$24,000–$36,000</td><td>$9,600–$15,900</td><td class="monto-val">$54,400–$90,100</td></tr>
+      <tr><td><strong>Año 3</strong> — Ganadería + carbono</td><td>12–15</td><td>$100,000–$150,000</td><td>$36,000–$45,000</td><td>$20,400–$29,250</td><td class="monto-val">$115,600–$165,750</td></tr>
+      <tr class="total-row"><td><strong>Año 4–5</strong> — Madurez plena</td><td>15–20</td><td>$200,000–$350,000</td><td>$45,000–$60,000</td><td>$36,750–$61,500</td><td class="monto-val">$208,250–$348,500</td></tr>
+    </tbody>
+  </table>
+
+  <div class="hoja-ruta">
+    <div class="hoja-title">Hoja de Ruta Legal — Paso a Paso</div>
+    <div class="hoja-steps">
+      <div class="hoja-step">
+        <div class="hoja-step-num">01</div>
+        <div class="hoja-step-title">Año 0 — Constitución de la SpA</div>
+        <ul class="hoja-step-items">
+          <li>Redactar el pacto de accionistas con abogado especializado en cooperativas/comunidades</li>
+          <li>Definir clases de acciones: económicas (con derecho a dividendos) y de decisión (con voto en asamblea)</li>
+          <li>Registrar en el CBR y obtener RUT</li>
+          <li>Abrir cuenta bancaria corporativa con firmas conjuntas (mínimo 2 co-fundadores)</li>
+          <li>Inscribir el terreno a nombre de la SpA (no de personas naturales)</li>
+        </ul>
+      </div>
+      <div class="hoja-step">
+        <div class="hoja-step-num">02</div>
+        <div class="hoja-step-title">Año 1–2 — Operación y Registro</div>
+        <ul class="hoja-step-items">
+          <li>Emisión de acciones a cada familia fundadora contra aporte de entrada</li>
+          <li>Registro contable mensual (cuotas, ingresos por actividades, fondo reserva)</li>
+          <li>Solicitar a INDAP el registro como proyecto agrícola asociativo</li>
+          <li>Explorar CORFO: línea de financiamiento para proyectos productivos rurales</li>
+          <li>Documentar horas de trabajo comunitario para eventuales créditos laborales</li>
+        </ul>
+      </div>
+      <div class="hoja-step">
+        <div class="hoja-step-num">03</div>
+        <div class="hoja-step-title">Año 3+ — Transformación en Cooperativa</div>
+        <ul class="hoja-step-items">
+          <li>Con 10+ familias y trayectoria de 3 años, iniciar proceso ante DECOOP</li>
+          <li>Redactar estatutos cooperativos respetando los acuerdos de la comunidad</li>
+          <li>Proceso de transición: las acciones de la SpA se convierten en cuotas cooperativas</li>
+          <li>Afiliar a GEN-LatAm como cooperativa para acceder a fondos internacionales</li>
+          <li>Evaluar emisión de bonos verdes para financiar expansión de infraestructura solar</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="block-label">Financiamiento Externo Disponible en Chile</div>
+  <div class="fondos-grid">
+    <div class="fondo-card">
+      <div class="fondo-tag">Fomento productivo · Chile</div>
+      <div class="fondo-nombre">INDAP</div>
+      <div class="fondo-desc">Créditos para proyectos agrícolas asociativos con tasas subsidiadas. Asesoría técnica gratuita para emprendimientos rurales. Requiere registro como agricultor/a y predio agrícola activo. Especialmente relevante para las actividades de ganadería regenerativa, CSA y agroforestería.</div>
+    </div>
+    <div class="fondo-card">
+      <div class="fondo-tag">Innovación y emprendimiento · Chile</div>
+      <div class="fondo-nombre">CORFO</div>
+      <div class="fondo-desc">Línea Capital de Riesgo para proyectos productivos con componente de innovación. Fondos de turismo sostenible. El componente de educación regenerativa y turismo ecológico puede calificar para financiamiento no reembolsable de hasta $30M CLP por proyecto.</div>
+    </div>
+    <div class="fondo-card">
+      <div class="fondo-tag">Red global de ecoaldeas</div>
+      <div class="fondo-nombre">GEN / FIC</div>
+      <div class="fondo-desc">El Global Ecovillage Network ofrece pequeñas subvenciones y visibilidad internacional para comunidades afiliadas. La afiliación también da acceso a la red de intercambio de saberes, visitas y cooperación con comunidades como Findhorn, Tamera y Auroville.</div>
+    </div>
+  </div>
+</div>
+</div>
+
+<footer>
+  Comunidad Eco-Aldea Regenerativa · Componentes Fundamentales · Marzo 2026 · Basado en Creating a Life Together (Diana Leafe Christian, 2003) · Adaptado al contexto legal y cultural de Chile
+</footer>
+
+<script>
+  function switchTab(idx) {
+    document.querySelectorAll('.tab-btn').forEach((b,i) => b.classList.toggle('active', i===idx));
+    document.querySelectorAll('.tab-panel').forEach((p,i) => p.classList.toggle('active', i===idx));
+    window.scrollTo({top:0, behavior:'smooth'});
+  }
+
+  function toggleEtapa(id) {
+    document.getElementById(id).classList.toggle('open');
+  }
+</script>
+</body>
+</html>
