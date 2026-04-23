@@ -1,0 +1,716 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Propuesta Jornada Terapéutica — Casa Koru Chacabuco</title>
+<style>
+  :root {
+    --verde-oscuro: #3E5A1A;
+    --verde-muy-oscuro: #1E2D08;
+    --verde-salvia: #84A85A;
+    --crema: #F5F5EF;
+    --crema-oscuro: #EAE8DC;
+    --texto: #2A2A20;
+    --texto-suave: #5A5A4A;
+    --borde: #D8D4C3;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html, body {
+    background: var(--crema);
+    color: var(--texto);
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  img { image-orientation: from-image; display: block; max-width: 100%; }
+
+  .container { max-width: 1100px; margin: 0 auto; padding: 0 24px; }
+
+  /* HERO */
+  .hero {
+    position: relative;
+    height: 72vh;
+    min-height: 520px;
+    overflow: hidden;
+    background: var(--verde-muy-oscuro);
+  }
+  .hero::before {
+    content: "";
+    position: absolute; inset: 0;
+    background-image: url("Photos-3-001/IMG_3332.jpg");
+    background-size: cover;
+    background-position: center;
+    filter: brightness(0.55);
+  }
+  .hero-content {
+    position: relative;
+    z-index: 2;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 48px 24px;
+    max-width: 1100px;
+    margin: 0 auto;
+    color: var(--crema);
+  }
+  .kicker {
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    font-size: 12px;
+    color: var(--verde-salvia);
+    margin-bottom: 14px;
+    font-weight: 600;
+  }
+  .hero h1 {
+    font-family: "Georgia", serif;
+    font-weight: 400;
+    font-size: clamp(36px, 6vw, 64px);
+    line-height: 1.05;
+    margin-bottom: 18px;
+    max-width: 820px;
+  }
+  .hero p.lead {
+    font-size: clamp(16px, 1.6vw, 19px);
+    max-width: 680px;
+    opacity: 0.92;
+  }
+  .corner {
+    position: absolute;
+    width: 56px;
+    height: 56px;
+    border: 2px solid var(--verde-salvia);
+    z-index: 3;
+  }
+  .corner.tl { top: 24px; left: 24px; border-right: none; border-bottom: none; }
+  .corner.br { bottom: 24px; right: 24px; border-left: none; border-top: none; }
+
+  /* SECTIONS */
+  section { padding: 72px 0; }
+  section.tight { padding: 48px 0; }
+
+  h2 {
+    font-family: "Georgia", serif;
+    font-weight: 400;
+    font-size: clamp(28px, 3.2vw, 40px);
+    color: var(--verde-muy-oscuro);
+    margin-bottom: 16px;
+    line-height: 1.15;
+  }
+  h3 {
+    font-family: "Georgia", serif;
+    font-weight: 500;
+    font-size: 22px;
+    color: var(--verde-oscuro);
+    margin-bottom: 10px;
+  }
+  .section-kicker {
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    font-size: 11px;
+    color: var(--verde-salvia);
+    font-weight: 700;
+    margin-bottom: 12px;
+  }
+  p { margin-bottom: 14px; color: var(--texto-suave); }
+
+  .divider {
+    width: 48px;
+    height: 2px;
+    background: var(--verde-oscuro);
+    margin: 0 0 28px 0;
+  }
+
+  /* RESUMEN (ficha) */
+  .resumen {
+    background: var(--verde-muy-oscuro);
+    color: var(--crema);
+    padding: 40px 0;
+  }
+  .resumen .grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 24px;
+  }
+  .resumen .cell .label {
+    font-size: 11px;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--verde-salvia);
+    margin-bottom: 6px;
+  }
+  .resumen .cell .value {
+    font-family: "Georgia", serif;
+    font-size: 20px;
+    color: var(--crema);
+  }
+
+  /* GALERIA */
+  .gallery {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr;
+    grid-template-rows: 240px 240px;
+    gap: 10px;
+    margin-top: 32px;
+  }
+  .gallery figure {
+    position: relative;
+    overflow: hidden;
+    background: #222;
+  }
+  .gallery img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform .6s ease;
+  }
+  .gallery figure:hover img { transform: scale(1.04); }
+  .gallery .g1 { grid-column: 1; grid-row: 1 / span 2; }
+  .gallery .g2 { grid-column: 2; grid-row: 1; }
+  .gallery .g3 { grid-column: 3; grid-row: 1; }
+  .gallery .g4 { grid-column: 2; grid-row: 2; }
+  .gallery .g5 { grid-column: 3; grid-row: 2; }
+
+  /* ESPACIO (arriendo) */
+  .arriendo-row {
+    display: grid;
+    grid-template-columns: 1.1fr 1fr;
+    gap: 48px;
+    align-items: center;
+  }
+  .arriendo-row.reverse { grid-template-columns: 1fr 1.1fr; }
+  .arriendo-row .media img {
+    width: 100%;
+    height: 480px;
+    object-fit: cover;
+  }
+  .arriendo-row ul {
+    list-style: none;
+    margin: 20px 0;
+  }
+  .arriendo-row li {
+    padding-left: 22px;
+    position: relative;
+    margin-bottom: 10px;
+    color: var(--texto-suave);
+  }
+  .arriendo-row li::before {
+    content: "";
+    position: absolute;
+    left: 0; top: 10px;
+    width: 10px; height: 2px;
+    background: var(--verde-salvia);
+  }
+
+  .price-tag {
+    display: inline-block;
+    background: var(--verde-oscuro);
+    color: var(--crema);
+    padding: 14px 22px;
+    font-family: "Georgia", serif;
+    font-size: 24px;
+    margin-top: 8px;
+  }
+  .price-tag small {
+    display: block;
+    font-family: "Helvetica Neue", sans-serif;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--verde-salvia);
+    margin-bottom: 4px;
+  }
+
+  /* OPCIONES DE COMIDA */
+  .opciones {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 28px;
+    margin-top: 40px;
+  }
+  .opcion {
+    background: #fff;
+    border: 1px solid var(--borde);
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+  }
+  .opcion-img {
+    height: 240px;
+    overflow: hidden;
+  }
+  .opcion-img img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .opcion-body {
+    padding: 32px 28px 28px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+  .opcion-badge {
+    position: absolute;
+    top: 16px;
+    left: 16px;
+    background: var(--verde-muy-oscuro);
+    color: var(--crema);
+    padding: 6px 14px;
+    font-size: 11px;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    z-index: 2;
+  }
+  .opcion ul {
+    list-style: none;
+    margin: 14px 0 20px;
+  }
+  .opcion li {
+    padding-left: 18px;
+    position: relative;
+    margin-bottom: 8px;
+    font-size: 15px;
+    color: var(--texto-suave);
+  }
+  .opcion li::before {
+    content: "•";
+    position: absolute;
+    left: 0;
+    color: var(--verde-salvia);
+    font-weight: bold;
+  }
+  .opcion .precio {
+    margin-top: auto;
+    padding-top: 20px;
+    border-top: 1px solid var(--borde);
+  }
+  .opcion .precio .monto {
+    font-family: "Georgia", serif;
+    font-size: 28px;
+    color: var(--verde-muy-oscuro);
+  }
+  .opcion .precio .detalle {
+    font-size: 13px;
+    color: var(--texto-suave);
+    margin-top: 4px;
+  }
+
+  /* COMPARATIVO */
+  .comparativo {
+    background: var(--crema-oscuro);
+    padding: 56px 0;
+  }
+  table.resumen-tabla {
+    width: 100%;
+    border-collapse: collapse;
+    background: #fff;
+    margin-top: 28px;
+    box-shadow: 0 2px 12px rgba(30, 45, 8, 0.06);
+  }
+  table.resumen-tabla th, table.resumen-tabla td {
+    padding: 18px 22px;
+    text-align: left;
+    border-bottom: 1px solid var(--borde);
+  }
+  table.resumen-tabla th {
+    background: var(--verde-muy-oscuro);
+    color: var(--crema);
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    font-size: 12px;
+  }
+  table.resumen-tabla td:first-child { color: var(--texto); font-weight: 500; }
+  table.resumen-tabla tr.total td {
+    background: var(--verde-oscuro);
+    color: var(--crema);
+    font-family: "Georgia", serif;
+    font-size: 17px;
+  }
+  table.resumen-tabla tr.total td:first-child { color: var(--crema); }
+  table.resumen-tabla tr.subtotal td {
+    font-size: 13px;
+    color: var(--texto-suave);
+    padding-top: 8px;
+    padding-bottom: 18px;
+  }
+
+  /* ADICIONALES */
+  .adicionales {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 18px;
+    margin-top: 28px;
+  }
+  .adicional {
+    background: #fff;
+    border-left: 4px solid var(--verde-salvia);
+    padding: 22px 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+  }
+  .adicional .nombre { color: var(--texto); font-weight: 500; }
+  .adicional .monto {
+    color: var(--verde-oscuro);
+    font-family: "Georgia", serif;
+    font-size: 18px;
+    white-space: nowrap;
+  }
+
+  /* CONDICIONES */
+  .condiciones {
+    background: var(--verde-muy-oscuro);
+    color: var(--crema);
+    padding: 64px 0;
+  }
+  .condiciones h2 { color: var(--crema); }
+  .condiciones .divider { background: var(--verde-salvia); }
+  .condiciones ul {
+    list-style: none;
+    margin-top: 20px;
+    columns: 2;
+    column-gap: 48px;
+  }
+  .condiciones li {
+    padding-left: 22px;
+    position: relative;
+    margin-bottom: 14px;
+    break-inside: avoid;
+    opacity: 0.92;
+  }
+  .condiciones li::before {
+    content: "";
+    position: absolute;
+    left: 0; top: 11px;
+    width: 10px; height: 2px;
+    background: var(--verde-salvia);
+  }
+
+  /* FOOTER */
+  footer {
+    background: #141E04;
+    color: var(--crema);
+    padding: 48px 0 36px;
+  }
+  footer .foot-grid {
+    display: grid;
+    grid-template-columns: 1.3fr 1fr 1fr;
+    gap: 32px;
+    align-items: start;
+  }
+  footer .brand {
+    font-family: "Georgia", serif;
+    font-size: 24px;
+    margin-bottom: 8px;
+  }
+  footer .tag {
+    color: var(--verde-salvia);
+    font-size: 12px;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    margin-bottom: 14px;
+  }
+  footer a { color: var(--crema); text-decoration: none; }
+  footer a:hover { color: var(--verde-salvia); }
+  footer .col h4 {
+    font-size: 11px;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    color: var(--verde-salvia);
+    margin-bottom: 12px;
+  }
+  footer .col p { color: var(--crema); opacity: 0.88; margin-bottom: 6px; font-size: 14px; }
+  .legal {
+    border-top: 1px solid rgba(132, 168, 90, 0.2);
+    margin-top: 40px;
+    padding-top: 20px;
+    font-size: 12px;
+    color: rgba(245, 245, 239, 0.6);
+    text-align: center;
+  }
+
+  /* RESPONSIVE */
+  @media (max-width: 900px) {
+    .resumen .grid { grid-template-columns: repeat(2, 1fr); }
+    .arriendo-row, .arriendo-row.reverse { grid-template-columns: 1fr; gap: 24px; }
+    .arriendo-row .media img { height: 320px; }
+    .opciones { grid-template-columns: 1fr; }
+    .adicionales { grid-template-columns: 1fr; }
+    .condiciones ul { columns: 1; }
+    footer .foot-grid { grid-template-columns: 1fr; }
+    .gallery {
+      grid-template-columns: 1fr 1fr;
+      grid-template-rows: 200px 200px 200px;
+    }
+    .gallery .g1 { grid-column: 1 / span 2; grid-row: 1; }
+    .gallery .g2 { grid-column: 1; grid-row: 2; }
+    .gallery .g3 { grid-column: 2; grid-row: 2; }
+    .gallery .g4 { grid-column: 1; grid-row: 3; }
+    .gallery .g5 { grid-column: 2; grid-row: 3; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<header class="hero">
+  <span class="corner tl"></span>
+  <span class="corner br"></span>
+  <div class="hero-content">
+    <div class="kicker">Casa Koru · Chacabuco</div>
+    <h1>Propuesta para Jornada Terapéutica</h1>
+    <p class="lead">Un día de trabajo profundo en un entorno natural diseñado para el cuidado, la pausa y la transformación.</p>
+  </div>
+</header>
+
+<!-- FICHA RESUMEN -->
+<section class="resumen">
+  <div class="container">
+    <div class="grid">
+      <div class="cell">
+        <div class="label">Grupo</div>
+        <div class="value">15 participantes + 2 terapeutas</div>
+      </div>
+      <div class="cell">
+        <div class="label">Modalidad</div>
+        <div class="value">Uso exclusivo del recinto</div>
+      </div>
+      <div class="cell">
+        <div class="label">Horario</div>
+        <div class="value">08:30 – 18:30 hrs</div>
+      </div>
+      <div class="cell">
+        <div class="label">Ubicación</div>
+        <div class="value">Hacienda Chacabuco, Colina</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- GALERIA -->
+<section class="tight">
+  <div class="container">
+    <div class="section-kicker">El lugar</div>
+    <h2>Un espacio pensado para el trabajo interior</h2>
+    <div class="divider"></div>
+    <p>Casa Koru es un centro de regeneración ubicado entre montañas, con salas acondicionadas, jardines, bosque comestible y áreas exteriores que invitan a la pausa y la conexión con la naturaleza.</p>
+
+    <div class="gallery">
+      <figure class="g1"><img src="Photos-3-001/IMG_4773.JPG" alt="Terraza exterior al atardecer"></figure>
+      <figure class="g2"><img src="Photos-3-001/IMG_4375.JPG" alt="Salón principal con cojines y mats"></figure>
+      <figure class="g3"><img src="Photos-3-001/IMG_2027.JPG" alt="Terraza entre pinos"></figure>
+      <figure class="g4"><img src="Photos-3-001/IMG_2857.JPG" alt="Bosque comestible y jardín"></figure>
+      <figure class="g5"><img src="Photos-3-001/IMG_4711.JPG" alt="Vista al atardecer"></figure>
+    </div>
+  </div>
+</section>
+
+<!-- ARRIENDO -->
+<section>
+  <div class="container">
+    <div class="arriendo-row">
+      <div class="media">
+        <img src="Photos-3-001/IMG_4375.JPG" alt="Salón acondicionado para jornada">
+      </div>
+      <div class="text">
+        <div class="section-kicker">01 · Arriendo del espacio</div>
+        <h2>Uso exclusivo por el día completo</h2>
+        <div class="divider"></div>
+        <p>Todo el recinto queda a disposición del grupo. Sin interrupciones, sin otros visitantes, sin tiempos compartidos.</p>
+        <ul>
+          <li>Salón principal acondicionado (cojines, mats, iluminación regulable, sonido)</li>
+          <li>Áreas exteriores, jardines y zonas de descanso</li>
+          <li>Baños equipados y estacionamiento privado</li>
+          <li>Uso de cocina y comedor habilitados para el servicio</li>
+          <li>Anfitrión/a de Casa Koru presente durante toda la jornada</li>
+          <li>Coordinación logística previa con los terapeutas</li>
+        </ul>
+        <div class="price-tag">
+          <small>Valor</small>
+          CLP $450.000
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- OPCIONES COMIDA -->
+<section class="tight" style="padding-top: 24px;">
+  <div class="container">
+    <div class="section-kicker">02 · Servicio de alimentación</div>
+    <h2>Dos opciones a elección</h2>
+    <div class="divider"></div>
+    <p>Ambas opciones incluyen <strong>cocinera profesional y garzona</strong> durante toda la jornada, uso de cocina y menaje completo, montaje y desmontaje del servicio, y disposición continua de agua, café e infusiones.</p>
+
+    <div class="opciones">
+      <!-- OPCION A -->
+      <div class="opcion">
+        <span class="opcion-badge">Opción A</span>
+        <div class="opcion-img">
+          <img src="Photos-3-001/IMG_1823.JPG" alt="Cocina a leña exterior">
+        </div>
+        <div class="opcion-body">
+          <h3>Ustedes traen los insumos</h3>
+          <p>Ideal si el grupo quiere optimizar costos o tiene requerimientos alimenticios muy específicos. Ustedes entregan los ingredientes; nuestro equipo prepara, monta y sirve los tres servicios del día.</p>
+          <ul>
+            <li>Cocinera (jornada completa)</li>
+            <li>Garzona (jornada completa)</li>
+            <li>Uso de cocina y menaje</li>
+            <li>Planificación de menú en conjunto (llamada previa)</li>
+            <li>Lista de compras detallada entregada por Casa Koru</li>
+            <li>Retiro de basura y aseo post-evento</li>
+          </ul>
+          <div class="precio">
+            <div class="monto">CLP $250.000</div>
+            <div class="detalle">Servicio completo para 17 pax · Los insumos son por cuenta del arrendatario</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- OPCION B -->
+      <div class="opcion">
+        <span class="opcion-badge">Opción B · Llave en mano</span>
+        <div class="opcion-img">
+          <img src="Photos-3-001/IMG_3862.jpg" alt="Laguna y paisaje de Casa Koru">
+        </div>
+        <div class="opcion-body">
+          <h3>Casa Koru se encarga de todo</h3>
+          <p>Sin preocupaciones. Casa Koru prepara el menú, compra los insumos frescos y locales, cocina y sirve.</p>
+          <ul>
+            <li><strong>Coffee de bienvenida (08:30)</strong> — café de especialidad, té, infusiones, agua infusionada, fruta de estación, pastelería artesanal</li>
+            <li><strong>Almuerzo saludable</strong> — entrada + principal (omnívoro y vegetariano/vegano) + postre ligero</li>
+            <li><strong>Coffee de la tarde</strong> — café, té, frutos secos, barras, fruta</li>
+            <li>Preparación del menú por Casa Koru, alineado a jornada terapéutica</li>
+            <li>Compra de insumos frescos y locales</li>
+            <li>Cocinera, garzona, menaje completo, montaje y desmontaje</li>
+          </ul>
+          <div class="precio">
+            <div class="monto">CLP $476.000</div>
+            <div class="detalle">CLP $28.000 por persona × 17 pax · Todo incluido</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- COMPARATIVO -->
+<section class="comparativo">
+  <div class="container">
+    <div class="section-kicker">Resumen comparativo</div>
+    <h2>Valores totales</h2>
+    <div class="divider"></div>
+
+    <table class="resumen-tabla">
+      <thead>
+        <tr>
+          <th style="width: 40%;">Concepto</th>
+          <th>Opción A (ustedes traen insumos)</th>
+          <th>Opción B (todo incluido)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Arriendo del recinto</td>
+          <td>CLP $450.000</td>
+          <td>CLP $450.000</td>
+        </tr>
+        <tr>
+          <td>Servicio de cocina y garzona</td>
+          <td>CLP $250.000</td>
+          <td>—</td>
+        </tr>
+        <tr>
+          <td>Alimentación completa (insumos + servicio)</td>
+          <td>—</td>
+          <td>CLP $476.000</td>
+        </tr>
+        <tr class="total">
+          <td>Total</td>
+          <td>CLP $700.000 + insumos</td>
+          <td>CLP $926.000</td>
+        </tr>
+        <tr class="subtotal">
+          <td>Valor por persona</td>
+          <td>≈ CLP $41.200 + insumos</td>
+          <td>≈ CLP $54.500</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- ADICIONALES -->
+<section>
+  <div class="container">
+    <div class="section-kicker">03 · Adicionales opcionales</div>
+    <h2>Servicios complementarios</h2>
+    <div class="divider"></div>
+    <div class="adicionales">
+      <div class="adicional">
+        <span class="nombre">Extensión de horario (por hora adicional)</span>
+        <span class="monto">CLP $80.000</span>
+      </div>
+      <div class="adicional">
+        <span class="nombre">Hospedaje noche previa para terapeutas (2 hab.)</span>
+        <span class="monto">CLP $120.000</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONDICIONES -->
+<section class="condiciones">
+  <div class="container">
+    <div class="section-kicker">04 · Condiciones comerciales</div>
+    <h2>Reservas, pagos y políticas</h2>
+    <div class="divider"></div>
+    <ul>
+      <li>Reserva con 50% al confirmar, saldo 7 días antes del evento</li>
+      <li>Confirmación del número final de participantes: 72 hrs antes</li>
+      <li>En Opción A, los insumos deben llegar máximo 12 hrs antes del evento</li>
+      <li>Restricciones alimentarias: informar con 5 días de anticipación</li>
+      <li>Cambio de fecha: hasta 10 días antes sin costo, luego 20% de recargo</li>
+      <li>Cancelación con menos de 7 días: se retiene el 50% del abono</li>
+    </ul>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="container">
+    <div class="foot-grid">
+      <div class="col">
+        <div class="tag">Casa Koru</div>
+        <div class="brand">Un espacio para volver a ti.</div>
+        <p style="opacity: 0.75; font-size: 14px;">Centro de regeneración en Hacienda Chacabuco, Colina, Región Metropolitana, Chile.</p>
+      </div>
+      <div class="col">
+        <h4>Contacto</h4>
+        <p>+56 9 9827 7678</p>
+        <p>casakoruchacabuco@gmail.com</p>
+        <p><a href="https://www.casakoru.cl" target="_blank">www.casakoru.cl</a></p>
+      </div>
+      <div class="col">
+        <h4>Equipo</h4>
+        <p>Romina Villegas · Psicóloga Clínica</p>
+        <p>Diego Rebolledo · Coach Psicodélico</p>
+        <p>Paz Mesa · Kinesióloga y Terapeuta Manual</p>
+      </div>
+    </div>
+    <div class="legal">
+      Propuesta válida por 30 días desde su emisión · Valores en pesos chilenos (CLP)
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
